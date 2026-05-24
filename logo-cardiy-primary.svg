@@ -1,21 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 90" role="img" aria-label="CARDIY logo">
-  <defs>
-    <linearGradient id="shieldGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1E3F8E"/>
-      <stop offset="100%" stop-color="#0D2F6E"/>
-    </linearGradient>
-    <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FDD835"/>
-      <stop offset="100%" stop-color="#F9A825"/>
-    </linearGradient>
-  </defs>
-  <path d="M45 5 L77 17 L77 50 Q77 72 45 84 Q13 72 13 50 L13 17 Z" fill="url(#goldGrad)"/>
-  <path d="M45 12 L71 22 L71 50 Q71 68 45 78 Q19 68 19 50 L19 22 Z" fill="url(#shieldGrad)"/>
-  <g transform="translate(45,46) rotate(-40)">
-    <circle cx="0" cy="-15" r="9" fill="none" stroke="#FDD835" stroke-width="5.5"/>
-    <rect x="3" y="-20" width="12" height="8" fill="#0D2F6E"/>
-    <rect x="-3.5" y="-8" width="7" height="26" rx="3" fill="url(#goldGrad)"/>
-    <ellipse cx="0" cy="19" rx="6" ry="4.5" fill="url(#goldGrad)"/>
-  </g>
-  <text x="95" y="67" font-family="'Arial Black','Franklin Gothic Heavy','Impact',sans-serif" font-size="58" font-weight="900" font-style="italic" fill="url(#goldGrad)" letter-spacing="-1">CARDIY</text>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 480 160" role="img" aria-label="CARDIY logo">
+  <image href="logo-cardiy-brand.png" x="0" y="0" width="480" height="160" preserveAspectRatio="xMidYMid meet"/>
 </svg>
