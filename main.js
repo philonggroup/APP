@@ -488,186 +488,148 @@ Bạn cứ hỏi tự nhiên nhé — "xe mình kêu gì đó", "thay dầu giá
   // ================================================================
   // CARDIY · 3-Step Booking Bill Logic
   // ================================================================
-  // Booking Bill Init — runs after defer script loads (DOM is ready)
-  (function initBookingBill() {
+  // ================================================================
+  // CARDIY · 3-Step Booking Bill Logic (clean, no $ conflicts)
+  // ================================================================
+  (function() {
+    function gid(id) { return document.getElementById(id); }
 
-    // ── Helpers ──
-    const $ = id => document.getElementById(id);
-    const formatVN = n => Math.round(n).toLocaleString('vi-VN');
-    
-    // ── Mobile fee calc ──
     function calcFee(km, night, holiday) {
-      const BASE = 150000, BASE_KM = 5;
-      let fee = BASE;
-      const k = parseFloat(km) || 0;
+      var BASE = 150000, BASE_KM = 5, fee = BASE;
+      var k = parseFloat(km) || 0;
       if (k > BASE_KM) fee += (k - BASE_KM) * (night ? 35000 : 30000);
-      if (holiday) fee = Math.round(fee * 1.3);
-      return Math.round(fee);
+      return holiday ? Math.round(fee * 1.3) : Math.round(fee);
     }
 
-    // ── Step indicator ──
     function setStep(n) {
-      document.querySelectorAll('.bk-step').forEach(s => {
-        const sn = +s.dataset.step;
+      document.querySelectorAll('.bk-step').forEach(function(s) {
+        var sn = +s.dataset.step;
         s.classList.toggle('is-active', sn === n);
         s.classList.toggle('is-done', sn < n);
       });
-      ['bstep-1','bstep-2','bstep-3'].forEach((id, i) => {
-        const el = document.getElementById(id);
+      ['bstep-1','bstep-2','bstep-3'].forEach(function(id, i) {
+        var el = document.getElementById(id);
         if (el) el.style.display = (i + 1 === n) ? 'block' : 'none';
       });
-      const bill = document.getElementById('booking');
+      var bill = document.getElementById('booking');
       if (bill) bill.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // ── Service cards ──
     function getSelected() {
-      return Array.from(document.querySelectorAll('.bsvc-card input:checked')).map(cb => ({
-        name: cb.dataset.name,
-        time: cb.closest('.bsvc-card')?.querySelector('.bsvc-time')?.textContent || ''
-      }));
+      return Array.from(document.querySelectorAll('.bsvc-card input:checked')).map(function(cb) {
+        var card = cb.closest('.bsvc-card');
+        var timeEl = card && card.querySelector('.bsvc-time');
+        return { name: cb.dataset.name || '', time: timeEl ? timeEl.textContent : '' };
+      });
     }
-    
-    function updateBillTable() {
-      const selected = getSelected();
-      const empty = $('bill-empty-hint');
-      const table = $('bill-table');
-      const tbody = $('bill-table-body');
-      const nextBtn = $('bstep1-next');
-      
-      if (!tbody) return;
-      
-      if (selected.length === 0) {
+
+    function updateTable() {
+      var sel = getSelected();
+      var empty = gid('bill-empty-hint');
+      var table = gid('bill-table');
+      var tbody = gid('bill-table-body');
+      var btn = gid('bstep1-next');
+      if (!btn) return;
+      if (sel.length === 0) {
         if (empty) empty.style.display = 'flex';
         if (table) table.style.display = 'none';
-        if (nextBtn) nextBtn.disabled = true;
+        btn.disabled = true;
       } else {
         if (empty) empty.style.display = 'none';
         if (table) table.style.display = 'table';
-        if (nextBtn) nextBtn.disabled = false;
-        tbody.innerHTML = selected.map((s, i) =>
-          '<tr><td>' + (i + 1) + '</td><td>' + escapeHTML(s.name) + '</td><td>' + escapeHTML(s.time) + '</td><td>Báo giá theo thực tế</td></tr>'
-        ).join('');
-      }
-      if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.75 } });
-    }
-    
-    document.querySelectorAll('.bsvc-card input[type="checkbox"]').forEach(cb => {
-      cb.addEventListener('change', updateBillTable);
-    });
-    updateBillTable();
-    
-    // ── Step 1 → 2 ──
-    const next1 = $('bstep1-next');
-    if (next1) next1.addEventListener('click', () => {
-      if (getSelected().length === 0) return;
-      setStep(2);
-    });
-    
-    // ── Mobile fee display (step 2) ──
-    function updateFeeDisplay() {
-      const km = $('bk-km')?.value || 5;
-      const night = $('bk-daytime')?.value === 'night';
-      const holiday = $('bk-holiday')?.checked || false;
-      const fee = calcFee(km, night, holiday);
-      const feeEl = $('bk-fee-value');
-      const noteEl = $('bk-fee-note');
-      if (feeEl) feeEl.textContent = formatVN(fee) + ' ₫';
-      if (noteEl) {
-        const k = parseFloat(km) || 0;
-        noteEl.textContent = k <= 5 ? '≤ 5 km' : k.toFixed(1) + ' km' + (night ? ' · đêm' : ' · ngày') + (holiday ? ' · lễ +30%' : '');
+        btn.disabled = false;
+        if (tbody) tbody.innerHTML = sel.map(function(s, i) {
+          return '<tr><td>' + (i+1) + '</td><td>' + escapeHTML(s.name) + '</td><td>' + escapeHTML(s.time) + '</td><td>B\u00e1o gi\u00e1 theo th\u1ef1c t\u1ebf</td></tr>';
+        }).join('');
       }
     }
-    ['bk-km','bk-daytime','bk-holiday','bk-toll'].forEach(id => {
-      const el = $(id);
-      if (el) {
-        el.addEventListener('change', updateFeeDisplay);
-        if (el.type === 'number') el.addEventListener('input', updateFeeDisplay);
-      }
+
+    function updateFee() {
+      var kmEl = gid('bk-km'), dtEl = gid('bk-daytime'), hlEl = gid('bk-holiday');
+      var km = kmEl ? kmEl.value : 5;
+      var night = dtEl ? dtEl.value === 'night' : false;
+      var holiday = hlEl ? hlEl.checked : false;
+      var fee = calcFee(km, night, holiday);
+      var fv = gid('bk-fee-value'), fn = gid('bk-fee-note');
+      if (fv) fv.textContent = formatVN(fee) + ' \u20ab';
+      if (fn) { var k = parseFloat(km)||0; fn.textContent = k<=5 ? '\u22645km' : k.toFixed(1)+'km'; }
+    }
+
+    // Wire up service checkboxes
+    document.querySelectorAll('.bsvc-card input[type="checkbox"]').forEach(function(cb) {
+      cb.addEventListener('change', updateTable);
     });
-    updateFeeDisplay();
-    
-    // ── Step 2 back ──
-    const back2 = $('bstep2-back');
-    if (back2) back2.addEventListener('click', () => setStep(1));
-    
-    // ── Step 2 → 3 ──
-    const next2 = $('bstep2-next');
-    if (next2) next2.addEventListener('click', () => {
-      const name = $('bk-name')?.value.trim();
-      const phone = $('bk-phone')?.value.trim();
-      const address = $('bk-address')?.value.trim();
-      const date = $('bk-date')?.value;
-      if (!name) { toast('Vui lòng nhập họ và tên', 'user'); $('bk-name')?.focus(); return; }
-      if (!phone || !/^0d{8,9}$/.test(phone.replace(/s/g, ''))) { toast('Số điện thoại chưa đúng định dạng', 'phone'); $('bk-phone')?.focus(); return; }
-      if (!address) { toast('Vui lòng nhập địa chỉ lấy xe', 'map-pin'); $('bk-address')?.focus(); return; }
-      if (!date) { toast('Vui lòng chọn ngày hẹn', 'calendar'); $('bk-date')?.focus(); return; }
-      
-      // Fill preview
-      const car = $('bk-car')?.value.trim() || '—';
-      const plate = $('bk-plate')?.value.trim() || '—';
-      const slot = $('bk-slot')?.options[$('bk-slot').selectedIndex]?.text || '—';
-      const feeText = $('bk-fee-value')?.textContent || '150.000 ₫';
-      const d = new Date(date);
-      const dateStr = d.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
-      
-      const set = (id, val) => { const el = $(id); if (el) el.textContent = val; };
-      set('prev-name', name);
-      set('prev-phone', phone);
-      set('prev-car', car);
-      set('prev-plate', plate);
-      set('prev-address', address);
-      set('prev-date', dateStr);
-      set('prev-slot', slot);
-      set('prev-fee', feeText);
-      
-      const svcs = getSelected();
-      const svcContainer = $('prev-services');
-      if (svcContainer) {
-        svcContainer.innerHTML = svcs.map(s =>
-          '<div class="bill-preview-svc-row"><span>' + escapeHTML(s.name) + '</span><span>' + escapeHTML(s.time) + '</span></div>'
-        ).join('');
-      }
+    updateTable();
+
+    // Wire up fee inputs
+    ['bk-km','bk-daytime','bk-holiday','bk-toll'].forEach(function(id) {
+      var el = gid(id);
+      if (!el) return;
+      el.addEventListener('change', updateFee);
+      if (el.type === 'number') el.addEventListener('input', updateFee);
+    });
+    updateFee();
+
+    // Step buttons
+    var b = gid('bstep1-next');
+    if (b) b.addEventListener('click', function() { if (getSelected().length > 0) setStep(2); });
+    b = gid('bstep2-back');
+    if (b) b.addEventListener('click', function() { setStep(1); });
+    b = gid('bstep3-back');
+    if (b) b.addEventListener('click', function() { setStep(2); });
+
+    b = gid('bstep2-next');
+    if (b) b.addEventListener('click', function() {
+      var nm = gid('bk-name'), ph = gid('bk-phone'), ad = gid('bk-address'), dt = gid('bk-date');
+      var name = nm ? nm.value.trim() : '';
+      var phone = ph ? ph.value.trim() : '';
+      var addr = ad ? ad.value.trim() : '';
+      var date = dt ? dt.value : '';
+      if (!name) { toast('Vui l\u00f2ng nh\u1eadp h\u1ecd t\u00ean', 'user'); if (nm) nm.focus(); return; }
+      if (!phone || !/^0\d{8,9}$/.test(phone.replace(/\s/g,''))) { toast('S\u1ed1 \u0111i\u1ec7n tho\u1ea1i ch\u01b0a \u0111\u00fang', 'phone'); if (ph) ph.focus(); return; }
+      if (!addr) { toast('Vui l\u00f2ng nh\u1eadp \u0111\u1ecba ch\u1ec9', 'map-pin'); if (ad) ad.focus(); return; }
+      if (!date) { toast('Vui l\u00f2ng ch\u1ecdn ng\u00e0y h\u1eb9n', 'calendar'); if (dt) dt.focus(); return; }
+      function sp(id, v) { var e = gid(id); if (e) e.textContent = v; }
+      var carEl = gid('bk-car'), plEl = gid('bk-plate'), slEl = gid('bk-slot'), fvEl = gid('bk-fee-value');
+      sp('prev-name', name); sp('prev-phone', phone);
+      sp('prev-car', carEl ? carEl.value.trim() || '\u2014' : '\u2014');
+      sp('prev-plate', plEl ? plEl.value.trim() || '\u2014' : '\u2014');
+      sp('prev-address', addr);
+      sp('prev-date', new Date(date).toLocaleDateString('vi-VN', {weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'}));
+      sp('prev-slot', slEl ? slEl.options[slEl.selectedIndex].text : '\u2014');
+      sp('prev-fee', fvEl ? fvEl.textContent : '150.000 \u20ab');
+      var sc = gid('prev-services');
+      if (sc) sc.innerHTML = getSelected().map(function(s) {
+        return '<div class="bill-preview-svc-row"><span>'+escapeHTML(s.name)+'</span><span>'+escapeHTML(s.time)+'</span></div>';
+      }).join('');
       setStep(3);
     });
-    
-    // ── Step 3 back ──
-    const back3 = $('bstep3-back');
-    if (back3) back3.addEventListener('click', () => setStep(2));
-    
-    // ── Step 3 submit ──
-    const submit3 = $('bstep3-submit');
-    if (submit3) submit3.addEventListener('click', () => {
-      const code = 'CDY-' + Date.now().toString(36).toUpperCase().slice(-6);
-      const codeEl = $('bill-code-display');
-      if (codeEl) codeEl.textContent = 'Mã đặt lịch: ' + code;
-      
+
+    b = gid('bstep3-submit');
+    if (b) b.addEventListener('click', function() {
+      var code = 'CDY-' + Date.now().toString(36).toUpperCase().slice(-6);
+      var cd = gid('bill-code-display'); if (cd) cd.textContent = 'M\u00e3: ' + code;
       openModal({
-        icon: 'check-circle',
-        title: 'Đặt lịch thành công! 🎉',
-        html: '<p>Mã đặt lịch của bạn: <strong style="font-family:monospace;font-size:18px;color:var(--cardiy-blue-600)">' + code + '</strong></p><p style="color:var(--fg-2);font-size:13px;margin-top:8px">KTV sẽ gọi xác nhận trong vòng <b>5 phút</b>. Hẹn gặp bạn! 🚗</p>',
-        actions: [
-          { label: 'Tuyệt vời!', variant: 'primary', icon: 'thumbs-up' }
-        ]
+        icon: 'check-circle', title: '\u0110\u1eb7t l\u1ecbch th\u00e0nh c\u00f4ng! \ud83c\udf89',
+        html: '<p>M\u00e3 \u0111\u1eb7t l\u1ecbch: <strong style="font-family:monospace;font-size:18px;color:var(--cardiy-blue-600)">' + code + '</strong></p><p style="color:var(--fg-2);font-size:13px;margin-top:8px">KTV g\u1ecdi x\u00e1c nh\u1eadn trong <b>5 ph\u00fat</b>. H\u1eb9n g\u1eb7p! \ud83d\ude97</p>',
+        actions: [{ label: 'Tuy\u1ec7t v\u1eddi!', variant: 'primary', icon: 'thumbs-up' }]
       });
-      // Reset form
-      setTimeout(() => {
-        document.querySelectorAll('.bsvc-card input').forEach(cb => cb.checked = false);
-        ['bk-name','bk-phone','bk-car','bk-plate','bk-address','bk-note'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-        if ($('bk-date')) $('bk-date').value = '';
-        updateBillTable();
-        setStep(1);
+      setTimeout(function() {
+        document.querySelectorAll('.bsvc-card input').forEach(function(cb) { cb.checked = false; });
+        ['bk-name','bk-phone','bk-car','bk-plate','bk-address','bk-note'].forEach(function(id) { var e = gid(id); if (e) e.value = ''; });
+        var de = gid('bk-date'); if (de) de.value = '';
+        updateTable(); setStep(1);
       }, 300);
     });
 
-    // ── CTA buttons that scroll to booking ──
-    document.querySelectorAll('[data-action="book"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const el = document.getElementById('booking');
+    // CTA buttons
+    document.querySelectorAll('[data-action="book"]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var el = document.getElementById('booking');
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
-    
-  });
+
+  })();
 
 })();
