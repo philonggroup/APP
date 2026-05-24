@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <title>CARDIY · Trợ Lý Ô Tô Thông Minh</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="description" content="CARDIY — nền tảng AI giúp bạn bảo dưỡng, quản lý và chăm sóc ô tô thông minh hơn mỗi ngày. Đặt lịch trong 30 giây, kỹ thuật viên tới tận nơi." />
+<meta name="description" content="CARDIY — nền tảng AI giúp bạn bảo dưỡng, quản lý và chăm sóc ô tô thông minh hơn mỗi ngày. Đặt lịch linh hoạt · Dịch vụ tận nơi, kỹ thuật viên tới tận nơi." />
 <meta name="theme-color" content="#1E4FB8" />
 <link rel="icon" type="image/svg+xml" href="logo-cardiy-mark.svg" />
 <meta property="og:title" content="CARDY · Trợ Lý Ô Tô Thông Minh" />
@@ -65,7 +65,7 @@
     <div class="reveal">
       <span class="eyebrow">
         <i data-lucide="sparkles" class="ic" style="width:12px;height:12px"></i>
-        Trợ lý ô tô thông minh #1 Việt Nam
+        An toàn trọn hành trình · Solo gần nâng tầm trải nghiệm lái
       </span>
       <h1 class="h-display">
         Sửa xe tận nơi,<br />
@@ -74,7 +74,7 @@
       </h1>
       <p class="lead">
         Nền tảng AI giúp bạn <strong style="color:var(--fg-1)">đặt lịch sửa xe trong 30 giây</strong> —
-        kỹ thuật viên CARDIY tới tận nhà hoặc garage gần bạn, báo giá trước, không phát sinh.
+        KTV lưu động tới tận nơi · Phí minh bạch theo GPS · Ghi rõ nhu cầu — KTV chuẩn bị đúng.
       </p>
       <div class="hero__cta">
         <button class="btn btn--primary btn--lg" data-action="book">
@@ -204,31 +204,31 @@
       <div class="service" data-price="450000" data-name="Thay dầu + lọc">
         <div class="service__ic"><i data-lucide="droplets"></i></div>
         <h3 class="service__name">Thay dầu máy + lọc</h3>
-        <div class="service__price">450.000 ₫</div>
+        <div class="service__price service__price--flex">Liên hệ báo giá</div>
         <div class="service__time">~ 45 phút</div>
       </div>
       <div class="service" data-price="680000" data-name="Má phanh">
         <div class="service__ic"><i data-lucide="disc-3"></i></div>
         <h3 class="service__name">Thay má phanh</h3>
-        <div class="service__price">680.000 ₫</div>
+        <div class="service__price service__price--flex">Liên hệ báo giá</div>
         <div class="service__time">~ 60 phút</div>
       </div>
       <div class="service" data-price="350000" data-name="Cân thước lái">
         <div class="service__ic"><i data-lucide="car"></i></div>
         <h3 class="service__name">Cân chỉnh thước lái</h3>
-        <div class="service__price">350.000 ₫</div>
+        <div class="service__price service__price--flex">Liên hệ báo giá</div>
         <div class="service__time">~ 50 phút</div>
       </div>
       <div class="service" data-price="1850000" data-name="Bình ắc-quy">
         <div class="service__ic"><i data-lucide="battery-charging"></i></div>
         <h3 class="service__name">Thay bình ắc-quy</h3>
-        <div class="service__price">1.850.000 ₫</div>
+        <div class="service__price service__price--flex">Liên hệ báo giá</div>
         <div class="service__time">~ 30 phút</div>
       </div>
       <div class="service" data-price="550000" data-name="Vệ sinh điều hoà">
         <div class="service__ic"><i data-lucide="wind"></i></div>
         <h3 class="service__name">Vệ sinh điều hoà</h3>
-        <div class="service__price">550.000 ₫</div>
+        <div class="service__price service__price--flex">Liên hệ báo giá</div>
         <div class="service__time">~ 75 phút</div>
       </div>
       <div class="service" data-price="250000" data-name="Cảm biến + đèn báo">
@@ -240,13 +240,13 @@
       <div class="service" data-price="1450000" data-name="Gói bảo dưỡng 10k">
         <div class="service__ic"><i data-lucide="wrench"></i></div>
         <h3 class="service__name">Gói bảo dưỡng 10k</h3>
-        <div class="service__price">1.450.000 ₫</div>
+        <div class="service__price service__price--flex">Liên hệ báo giá</div>
         <div class="service__time">~ 90 phút</div>
       </div>
       <div class="service" data-price="2400000" data-name="Đánh bóng + ceramic">
         <div class="service__ic"><i data-lucide="sparkles"></i></div>
         <h3 class="service__name">Đánh bóng + phủ ceramic</h3>
-        <div class="service__price">2.400.000 ₫</div>
+        <div class="service__price service__price--flex">Liên hệ báo giá</div>
         <div class="service__time">~ 4 giờ</div>
       </div>
     </div>
@@ -310,6 +310,58 @@
             <input type="date" id="q-date" name="date" />
           </div>
         </div>
+      </div>
+
+      <!-- ── ADDRESS ── -->
+      <div class="field field--full">
+        <label for="q-address">Địa chỉ lưu động <span class="field-hint">KTV sẽ tới đây</span></label>
+        <input type="text" id="q-address" name="address" autocomplete="street-address"
+          placeholder="VD: 123 Nguyễn Văn Linh, Q.7, TP.HCM" />
+      </div>
+
+      <!-- ── MOBILE FEE CALCULATOR ── -->
+      <div class="field field--full" id="mobile-fee-block">
+        <label>Phí lưu động <span class="badge-gps">📍 Tự tính theo km</span></label>
+        <div class="fee-row">
+          <div class="fee-col">
+            <span class="fee-unit">Khoảng cách</span>
+            <div class="fee-input-km">
+              <input type="number" id="q-km" name="km" min="0" max="200" step="0.5" value="5" />
+              <span>km</span>
+            </div>
+          </div>
+          <div class="fee-col">
+            <span class="fee-unit">Thời điểm</span>
+            <select id="q-daytime" name="daytime">
+              <option value="day">Ban ngày (6h – 22h) · 30.000₫/km</option>
+              <option value="night">Ban đêm (22h – 6h) · 35.000₫/km</option>
+            </select>
+          </div>
+          <div class="fee-col fee-col--result">
+            <span class="fee-unit">Phí lưu động</span>
+            <strong class="fee-total-value" id="mobile-fee-value">150.000 ₫</strong>
+            <span class="fee-total-note" id="mobile-fee-note">≤ 5 km</span>
+          </div>
+        </div>
+        <div class="fee-extras">
+          <label class="fee-check">
+            <input type="checkbox" id="q-holiday" name="holiday" />
+            Ngày lễ / Tết &nbsp;<span class="surcharge-tag">+30%</span>
+          </label>
+          <label class="fee-check">
+            <input type="checkbox" id="q-toll" name="toll" />
+            Phí cầu đường (cộng thực tế)
+          </label>
+        </div>
+        <p class="fee-rule">5 km đầu: <b>150.000₫</b> · km tiếp ban ngày: <b>+30.000₫/km</b> · ban đêm: <b>+35.000₫/km</b> · ngày lễ: <b>+30%</b></p>
+      </div>
+
+      <!-- ── NOTE / NEEDS ── -->
+      <div class="field field--full">
+        <label for="q-note">Nhu cầu thực tế <span class="field-hint">(tuỳ chọn — giúp KTV chuẩn bị tốt hơn)</span></label>
+        <textarea id="q-note" name="note" rows="3"
+          placeholder="VD: Xe rung khi vào số, tiếng kêu lạ vùng bánh trước phải, muốn kiểm tra thêm dầu hộp số… Phí dịch vụ tuỳ chỉnh linh hoạt — ghi rõ để báo giá đúng nhất."></textarea>
+        <div class="field-tagline">&ldquo; Càng đơn giản — Càng hiệu quả &rdquo;</div>
       </div>
 
       <div class="quote__summary">
