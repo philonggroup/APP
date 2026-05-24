@@ -192,207 +192,291 @@
 </section>
 
 <!-- ============ SERVICES + BOOKING ============ -->
-<section class="section section--alt" id="services">
+<!-- ============ SERVICES + BOOKING ============ -->
+<section class="section bk-section" id="services">
   <div class="container">
-    <div class="reveal">
-      <span class="eyebrow">Dịch vụ &amp; báo giá</span>
-      <h2 class="h-section">Dịch vụ linh hoạt. Báo giá theo thực tế.</h2>
-      <p class="lead">Chọn dịch vụ bạn cần · KTV kiểm tra thực tế · Báo giá minh bạch trước khi làm.</p>
+
+    <!-- ── Section header ── -->
+    <div class="bk-header reveal">
+      <span class="eyebrow eyebrow--yellow">
+        <i data-lucide="calendar-check" class="ic" style="width:13px;height:13px"></i>
+        Đặt lịch dịch vụ
+      </span>
+      <h2 class="h-section">Phiếu đặt lịch nhanh<br><span class="bk-sub-accent">Chỉ 3 bước · KTV tới tận nơi</span></h2>
     </div>
 
-    <div class="services">
-      <div class="service" data-price="450000" data-name="Thay dầu + lọc">
-        <div class="service__ic"><i data-lucide="droplets"></i></div>
-        <h3 class="service__name">Thay dầu máy + lọc</h3>
-        <div class="service__price service__price--flex">Liên hệ báo giá</div>
-        <div class="service__time">~ 45 phút</div>
+    <!-- ── Trust bar ── -->
+    <div class="bk-trust-bar reveal">
+      <div class="bk-trust-item"><i data-lucide="shield-check" class="ic"></i><span><strong>Báo giá trước</strong> · Không phát sinh</span></div>
+      <div class="bk-trust-item"><i data-lucide="map-pin" class="ic"></i><span><strong>KTV tới tận nơi</strong> · Phí GPS minh bạch</span></div>
+      <div class="bk-trust-item"><i data-lucide="clock" class="ic"></i><span><strong>Xác nhận trong 5 phút</strong> · 7 ngày / tuần</span></div>
+      <div class="bk-trust-item"><i data-lucide="star" class="ic"></i><span><strong>4.9 / 5</strong> · 12.000+ khách hàng</span></div>
+    </div>
+
+    <!-- ── STEP INDICATOR ── -->
+    <div class="bk-steps reveal">
+      <div class="bk-step is-active" data-step="1">
+        <div class="bk-step__dot"><span>1</span></div>
+        <div class="bk-step__label">Chọn dịch vụ</div>
       </div>
-      <div class="service" data-price="680000" data-name="Má phanh">
-        <div class="service__ic"><i data-lucide="disc-3"></i></div>
-        <h3 class="service__name">Thay má phanh</h3>
-        <div class="service__price service__price--flex">Liên hệ báo giá</div>
-        <div class="service__time">~ 60 phút</div>
+      <div class="bk-step-line"></div>
+      <div class="bk-step" data-step="2">
+        <div class="bk-step__dot"><span>2</span></div>
+        <div class="bk-step__label">Thông tin & địa chỉ</div>
       </div>
-      <div class="service" data-price="350000" data-name="Cân thước lái">
-        <div class="service__ic"><i data-lucide="car"></i></div>
-        <h3 class="service__name">Cân chỉnh thước lái</h3>
-        <div class="service__price service__price--flex">Liên hệ báo giá</div>
-        <div class="service__time">~ 50 phút</div>
-      </div>
-      <div class="service" data-price="1850000" data-name="Bình ắc-quy">
-        <div class="service__ic"><i data-lucide="battery-charging"></i></div>
-        <h3 class="service__name">Thay bình ắc-quy</h3>
-        <div class="service__price service__price--flex">Liên hệ báo giá</div>
-        <div class="service__time">~ 30 phút</div>
-      </div>
-      <div class="service" data-price="550000" data-name="Vệ sinh điều hoà">
-        <div class="service__ic"><i data-lucide="wind"></i></div>
-        <h3 class="service__name">Vệ sinh điều hoà</h3>
-        <div class="service__price service__price--flex">Liên hệ báo giá</div>
-        <div class="service__time">~ 75 phút</div>
-      </div>
-      <div class="service" data-price="250000" data-name="Cảm biến + đèn báo">
-        <div class="service__ic"><i data-lucide="gauge"></i></div>
-        <h3 class="service__name">Cảm biến + đèn báo</h3>
-        <div class="service__price service__price--flex">Liên hệ báo giá</div>
-        <div class="service__time">~ 30 phút</div>
-      </div>
-      <div class="service" data-price="1450000" data-name="Gói bảo dưỡng 10k">
-        <div class="service__ic"><i data-lucide="wrench"></i></div>
-        <h3 class="service__name">Gói bảo dưỡng 10k</h3>
-        <div class="service__price service__price--flex">Liên hệ báo giá</div>
-        <div class="service__time">~ 90 phút</div>
-      </div>
-      <div class="service" data-price="2400000" data-name="Đánh bóng + ceramic">
-        <div class="service__ic"><i data-lucide="sparkles"></i></div>
-        <h3 class="service__name">Đánh bóng + phủ ceramic</h3>
-        <div class="service__price service__price--flex">Liên hệ báo giá</div>
-        <div class="service__time">~ 4 giờ</div>
+      <div class="bk-step-line"></div>
+      <div class="bk-step" data-step="3">
+        <div class="bk-step__dot"><span>3</span></div>
+        <div class="bk-step__label">Xác nhận</div>
       </div>
     </div>
 
-    <!-- ============ BOOKING FORM ============ -->
-    <form class="quote reveal" id="booking-form" novalidate>
-      <div id="booking">
-        <h3>Báo giá &amp; đặt lịch nhanh</h3>
-        <p class="lead" style="font-size:15px;margin-bottom:20px">
-          Điền thông tin, chọn xe + dịch vụ. Báo giá cập nhật tức thì. KTV sẽ liên hệ xác nhận trong 15 phút.
-        </p>
+    <!-- ══════════════════════════════════════════
+         PHIẾU ĐẶT LỊCH (Bill-style card)
+    ══════════════════════════════════════════ -->
+    <div class="booking-bill reveal" id="booking">
 
-        <div class="field--row">
-          <div class="field">
-            <label for="q-name">Họ và tên</label>
-            <input type="text" id="q-name" name="name" placeholder="Nguyễn Văn A" required />
-          </div>
-          <div class="field">
-            <label for="q-phone">Số điện thoại</label>
-            <input type="tel" id="q-phone" name="phone" placeholder="0901 234 567" required />
-          </div>
+      <!-- Bill header -->
+      <div class="bill-header">
+        <div class="bill-logo">
+          <img src="logo-cardiy-primary.svg" alt="CARDIY" />
         </div>
-
-        <div class="field">
-          <label for="q-car">Dòng xe</label>
-          <select id="q-car" name="car">
-            <option value="sedan-small" data-mult="1">Sedan hạng B (Vios, City, Accent)</option>
-            <option value="sedan-mid" data-mult="1.15">Sedan hạng C (Altis, Mazda 3, Civic)</option>
-            <option value="suv" data-mult="1.3">SUV / CUV (CR-V, CX-5, Tucson)</option>
-            <option value="pickup" data-mult="1.35">Bán tải (Ranger, Hilux, Triton)</option>
-            <option value="luxury" data-mult="1.6">Xe sang (Mercedes, BMW, Audi)</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Dịch vụ cần làm</label>
-          <div class="checks">
-            <label class="check"><input type="checkbox" data-price="450000" data-time="45" checked />Thay dầu + lọc <small>450k</small></label>
-            <label class="check"><input type="checkbox" data-price="680000" data-time="60" />Má phanh <small>680k</small></label>
-            <label class="check"><input type="checkbox" data-price="350000" data-time="50" />Cân thước lái <small>350k</small></label>
-            <label class="check"><input type="checkbox" data-price="550000" data-time="75" />Vệ sinh điều hoà <small>550k</small></label>
-            <label class="check"><input type="checkbox" data-price="1850000" data-time="30" />Bình ắc-quy <small>1.85tr</small></label>
-            <label class="check"><input type="checkbox" data-price="1450000" data-time="90" />Gói bảo dưỡng 10k <small>1.45tr</small></label>
-            <label class="check"><input type="checkbox" data-price="250000" data-time="30" />Cảm biến + đèn báo <small>250k</small></label>
-            <label class="check"><input type="checkbox" data-price="2400000" data-time="240" />Đánh bóng + ceramic <small>2.4tr</small></label>
-          </div>
-        </div>
-
-        <div class="field--row">
-          <div class="field">
-            <label for="q-loc">Khu vực</label>
-            <select id="q-loc" name="location">
-              <option value="hcm">TP. Hồ Chí Minh</option>
-              <option value="hn">Hà Nội</option>
-              <option value="dn">Đà Nẵng</option>
-              <option value="other">Tỉnh khác</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="q-date">Ngày muốn làm</label>
-            <input type="date" id="q-date" name="date" />
-          </div>
+        <div class="bill-header-right">
+          <div class="bill-title">PHIẾU ĐẶT LỊCH DỊCH VỤ</div>
+          <div class="bill-code" id="bill-code-display">Mã đặt lịch: —</div>
         </div>
       </div>
 
-      <!-- ── ADDRESS ── -->
-      <div class="field field--full">
-        <label for="q-address">Địa chỉ lưu động <span class="field-hint">KTV sẽ tới đây</span></label>
-        <input type="text" id="q-address" name="address" autocomplete="street-address"
-          placeholder="VD: 123 Nguyễn Văn Linh, Q.7, TP.HCM" />
-      </div>
+      <!-- Bill body -->
+      <div class="bill-body">
 
-      <!-- ── MOBILE FEE CALCULATOR ── -->
-      <div class="field field--full" id="mobile-fee-block">
-        <label>Phí lưu động <span class="badge-gps">📍 Tự tính theo km</span></label>
-        <div class="fee-row">
-          <div class="fee-col">
-            <span class="fee-unit">Khoảng cách</span>
-            <div class="fee-input-km">
-              <input type="number" id="q-km" name="km" min="0" max="200" step="0.5" value="5" />
-              <span>km</span>
+        <!-- ── STEP 1: Service selection ── -->
+        <div class="bill-step" id="bstep-1">
+          <div class="bill-step-title">
+            <span class="bill-step-num">1</span>
+            Chọn dịch vụ cần làm
+            <span class="bill-step-hint">Chọn một hoặc nhiều dịch vụ</span>
+          </div>
+
+          <!-- Service grid -->
+          <div class="bill-services-grid">
+            <label class="bsvc-card">
+              <input type="checkbox" name="svc" value="dau_loc" data-name="Thay dầu máy + lọc" data-icon="droplets" />
+              <i data-lucide="droplets" class="ic bsvc-ic"></i>
+              <span class="bsvc-name">Thay dầu máy + lọc</span>
+              <span class="bsvc-time">~ 45 phút</span>
+            </label>
+            <label class="bsvc-card">
+              <input type="checkbox" name="svc" value="phanh" data-name="Thay má phanh" data-icon="disc-3" />
+              <i data-lucide="disc-3" class="ic bsvc-ic"></i>
+              <span class="bsvc-name">Thay má phanh</span>
+              <span class="bsvc-time">~ 60 phút</span>
+            </label>
+            <label class="bsvc-card">
+              <input type="checkbox" name="svc" value="thuoc_lai" data-name="Cân chỉnh thước lái" data-icon="car" />
+              <i data-lucide="car" class="ic bsvc-ic"></i>
+              <span class="bsvc-name">Cân chỉnh thước lái</span>
+              <span class="bsvc-time">~ 50 phút</span>
+            </label>
+            <label class="bsvc-card">
+              <input type="checkbox" name="svc" value="acquy" data-name="Thay bình ắc-quy" data-icon="battery-charging" />
+              <i data-lucide="battery-charging" class="ic bsvc-ic"></i>
+              <span class="bsvc-name">Thay bình ắc-quy</span>
+              <span class="bsvc-time">~ 30 phút</span>
+            </label>
+            <label class="bsvc-card">
+              <input type="checkbox" name="svc" value="dieu_hoa" data-name="Vệ sinh điều hoà" data-icon="wind" />
+              <i data-lucide="wind" class="ic bsvc-ic"></i>
+              <span class="bsvc-name">Vệ sinh điều hoà</span>
+              <span class="bsvc-time">~ 75 phút</span>
+            </label>
+            <label class="bsvc-card">
+              <input type="checkbox" name="svc" value="cam_bien" data-name="Cảm biến + đèn báo" data-icon="gauge" />
+              <i data-lucide="gauge" class="ic bsvc-ic"></i>
+              <span class="bsvc-name">Cảm biến + đèn báo</span>
+              <span class="bsvc-time">~ 30 phút</span>
+            </label>
+            <label class="bsvc-card">
+              <input type="checkbox" name="svc" value="bao_duong" data-name="Gói bảo dưỡng 10k" data-icon="wrench" />
+              <i data-lucide="wrench" class="ic bsvc-ic"></i>
+              <span class="bsvc-name">Gói bảo dưỡng 10k</span>
+              <span class="bsvc-time">~ 90 phút</span>
+            </label>
+            <label class="bsvc-card">
+              <input type="checkbox" name="svc" value="ceramic" data-name="Đánh bóng + phủ ceramic" data-icon="sparkles" />
+              <i data-lucide="sparkles" class="ic bsvc-ic"></i>
+              <span class="bsvc-name">Đánh bóng + ceramic</span>
+              <span class="bsvc-time">~ 4 giờ</span>
+            </label>
+          </div>
+
+          <!-- Selected services mini-bill -->
+          <div class="bill-selected-list" id="bill-selected-list">
+            <div class="bill-list-empty" id="bill-empty-hint">
+              <i data-lucide="mouse-pointer-click" class="ic"></i>
+              Chọn ít nhất 1 dịch vụ để tiếp tục
             </div>
+            <table class="bill-table" id="bill-table" style="display:none">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên dịch vụ</th>
+                  <th>Thời gian dự kiến</th>
+                  <th>Báo giá</th>
+                </tr>
+              </thead>
+              <tbody id="bill-table-body"></tbody>
+            </table>
           </div>
-          <div class="fee-col">
-            <span class="fee-unit">Thời điểm</span>
-            <select id="q-daytime" name="daytime">
-              <option value="day">Ban ngày (6h – 22h) · 30.000₫/km</option>
-              <option value="night">Ban đêm (22h – 6h) · 35.000₫/km</option>
-            </select>
-          </div>
-          <div class="fee-col fee-col--result">
-            <span class="fee-unit">Phí lưu động</span>
-            <strong class="fee-total-value" id="mobile-fee-value">150.000 ₫</strong>
-            <span class="fee-total-note" id="mobile-fee-note">≤ 5 km</span>
-          </div>
-        </div>
-        <div class="fee-extras">
-          <label class="fee-check">
-            <input type="checkbox" id="q-holiday" name="holiday" />
-            Ngày lễ / Tết &nbsp;<span class="surcharge-tag">+30%</span>
-          </label>
-          <label class="fee-check">
-            <input type="checkbox" id="q-toll" name="toll" />
-            Phí cầu đường (cộng thực tế)
-          </label>
-        </div>
-        <p class="fee-rule">5 km đầu: <b>150.000₫</b> · km tiếp ban ngày: <b>+30.000₫/km</b> · ban đêm: <b>+35.000₫/km</b> · ngày lễ: <b>+30%</b></p>
-      </div>
 
-      <!-- ── NOTE / NEEDS ── -->
-      <div class="field field--full">
-        <label for="q-note">Nhu cầu thực tế <span class="field-hint">(tuỳ chọn — giúp KTV chuẩn bị tốt hơn)</span></label>
-        <textarea id="q-note" name="note" rows="3"
-          placeholder="VD: Xe rung khi vào số, tiếng kêu lạ vùng bánh trước phải, muốn kiểm tra thêm dầu hộp số… Phí dịch vụ tuỳ chỉnh linh hoạt — ghi rõ để báo giá đúng nhất."></textarea>
-        <div class="field-tagline">&ldquo; Càng đơn giản — Càng hiệu quả &rdquo;</div>
-      </div>
-
-      <div class="quote__summary">
-        <div class="qs-overline">Tạm tính</div>
-        <div>
-          <span class="qs-total" id="qs-total">450.000</span>
-          <span class="qs-suffix">₫</span>
-        </div>
-        <div class="qs-note">
-          Tổng thời gian dự kiến: <strong id="qs-eta" style="color:#fff">45 phút</strong>.<br />
-          Đã bao gồm phụ tùng chính hãng, công thợ &amp; bảo hành 6 tháng. KTV tới tận nơi miễn phí trong nội thành.
-        </div>
-        <ul class="qs-list" id="qs-list">
-          <li><span>Thay dầu + lọc</span><span class="v">450.000 ₫</span></li>
-        </ul>
-        <div class="qs-btn-row">
-          <button type="submit" class="btn btn--accent btn--lg" style="flex:1;min-width:180px">
-            Xác nhận đặt lịch
+          <button class="btn btn--primary btn--lg bill-next-btn" id="bstep1-next" disabled>
+            Tiếp theo: Điền thông tin
             <i data-lucide="arrow-right" class="ic"></i>
           </button>
-          <a href="#ai" class="btn btn--inverse">
-            <i data-lucide="message-circle" class="ic"></i>
-            Hỏi AI
-          </a>
         </div>
-      </div>
-    </form>
-  </div>
+
+        <!-- ── STEP 2: Info & Address ── -->
+        <div class="bill-step" id="bstep-2" style="display:none">
+          <div class="bill-step-title">
+            <span class="bill-step-num">2</span>
+            Thông tin đặt lịch
+          </div>
+
+          <!-- Customer info row -->
+          <div class="bill-info-grid">
+            <div class="bill-field">
+              <label for="bk-name">Họ và tên khách hàng <span class="req">*</span></label>
+              <input type="text" id="bk-name" placeholder="VD: Nguyễn Văn A" autocomplete="name" required />
+            </div>
+            <div class="bill-field">
+              <label for="bk-phone">Số điện thoại <span class="req">*</span></label>
+              <input type="tel" id="bk-phone" placeholder="VD: 0901 234 567" autocomplete="tel" required />
+            </div>
+            <div class="bill-field">
+              <label for="bk-car">Hãng xe / Dòng xe</label>
+              <input type="text" id="bk-car" placeholder="VD: Toyota Vios 2021" autocomplete="off" />
+            </div>
+            <div class="bill-field">
+              <label for="bk-plate">Biển số xe</label>
+              <input type="text" id="bk-plate" placeholder="VD: 51K-238.79" autocomplete="off" />
+            </div>
+            <div class="bill-field bill-field--full">
+              <label for="bk-address">Địa chỉ lấy xe <span class="req">*</span></label>
+              <input type="text" id="bk-address" placeholder="Số nhà, đường, phường, quận — KTV sẽ tới đây" autocomplete="street-address" required />
+            </div>
+          </div>
+
+          <!-- Date + time -->
+          <div class="bill-datetime-row">
+            <div class="bill-field">
+              <label for="bk-date">Ngày hẹn <span class="req">*</span></label>
+              <input type="date" id="bk-date" required />
+            </div>
+            <div class="bill-field">
+              <label for="bk-slot">Khung giờ</label>
+              <select id="bk-slot">
+                <option value="7-9">7:00 – 9:00</option>
+                <option value="9-11">9:00 – 11:00</option>
+                <option value="11-13">11:00 – 13:00</option>
+                <option value="13-15">13:00 – 15:00</option>
+                <option value="15-17">15:00 – 17:00</option>
+                <option value="17-19">17:00 – 19:00</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Mobile fee row -->
+          <div class="bill-fee-block">
+            <div class="bill-fee-header">
+              <i data-lucide="map-pin" class="ic"></i>
+              <span>Phí lưu động <span class="badge-gps-sm">📍 Tự tính theo km</span></span>
+            </div>
+            <div class="bill-fee-inputs">
+              <div class="bill-field">
+                <label for="bk-km">Khoảng cách (km)</label>
+                <div class="km-wrap"><input type="number" id="bk-km" min="0" max="200" step="0.5" value="5" /><span>km</span></div>
+              </div>
+              <div class="bill-field">
+                <label for="bk-daytime">Thời điểm</label>
+                <select id="bk-daytime">
+                  <option value="day">Ban ngày · 30.000₫/km</option>
+                  <option value="night">Ban đêm · 35.000₫/km</option>
+                </select>
+              </div>
+              <div class="bill-fee-result">
+                <span class="bill-fee-label">Phí lưu động</span>
+                <strong id="bk-fee-value">150.000 ₫</strong>
+                <span id="bk-fee-note">≤ 5 km</span>
+              </div>
+            </div>
+            <div class="bill-fee-extras">
+              <label class="fee-chk"><input type="checkbox" id="bk-holiday" /><span>Ngày lễ / Tết <em class="badge-holiday">+30%</em></span></label>
+              <label class="fee-chk"><input type="checkbox" id="bk-toll" /><span>Có phí cầu đường</span></label>
+            </div>
+            <div class="bill-fee-rule">5 km đầu: <b>150.000₫</b> · Ngày +<b>30.000₫/km</b> · Đêm +<b>35.000₫/km</b> · Lễ +<b>30%</b></div>
+          </div>
+
+          <!-- Note -->
+          <div class="bill-field bill-field--full">
+            <label for="bk-note">Nhu cầu thực tế & ghi chú <span class="field-hint">(tuỳ chọn)</span></label>
+            <textarea id="bk-note" rows="3" placeholder="VD: Xe rung khi tăng tốc, đèn check engine sáng, muốn kiểm tra thêm lốp… Càng mô tả chi tiết — KTV càng chuẩn bị tốt hơn."></textarea>
+          </div>
+
+          <div class="bill-step-actions">
+            <button class="btn btn--outline" id="bstep2-back">
+              <i data-lucide="arrow-left" class="ic"></i> Quay lại
+            </button>
+            <button class="btn btn--primary btn--lg" id="bstep2-next">
+              Xem xác nhận <i data-lucide="arrow-right" class="ic"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- ── STEP 3: Confirmation preview ── -->
+        <div class="bill-step" id="bstep-3" style="display:none">
+          <div class="bill-step-title">
+            <span class="bill-step-num">3</span>
+            Xác nhận phiếu đặt lịch
+          </div>
+
+          <!-- Preview bill -->
+          <div class="bill-preview">
+            <div class="bill-preview-row"><span>Khách hàng</span><strong id="prev-name">—</strong></div>
+            <div class="bill-preview-row"><span>Điện thoại</span><strong id="prev-phone">—</strong></div>
+            <div class="bill-preview-row"><span>Xe</span><strong id="prev-car">—</strong></div>
+            <div class="bill-preview-row"><span>Biển số</span><strong id="prev-plate">—</strong></div>
+            <div class="bill-preview-row"><span>Địa chỉ</span><strong id="prev-address">—</strong></div>
+            <div class="bill-preview-row"><span>Ngày hẹn</span><strong id="prev-date">—</strong></div>
+            <div class="bill-preview-row"><span>Khung giờ</span><strong id="prev-slot">—</strong></div>
+            <div class="bill-preview-divider"></div>
+            <div class="bill-preview-services" id="prev-services"></div>
+            <div class="bill-preview-divider"></div>
+            <div class="bill-preview-row"><span>Phí lưu động</span><strong id="prev-fee">150.000 ₫</strong></div>
+            <div class="bill-preview-row bill-preview-total"><span>Tổng ước tính</span><strong id="prev-total">Sẽ báo sau khi KTV kiểm tra</strong></div>
+          </div>
+
+          <div class="bill-confirm-note">
+            <i data-lucide="info" class="ic"></i>
+            KTV sẽ gọi xác nhận trong vòng <b>5 phút</b> sau khi bạn đặt lịch.
+          </div>
+
+          <div class="bill-step-actions">
+            <button class="btn btn--outline" id="bstep3-back">
+              <i data-lucide="arrow-left" class="ic"></i> Sửa thông tin
+            </button>
+            <button class="btn btn--accent btn--lg" id="bstep3-submit">
+              <i data-lucide="check-circle" class="ic"></i>
+              Xác nhận đặt lịch ngay!
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /bill-body -->
+    </div><!-- /booking-bill -->
+
+  </div><!-- /container -->
 </section>
 
-<!-- ============ TRACKING ============ -->
 <section class="section" id="tracking">
   <div class="container tracking">
     <div class="tracking__copy reveal">
