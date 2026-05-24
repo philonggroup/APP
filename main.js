@@ -488,7 +488,7 @@ Bạn cứ hỏi tự nhiên nhé — "xe mình kêu gì đó", "thay dầu giá
   // ================================================================
   // CARDIY · 3-Step Booking Bill Logic
   // ================================================================
-  (function initBookingBill() {
+  document.addEventListener('DOMContentLoaded', function initBookingBill() {
 
     // ── Helpers ──
     const $ = id => document.getElementById(id);
@@ -667,6 +667,6 @@ Bạn cứ hỏi tự nhiên nhé — "xe mình kêu gì đó", "thay dầu giá
       });
     });
     
-  })();
+  });
 
 })();
