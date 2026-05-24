@@ -1004,3 +1004,175 @@ p.lead { text-wrap: pretty; }
   .map__eta .v { font-size: 22px; }
   .map__timeline { flex-wrap: wrap; }
 }
+
+
+/* =====================================================================
+   CARDIY · Phí Lưu Động & Booking Mới
+   ===================================================================== */
+
+/* ── Service card: no-price state ── */
+.service__price.service__price--flex {
+  color: var(--cardiy-blue-600);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ── Booking: field variants ── */
+.field--full { grid-column: 1 / -1; }
+.field-hint {
+  font: 400 12px/1 var(--font-sans);
+  color: var(--fg-3);
+  margin-left: 6px;
+}
+.field-optional {
+  font: 400 12px/1 var(--font-sans);
+  color: var(--fg-3);
+  margin-left: 4px;
+}
+.field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border-2);
+  border-radius: var(--r-md);
+  background: var(--bg-1);
+  color: var(--fg-1);
+  font: 400 14px/1.55 var(--font-sans);
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 200ms ease;
+}
+.field textarea:focus {
+  outline: none;
+  border-color: var(--cardiy-blue-500);
+}
+.field-tagline {
+  margin-top: 8px;
+  font: 600 13px/1.3 var(--font-display);
+  color: var(--cardiy-blue-600);
+  letter-spacing: 0.02em;
+  font-style: italic;
+}
+
+/* ── GPS Mobile Fee Block ── */
+#mobile-fee-block {
+  background: var(--bg-2);
+  border: 1.5px solid var(--border-1);
+  border-radius: var(--r-lg);
+  padding: 18px 20px 14px;
+}
+#mobile-fee-block > label {
+  font: 600 14px/1 var(--font-display);
+  color: var(--fg-1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.badge-gps {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--cardiy-blue-50);
+  color: var(--cardiy-blue-600);
+  border: 1px solid rgba(30, 79, 184, 0.15);
+  border-radius: 999px;
+  font: 600 11px/1 var(--font-sans);
+  padding: 4px 10px;
+  letter-spacing: 0.04em;
+}
+.fee-row {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+@media (max-width: 640px) {
+  .fee-row { grid-template-columns: 1fr 1fr; }
+  .fee-col--result { grid-column: 1 / -1; }
+}
+.fee-col { display: flex; flex-direction: column; gap: 6px; }
+.fee-unit {
+  font: 500 11px/1 var(--font-sans);
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.fee-input-km {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fee-input-km input {
+  width: 90px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1.5px solid var(--border-2);
+  border-radius: var(--r-md);
+  background: var(--bg-1);
+  font: 600 15px/1 var(--font-sans);
+  color: var(--fg-1);
+}
+.fee-input-km input:focus { outline: none; border-color: var(--cardiy-blue-500); }
+.fee-input-km span { font: 500 13px/1 var(--font-sans); color: var(--fg-3); }
+#mobile-fee-block select {
+  height: 40px;
+  width: 100%;
+  padding: 0 12px;
+  border: 1.5px solid var(--border-2);
+  border-radius: var(--r-md);
+  background: var(--bg-1);
+  font: 500 13px/1 var(--font-sans);
+  color: var(--fg-1);
+}
+#mobile-fee-block select:focus { outline: none; border-color: var(--cardiy-blue-500); }
+.fee-col--result {
+  background: var(--bg-1);
+  border: 1.5px solid var(--cardiy-blue-100);
+  border-radius: var(--r-md);
+  padding: 10px 14px;
+  text-align: center;
+}
+.fee-total-value {
+  display: block;
+  font: 700 20px/1 var(--font-display);
+  color: var(--cardiy-blue-600);
+  margin: 4px 0;
+}
+.fee-total-note {
+  display: block;
+  font: 400 11px/1 var(--font-sans);
+  color: var(--fg-3);
+}
+.fee-extras {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.fee-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 500 13px/1 var(--font-sans);
+  color: var(--fg-2);
+  cursor: pointer;
+}
+.fee-check input[type="checkbox"] { accent-color: var(--cardiy-blue-500); width: 15px; height: 15px; }
+.surcharge-tag {
+  display: inline-flex;
+  background: var(--cardiy-yellow-500);
+  color: var(--cardiy-ink-900);
+  font: 700 10px/1 var(--font-sans);
+  padding: 3px 7px;
+  border-radius: 999px;
+}
+.fee-rule {
+  font: 400 11px/1.5 var(--font-sans);
+  color: var(--fg-3);
+  border-top: 1px solid var(--border-1);
+  padding-top: 10px;
+  margin: 0;
+}
+.fee-rule b { color: var(--fg-2); }
