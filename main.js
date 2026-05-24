@@ -429,4 +429,59 @@ Bạn cứ hỏi tự nhiên nhé — "xe mình kêu gì đó", "thay dầu giá
 
   // Mark page as ready (for any CSS hooks)
   document.documentElement.classList.add('is-ready');
+
+  // ============================================================
+  // CARDIY · Phí Lưu Động (Mobile Service Fee Calculator)
+  // Tính phí GPS: 150k cho 5km đầu, 30k/km ban ngày, 35k/km ban đêm
+  // Phụ thu ngày lễ 30%. Cộng phí cầu đường thực tế.
+  // ============================================================
+
+  function calcMobileFee(km, isNight, isHoliday) {
+    const BASE = 150000;       // 5km đầu
+    const BASE_KM = 5;
+    const RATE_DAY = 30000;    // per km, ban ngày
+    const RATE_NIGHT = 35000;  // per km, ban đêm
+    const km_num = parseFloat(km) || 0;
+    let fee = BASE;
+    if (km_num > BASE_KM) {
+      const extra = km_num - BASE_KM;
+      fee += extra * (isNight ? RATE_NIGHT : RATE_DAY);
+    }
+    if (isHoliday) fee = Math.round(fee * 1.3);
+    return Math.round(fee);
+  }
+
+  function updateMobileFeeDisplay() {
+    const kmEl = document.getElementById('q-km');
+    const daytimeEl = document.getElementById('q-daytime');
+    const holidayEl = document.getElementById('q-holiday');
+    const feeValueEl = document.getElementById('mobile-fee-value');
+    const feeNoteEl = document.getElementById('mobile-fee-note');
+    if (!kmEl || !feeValueEl) return;
+
+    const km = parseFloat(kmEl.value) || 0;
+    const isNight = daytimeEl ? daytimeEl.value === 'night' : false;
+    const isHoliday = holidayEl ? holidayEl.checked : false;
+    const fee = calcMobileFee(km, isNight, isHoliday);
+
+    feeValueEl.textContent = formatVN(fee) + ' ₫';
+    let note = '';
+    if (km <= 5) note = '≤ 5 km đầu tiên';
+    else note = km.toFixed(1) + ' km' + (isNight ? ' · đêm' : ' · ngày') + (isHoliday ? ' · lễ +30%' : '');
+    if (feeNoteEl) feeNoteEl.textContent = note;
+  }
+
+  // Attach listeners for mobile fee inputs
+  function bindMobileFeeListeners() {
+    const inputs = ['q-km', 'q-daytime', 'q-holiday', 'q-toll'];
+    inputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('change', updateMobileFeeDisplay);
+      if (el && el.type === 'number') el.addEventListener('input', updateMobileFeeDisplay);
+    });
+    updateMobileFeeDisplay(); // initial render
+  }
+
+  document.addEventListener('DOMContentLoaded', bindMobileFeeListeners);
+
 })();
