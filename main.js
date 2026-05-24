@@ -75,7 +75,7 @@
         close();
       }
       if (e.target.closest('.modal__close')) close();
-    });
+    })();
     document.addEventListener('keydown', function onEsc(e) {
       if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onEsc); }
     });
@@ -488,7 +488,8 @@ Bạn cứ hỏi tự nhiên nhé — "xe mình kêu gì đó", "thay dầu giá
   // ================================================================
   // CARDIY · 3-Step Booking Bill Logic
   // ================================================================
-  document.addEventListener('DOMContentLoaded', function initBookingBill() {
+  // Booking Bill Init — runs after defer script loads (DOM is ready)
+  (function initBookingBill() {
 
     // ── Helpers ──
     const $ = id => document.getElementById(id);
