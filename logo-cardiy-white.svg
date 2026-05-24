@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" role="img" aria-label="CARDIY logo white">
+  <g transform="translate(8,12)">
+    <rect x="0" y="0" width="56" height="56" rx="14" fill="#FFFFFF" fill-opacity="0.12" stroke="#FFFFFF" stroke-opacity="0.4"></rect>
+    <path d="M40 18a14 14 0 1 0 0 20" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"></path>
+    <circle cx="40" cy="28" r="4" fill="#FFC400"></circle>
+  </g>
+  <g transform="translate(80,52)" font-family="Be Vietnam Pro, sans-serif" font-weight="800" font-size="34" letter-spacing="-0.5">
+    <text fill="#FFFFFF">CARD</text>
+    <text x="86" fill="#FFC400">I</text>
+    <text x="102" fill="#FFFFFF">Y</text>
+  </g>
+</svg>

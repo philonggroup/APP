@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>CARDIY · Bảng điều khiển</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#1E4FB8" />
+<meta name="description" content="CARDIY app — quản lý xe, đặt lịch dịch vụ, theo dõi KTV, trợ lý AI." />
+<link rel="icon" type="image/svg+xml" href="assets/logo-cardiy-mark.svg" />
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/main.css" />
+<link rel="stylesheet" href="styles/app.css" />
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script src="scripts/app.js" defer></script>
+</head>
+<body class="app-body">
+
+<div class="aside-scrim" id="aside-scrim"></div>
+
+<div class="app-shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="aside" id="aside">
+    <div class="aside__brand">
+      <img src="assets/logo-cardiy-primary.svg" alt="CARDIY" />
+    </div>
+
+    <div class="aside__user">
+      <div class="av">NH</div>
+      <div>
+        <div class="name">Nguyễn Quốc Hùng</div>
+        <div class="role">Chủ xe · 1 xe</div>
+      </div>
+    </div>
+
+    <nav class="aside__nav">
+      <button data-view="overview"><i data-lucide="layout-dashboard" class="ic"></i>Tổng quan</button>
+      <button data-view="cars"><i data-lucide="car" class="ic"></i>Xe của tôi</button>
+      <button data-view="book"><i data-lucide="calendar-plus" class="ic"></i>Đặt lịch<span class="badge">Nhanh</span></button>
+      <button data-view="history"><i data-lucide="history" class="ic"></i>Lịch sử</button>
+      <button data-view="ai"><i data-lucide="sparkles" class="ic"></i>Trợ lý AI</button>
+      <button data-view="settings"><i data-lucide="settings" class="ic"></i>Cài đặt</button>
+    </nav>
+
+    <div class="aside__footer">
+      <a href="index.html" class="aside__back">
+        <i data-lucide="arrow-left" class="ic" style="width:16px;height:16px"></i>
+        Về trang chủ
+      </a>
+      <button class="aside__back" data-action="logout" style="color:var(--cardiy-danger)">
+        <i data-lucide="log-out" class="ic" style="width:16px;height:16px"></i>
+        Đăng xuất
+      </button>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div>
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="topbar__burger" id="topbar-burger" aria-label="Mở menu">
+        <i data-lucide="menu" class="ic"></i>
+      </button>
+      <div>
+        <div class="topbar__title" id="topbar-title">Tổng quan</div>
+        <div class="topbar__sub" id="topbar-sub">Tóm tắt nhanh tình trạng xe của bạn</div>
+      </div>
+      <div class="topbar__spacer"></div>
+      <div class="topbar__search">
+        <i data-lucide="search" class="ic"></i>
+        <input type="text" placeholder="Tìm dịch vụ, KTV, hoá đơn…" />
+      </div>
+      <button class="topbar__icon-btn" id="notif-btn" aria-label="Thông báo">
+        <i data-lucide="bell" class="ic"></i>
+        <span class="dot"></span>
+      </button>
+      <button class="topbar__icon-btn" data-goto="settings" aria-label="Cài đặt">
+        <i data-lucide="settings" class="ic"></i>
+      </button>
+    </header>
+
+    <main class="app-main">
+
+      <!-- ============ OVERVIEW ============ -->
+      <section class="view" id="view-overview">
+        <!-- Active booking strip -->
+        <div class="active-booking" style="margin-bottom:24px">
+          <div class="ic-wrap"><i data-lucide="map-pin" class="ic"></i></div>
+          <div>
+            <div class="title">KTV đang trên đường tới</div>
+            <div class="sub">Nguyễn Văn Hùng · cách 1.2 km · ETA 8 phút · ★ 4.9</div>
+          </div>
+          <div class="meta">
+            <button class="btn btn--sm btn--ghost" data-quick="call-ktv"><i data-lucide="phone" class="ic"></i>Gọi</button>
+            <button class="btn btn--sm btn--outline" data-quick="cancel-booking">Huỷ</button>
+          </div>
+        </div>
+
+        <div class="grid grid--main-side-wide" style="margin-bottom:24px">
+          <!-- Car hero -->
+          <div class="car-hero">
+            <div>
+              <div class="car-hero__brand">TOYOTA · 2021</div>
+              <div class="car-hero__name">Vios 1.5G CVT</div>
+              <span class="car-hero__plate">51K-238.79</span>
+              <div class="car-hero__stats">
+                <div>
+                  <div class="vs-label">SỐ KM</div>
+                  <div class="vs-val">42.180</div>
+                </div>
+                <div>
+                  <div class="vs-label">BẢO DƯỠNG KẾ TIẾP</div>
+                  <div class="vs-val">15/06</div>
+                </div>
+                <div>
+                  <div class="vs-label">CHI PHÍ NĂM NAY</div>
+                  <div class="vs-val">4.2M ₫</div>
+                </div>
+              </div>
+            </div>
+            <div class="car-hero__health">
+              <div class="health-ring">
+                <div class="health-ring__val">87<small>/100</small></div>
+              </div>
+              <div class="lbl">Sức khoẻ xe</div>
+            </div>
+          </div>
+
+          <!-- Mini map -->
+          <div class="card" style="padding:0;overflow:hidden;background:transparent;border:none">
+            <div class="mini-map">
+              <div class="grid-bg"></div>
+              <svg viewBox="0 0 400 240" preserveAspectRatio="none">
+                <g stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none">
+                  <path d="M0,60 L400,60" /><path d="M0,120 L400,120" /><path d="M0,180 L400,180" />
+                  <path d="M80,0 L80,240" /><path d="M180,0 L180,240" /><path d="M280,0 L280,240" />
+                </g>
+                <path class="route" d="M88 60 Q 160 100 200 130 T 280 160 Q 300 165 320 158" />
+              </svg>
+              <div class="pin ktv"><div class="pulse"></div><div class="dot"></div></div>
+              <div class="pin cust"><div class="pulse"></div><div class="dot"></div></div>
+              <div class="badge">Đang đến</div>
+              <div class="eta-badge">8'</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div style="margin-bottom:24px">
+          <h3 style="font: 700 16px/1 var(--font-display);margin:0 0 12px">Tác vụ nhanh</h3>
+          <div class="quick-grid">
+            <button class="quick" data-quick="book">
+              <div class="ic-wrap"><i data-lucide="calendar-plus"></i></div>
+              <div class="lbl">Đặt lịch dịch vụ</div>
+            </button>
+            <button class="quick" data-quick="ai">
+              <div class="ic-wrap"><i data-lucide="sparkles"></i></div>
+              <div class="lbl">Hỏi trợ lý AI</div>
+            </button>
+            <button class="quick" data-quick="history">
+              <div class="ic-wrap"><i data-lucide="history"></i></div>
+              <div class="lbl">Xem lịch sử</div>
+            </button>
+            <button class="quick" data-quick="invoice">
+              <div class="ic-wrap"><i data-lucide="file-text"></i></div>
+              <div class="lbl">Tải hoá đơn T5</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid--main-side">
+          <!-- Recent activity -->
+          <div class="card">
+            <div class="card__head">
+              <h3>Hoạt động gần đây</h3>
+              <button class="more" data-goto="history">Xem tất cả</button>
+            </div>
+            <ul class="timeline">
+              <li>
+                <div class="icn icn--info"><i data-lucide="map-pin" style="width:16px;height:16px"></i></div>
+                <div class="body">
+                  <div class="ttl">KTV xác nhận đặt lịch</div>
+                  <div class="meta">Nguyễn Văn Hùng · 9:32 hôm nay</div>
+                </div>
+                <div class="right">vừa xong</div>
+              </li>
+              <li>
+                <div class="icn icn--success"><i data-lucide="check" style="width:16px;height:16px"></i></div>
+                <div class="body">
+                  <div class="ttl">Thay dầu + lọc gió hoàn tất</div>
+                  <div class="meta">KTV Trần Anh · 14/04/2026</div>
+                </div>
+                <div class="right price">450.000 ₫</div>
+              </li>
+              <li>
+                <div class="icn icn--info"><i data-lucide="sparkles" style="width:16px;height:16px"></i></div>
+                <div class="body">
+                  <div class="ttl">AI nhắc bảo dưỡng 50k km</div>
+                  <div class="meta">Đề xuất gói 1.450.000 ₫</div>
+                </div>
+                <div class="right">3 ngày</div>
+              </li>
+              <li>
+                <div class="icn icn--warning"><i data-lucide="droplets" style="width:16px;height:16px"></i></div>
+                <div class="body">
+                  <div class="ttl">Cảnh báo: áp suất lốp giảm</div>
+                  <div class="meta">Lốp sau bên phải · 28 psi (thường 32)</div>
+                </div>
+                <div class="right">1 tuần</div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Reminders -->
+          <div class="card">
+            <div class="card__head">
+              <h3>Nhắc nhở</h3>
+              <button class="more" data-goto="ai">Hỏi AI</button>
+            </div>
+            <div class="reminder is-urgent">
+              <div class="icn"><i data-lucide="alert-triangle" style="width:18px;height:18px"></i></div>
+              <div>
+                <div class="ttl">Đăng kiểm hết hạn 30 ngày</div>
+                <div class="meta">Hạn cuối: 22/06/2026</div>
+              </div>
+              <div class="right">
+                <button class="btn btn--sm btn--primary" data-quick="book">Đặt lịch</button>
+              </div>
+            </div>
+            <div class="reminder">
+              <div class="icn"><i data-lucide="wrench" style="width:18px;height:18px"></i></div>
+              <div>
+                <div class="ttl">Bảo dưỡng mốc 50.000 km</div>
+                <div class="meta">Còn ~1.500 km · gợi ý gói 1.45tr</div>
+              </div>
+            </div>
+            <div class="reminder">
+              <div class="icn"><i data-lucide="shield-check" style="width:18px;height:18px"></i></div>
+              <div>
+                <div class="ttl">Bảo hiểm còn hiệu lực</div>
+                <div class="meta">Hết hạn 30/09/2026</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MY CARS ============ -->
+      <section class="view" id="view-cars">
+        <div class="view__head">
+          <div>
+            <h1>Xe của tôi</h1>
+            <p class="sub">Tất cả xe bạn đang sử dụng. Bấm vào xe để xem chi tiết hoặc đặt lịch riêng cho từng xe.</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn--primary" data-quick="add-car">
+              <i data-lucide="plus" class="ic"></i>
+              Thêm xe mới
+            </button>
+          </div>
+        </div>
+
+        <div class="car-list">
+          <div class="car-row" data-plate="51K-238.79">
+            <div class="car-row__logo">TOY</div>
+            <div class="car-row__main">
+              <div class="car-row__name">Toyota Vios 1.5G CVT · 2021</div>
+              <div class="car-row__meta">
+                <span class="plate">51K-238.79</span>
+                <span><i data-lucide="gauge" style="width:12px;height:12px;display:inline;vertical-align:-2px"></i> 42.180 km</span>
+                <span><i data-lucide="wrench" style="width:12px;height:12px;display:inline;vertical-align:-2px"></i> Bảo dưỡng kế: 15/06</span>
+                <span style="color:var(--cardiy-success)">● Sức khoẻ 87%</span>
+              </div>
+            </div>
+            <div class="car-row__actions">
+              <button class="btn btn--sm btn--outline" data-car-action="detail">Chi tiết</button>
+              <button class="btn btn--sm btn--primary" data-car-action="book-for">
+                <i data-lucide="calendar-plus" class="ic"></i>
+                Đặt lịch
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;padding:32px;background:#fff;border:2px dashed var(--border-2);border-radius:16px;text-align:center">
+          <div style="width:48px;height:48px;border-radius:12px;background:var(--cardiy-blue-50);color:var(--cardiy-blue-500);display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px">
+            <i data-lucide="plus" style="width:22px;height:22px"></i>
+          </div>
+          <h3 style="font:700 18px/1.2 var(--font-display);margin:0 0 6px">Thêm xe thứ 2?</h3>
+          <p style="font:400 14px/1.5 var(--font-sans);color:var(--fg-2);margin:0 0 16px;max-width:46ch;margin-left:auto;margin-right:auto">
+            Quản lý tất cả xe của gia đình trên một tài khoản. CARDIY sẽ tự nhắc lịch riêng cho từng xe.
+          </p>
+          <button class="btn btn--primary" data-quick="add-car">
+            Thêm xe
+            <i data-lucide="arrow-right" class="ic"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============ BOOK ============ -->
+      <section class="view" id="view-book">
+        <div class="view__head">
+          <div>
+            <h1>Đặt lịch dịch vụ</h1>
+            <p class="sub">Chọn xe + dịch vụ + thời gian — KTV sẽ liên hệ xác nhận trong 15 phút.</p>
+          </div>
+        </div>
+
+        <form class="booking-app" id="booking-app-form">
+          <div>
+            <div class="field">
+              <label for="ba-car">Xe cần dịch vụ</label>
+              <select id="ba-car" data-mult-default="1">
+                <option value="vios" data-mult="1" selected>Toyota Vios 1.5G · 51K-238.79</option>
+                <option value="other" data-mult="1.2">Xe khác (chưa thêm vào CARDIY)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Dịch vụ cần làm</label>
+              <div class="booking-app__svc">
+                <label><input type="checkbox" data-price="450000" data-time="45" checked />Thay dầu + lọc <small>450k</small></label>
+                <label><input type="checkbox" data-price="680000" data-time="60" />Má phanh <small>680k</small></label>
+                <label><input type="checkbox" data-price="350000" data-time="50" />Cân thước lái <small>350k</small></label>
+                <label><input type="checkbox" data-price="550000" data-time="75" />Vệ sinh điều hoà <small>550k</small></label>
+                <label><input type="checkbox" data-price="1850000" data-time="30" />Bình ắc-quy <small>1.85tr</small></label>
+                <label><input type="checkbox" data-price="1450000" data-time="90" />Gói bảo dưỡng 10k <small>1.45tr</small></label>
+                <label><input type="checkbox" data-price="250000" data-time="30" />Cảm biến + đèn báo <small>250k</small></label>
+                <label><input type="checkbox" data-price="2400000" data-time="240" />Đánh bóng + ceramic <small>2.4tr</small></label>
+              </div>
+            </div>
+
+            <div class="field--row">
+              <div class="field">
+                <label for="ba-date">Ngày muốn làm</label>
+                <input type="date" id="ba-date" />
+              </div>
+              <div class="field">
+                <label for="ba-time">Khung giờ</label>
+                <select id="ba-time">
+                  <option>8:00 – 10:00 sáng</option>
+                  <option>10:00 – 12:00 trưa</option>
+                  <option>14:00 – 16:00 chiều</option>
+                  <option>16:00 – 18:00 chiều</option>
+                  <option>Sớm nhất có thể</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="ba-addr">Địa chỉ</label>
+              <input type="text" id="ba-addr" value="123 Nguyễn Văn Linh, Quận 7, TP.HCM" />
+            </div>
+          </div>
+
+          <div class="booking-app__summary">
+            <div class="ov">Tạm tính</div>
+            <div><span class="total" id="ba-total">450.000</span> <span class="suf">₫</span></div>
+            <div class="note">Thời gian dự kiến: <strong style="color:#fff" id="ba-eta">45 phút</strong>. Đã bao gồm phụ tùng chính hãng + công thợ + bảo hành 6 tháng.</div>
+            <ul id="ba-list">
+              <li><span>Thay dầu + lọc</span><span class="v">450.000 ₫</span></li>
+            </ul>
+            <div class="btn-row">
+              <button type="submit" class="btn btn--accent" style="flex:1">
+                Xác nhận đặt lịch
+                <i data-lucide="arrow-right" class="ic"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- ============ HISTORY ============ -->
+      <section class="view" id="view-history">
+        <div class="view__head">
+          <div>
+            <h1>Lịch sử bảo dưỡng</h1>
+            <p class="sub">Toàn bộ lượt dịch vụ của Vios 51K-238.79. Xuất PDF nguyên cuốn để tăng giá trị bán lại 10–15%.</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn--outline" data-invoice="full-pdf">
+              <i data-lucide="download" class="ic"></i>
+              Xuất PDF cả lịch sử
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="history-row">
+            <div class="history-row__date">
+              <div class="d">14</div>
+              <div class="m">T4 '26</div>
+            </div>
+            <div class="history-row__main">
+              <div class="ttl">Thay dầu máy + lọc dầu (42.000 km)</div>
+              <div class="sub">KTV Trần Anh · ★ 5.0 · CARDIY-A4F2K</div>
+            </div>
+            <div class="history-row__price">450.000 ₫</div>
+            <button class="btn btn--sm btn--outline" data-invoice="A4F2K">
+              <i data-lucide="file-text" class="ic"></i>
+              Hoá đơn
+            </button>
+          </div>
+          <div class="history-row">
+            <div class="history-row__date">
+              <div class="d">02</div>
+              <div class="m">T2 '26</div>
+            </div>
+            <div class="history-row__main">
+              <div class="ttl">Vệ sinh điều hoà + thay lọc gió</div>
+              <div class="sub">KTV Nguyễn Hùng · ★ 4.9 · CARDIY-B7H3M</div>
+            </div>
+            <div class="history-row__price">680.000 ₫</div>
+            <button class="btn btn--sm btn--outline" data-invoice="B7H3M">
+              <i data-lucide="file-text" class="ic"></i>
+              Hoá đơn
+            </button>
+          </div>
+          <div class="history-row">
+            <div class="history-row__date">
+              <div class="d">18</div>
+              <div class="m">T11 '25</div>
+            </div>
+            <div class="history-row__main">
+              <div class="ttl">Thay má phanh trước + cân chỉnh</div>
+              <div class="sub">KTV Lê Tuấn · ★ 4.8 · CARDIY-C2K8N</div>
+            </div>
+            <div class="history-row__price">1.030.000 ₫</div>
+            <button class="btn btn--sm btn--outline" data-invoice="C2K8N">
+              <i data-lucide="file-text" class="ic"></i>
+              Hoá đơn
+            </button>
+          </div>
+          <div class="history-row">
+            <div class="history-row__date">
+              <div class="d">05</div>
+              <div class="m">T9 '25</div>
+            </div>
+            <div class="history-row__main">
+              <div class="ttl">Gói bảo dưỡng mốc 30.000 km</div>
+              <div class="sub">KTV Trần Anh · ★ 5.0 · CARDIY-D9L4P</div>
+            </div>
+            <div class="history-row__price">1.450.000 ₫</div>
+            <button class="btn btn--sm btn--outline" data-invoice="D9L4P">
+              <i data-lucide="file-text" class="ic"></i>
+              Hoá đơn
+            </button>
+          </div>
+          <div class="history-row">
+            <div class="history-row__date">
+              <div class="d">22</div>
+              <div class="m">T5 '25</div>
+            </div>
+            <div class="history-row__main">
+              <div class="ttl">Thay dầu máy (20.000 km)</div>
+              <div class="sub">KTV Phạm Đức · ★ 4.7 · CARDIY-E5M2Q</div>
+            </div>
+            <div class="history-row__price">450.000 ₫</div>
+            <button class="btn btn--sm btn--outline" data-invoice="E5M2Q">
+              <i data-lucide="file-text" class="ic"></i>
+              Hoá đơn
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:14px;margin-top:28px;padding:20px;background:var(--bg-2);border-radius:14px;align-items:center;flex-wrap:wrap">
+          <i data-lucide="trending-up" style="color:var(--cardiy-success);width:24px;height:24px"></i>
+          <div>
+            <div style="font:700 14px/1.2 var(--font-display);color:var(--fg-1)">Tổng chi phí 12 tháng: <strong style="color:var(--cardiy-blue-500)">4.060.000 ₫</strong></div>
+            <div style="font:400 13px/1.4 var(--font-sans);color:var(--fg-2);margin-top:2px">Tiết kiệm <strong style="color:var(--cardiy-success)">~28%</strong> so với giá garage truyền thống cho cùng dịch vụ.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ AI ============ -->
+      <section class="view" id="view-ai">
+        <div class="view__head">
+          <div>
+            <h1>Trợ lý AI</h1>
+            <p class="sub">Mình hiểu xe của bạn — có toàn bộ lịch sử bảo dưỡng &amp; thông số. Hỏi gì cũng được.</p>
+          </div>
+        </div>
+
+        <div class="chat" style="max-width:760px">
+          <div class="chat__head">
+            <div class="av"><i data-lucide="sparkles" class="ic" style="width:18px;height:18px"></i></div>
+            <div>
+              <div class="ct">Trợ lý CARDIY</div>
+              <div class="cs">Đang trực tuyến · biết về Vios 51K-238.79</div>
+            </div>
+          </div>
+          <div class="chat__body" id="chat-body">
+            <div class="msg bot">
+              Chào <strong>anh Hùng</strong>! Mình thấy Vios của anh đang ở <strong>42.180 km</strong>, sức khoẻ <strong>87%</strong>.
+              Mốc bảo dưỡng <strong>50.000 km</strong> sắp tới (~1.500 km nữa). Anh muốn mình giúp gì hôm nay?
+            </div>
+          </div>
+          <div class="chat__suggest" id="chat-suggest">
+            <button type="button" class="chip">Khi nào nên thay dầu?</button>
+            <button type="button" class="chip">Đặt lịch bảo dưỡng 50k</button>
+            <button type="button" class="chip">Xe mình có vấn đề gì?</button>
+            <button type="button" class="chip">Giá điều hoà bao nhiêu?</button>
+          </div>
+          <form class="chat__input" id="chat-form" autocomplete="off">
+            <input type="text" id="chat-input" placeholder="Hỏi gì đó về xe của bạn…" />
+            <button type="submit" class="chat__send" id="chat-send" aria-label="Gửi">
+              <i data-lucide="send" class="ic" style="width:18px;height:18px"></i>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="view" id="view-settings">
+        <div class="view__head">
+          <div>
+            <h1>Cài đặt</h1>
+            <p class="sub">Thông tin tài khoản, thông báo &amp; thanh toán.</p>
+          </div>
+        </div>
+
+        <form class="profile" id="settings-form">
+          <div class="profile__head">
+            <div class="av">NH</div>
+            <div>
+              <h2>Nguyễn Quốc Hùng</h2>
+              <div class="meta">Thành viên CARDIY từ tháng 5/2025 · Hạng Gold</div>
+            </div>
+          </div>
+          <div class="profile__form">
+            <div class="field">
+              <label>Họ và tên</label>
+              <input type="text" value="Nguyễn Quốc Hùng" />
+            </div>
+            <div class="field">
+              <label>Số điện thoại</label>
+              <input type="tel" value="0901 234 567" />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input type="email" value="hung.nq@example.vn" />
+            </div>
+            <div class="field">
+              <label>Khu vực</label>
+              <input type="text" value="TP. Hồ Chí Minh" />
+            </div>
+            <div class="field field--full">
+              <label>Địa chỉ mặc định (KTV tới)</label>
+              <input type="text" value="123 Nguyễn Văn Linh, Q.7, TP.HCM" />
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap">
+            <button type="submit" class="btn btn--primary">
+              Lưu thay đổi
+              <i data-lucide="check" class="ic"></i>
+            </button>
+            <button type="button" class="btn btn--outline" data-action="logout" style="margin-left:auto;color:var(--cardiy-danger);border-color:rgba(220,38,38,0.3)">
+              <i data-lucide="log-out" class="ic"></i>
+              Đăng xuất
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

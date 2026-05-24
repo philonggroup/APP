@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>CARDIY · Trợ Lý Ô Tô Thông Minh</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="CARDIY — nền tảng AI giúp bạn bảo dưỡng, quản lý và chăm sóc ô tô thông minh hơn mỗi ngày. Đặt lịch trong 30 giây, kỹ thuật viên tới tận nơi." />
+<meta name="theme-color" content="#1E4FB8" />
+<link rel="icon" type="image/svg+xml" href="assets/logo-cardiy-mark.svg" />
+
+<meta property="og:title" content="CARDIY · Trợ Lý Ô Tô Thông Minh" />
+<meta property="og:description" content="Đặt lịch sửa xe trong 30 giây, kỹ thuật viên CARDIY tới tận nơi. Bảo dưỡng minh bạch, AI nhắc lịch, giá rõ ràng." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="assets/logo-cardiy-mark.svg" />
+
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/main.css" />
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<script src="scripts/main.js" defer></script>
+</head>
+
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="container nav__inner">
+    <a href="#top" class="nav__logo" aria-label="CARDIY">
+      <img src="assets/logo-cardiy-primary.svg" alt="CARDIY" />
+    </a>
+    <nav class="nav__links">
+      <a href="#how">Cách hoạt động</a>
+      <a href="#services">Dịch vụ</a>
+      <a href="#fleet">Fleet</a>
+      <a href="#tracking">Theo dõi KTV</a>
+      <a href="#ai">Trợ lý AI</a>
+      <a href="#faq">Câu hỏi</a>
+    </nav>
+    <div class="nav__right">
+      <a href="app.html" class="nav__signin">Đăng nhập</a>
+      <a href="#booking" class="btn btn--primary btn--sm" data-action="book">
+        Đặt lịch ngay
+        <i data-lucide="arrow-right" class="ic"></i>
+      </a>
+      <button class="nav__burger" id="burger" aria-label="Mở menu" aria-expanded="false">
+        <i data-lucide="menu" class="ic"></i>
+      </button>
+    </div>
+  </div>
+  <div class="nav__drawer" id="drawer">
+    <a href="#how">Cách hoạt động</a>
+    <a href="#services">Dịch vụ</a>
+    <a href="#fleet">Fleet (B2B)</a>
+    <a href="#tracking">Theo dõi KTV</a>
+    <a href="#ai">Trợ lý AI</a>
+    <a href="#faq">Câu hỏi</a>
+    <a href="app.html">Đăng nhập</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <div class="container hero__grid">
+    <div class="reveal">
+      <span class="eyebrow">
+        <i data-lucide="sparkles" class="ic" style="width:12px;height:12px"></i>
+        Trợ lý ô tô thông minh #1 Việt Nam
+      </span>
+      <h1 class="h-display">
+        Sửa xe tận nơi,<br />
+        <span class="blue-text">minh bạch</span>
+        <span class="yellow-underline">từng đồng.</span>
+      </h1>
+      <p class="lead">
+        Nền tảng AI giúp bạn <strong style="color:var(--fg-1)">đặt lịch sửa xe trong 30 giây</strong> —
+        kỹ thuật viên CARDIY tới tận nhà hoặc garage gần bạn, báo giá trước, không phát sinh.
+      </p>
+      <div class="hero__cta">
+        <button class="btn btn--primary btn--lg" data-action="book">
+          Đặt lịch ngay
+          <i data-lucide="arrow-right" class="ic"></i>
+        </button>
+        <a href="#ai" class="btn btn--outline btn--lg">
+          <i data-lucide="sparkles" class="ic" style="color:var(--cardiy-yellow-700)"></i>
+          Trò chuyện với AI
+        </a>
+      </div>
+      <div class="hero__trust">
+        <div class="avatar-stack" aria-hidden="true">
+          <div class="av" style="background:#1E4FB8">NH</div>
+          <div class="av" style="background:#FFC400;color:#0B0E13">TL</div>
+          <div class="av" style="background:#122F71">PM</div>
+          <div class="av" style="background:#262C36">AH</div>
+        </div>
+        <div>
+          <div class="trust-text">
+            <span class="stars">★★★★★</span> 4.9 / 5
+          </div>
+          <div class="trust-sub">Hơn <strong style="color:var(--fg-2)">12.000+</strong> chủ xe đang dùng CARDIY</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__visual reveal" aria-hidden="true">
+      <div class="vehicle-card">
+        <div class="v-overline">TOYOTA · 2021</div>
+        <div class="v-model">Vios 1.5G CVT</div>
+        <span class="plate">51K-238.79</span>
+        <div class="vehicle-stats">
+          <div>
+            <div class="vs-label">SỐ KM</div>
+            <div class="vs-val">42.180</div>
+          </div>
+          <div>
+            <div class="vs-label">BẢO DƯỠNG KẾ TIẾP</div>
+            <div class="vs-val">15/06</div>
+          </div>
+          <div>
+            <div class="vs-label">TÌNH TRẠNG</div>
+            <div class="vs-val"><span class="dot-success"></span> Tốt</div>
+          </div>
+        </div>
+      </div>
+      <div class="ai-bubble">
+        <div class="ai-head">
+          <div class="ai-badge"><i data-lucide="sparkles" class="ic" style="width:14px;height:14px"></i></div>
+          <span class="ai-title">Trợ lý CARDIY</span>
+          <span class="ai-time">vừa xong</span>
+        </div>
+        <div class="ai-msg">
+          Xe sắp đến mốc <strong>50.000 km</strong> — mình đề xuất gói bảo dưỡng
+          <strong>1.450.000 ₫</strong>, thứ Bảy 8h30 nhé?
+        </div>
+      </div>
+      <div class="ktv-chip">
+        <div class="av">NH</div>
+        <div>
+          <div class="ktv-title">KTV đang đến</div>
+          <div class="ktv-sub">1.2 km · còn 8 phút</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST STRIP ============ -->
+<section class="strip">
+  <div class="container strip__inner">
+    <div class="strip__label">Được tin dùng bởi</div>
+    <div class="strip__logos">
+      <span class="logo">PHI LONG</span>
+      <span class="logo">VIETTEL POST</span>
+      <span class="logo">BE GROUP</span>
+      <span class="logo">GRAB FLEET</span>
+      <span class="logo">VNPAY</span>
+      <span class="logo">MOMO</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">3 bước đơn giản</span>
+      <h2 class="h-section">Từ đặt lịch tới hoàn tất<br />trong cùng một buổi sáng.</h2>
+      <p class="lead">Không gọi điện. Không chờ báo giá. Không phát sinh chi phí. Đặt qua web hoặc app, theo dõi kỹ thuật viên trên bản đồ như gọi xe công nghệ.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step__num">1</div>
+        <i data-lucide="calendar-check-2" class="step__icon"></i>
+        <h3 class="step__title">Đặt lịch trong 30 giây</h3>
+        <p class="step__desc">Chọn xe, chọn dịch vụ, chọn khung giờ. AI gợi ý giá cố định trước khi bạn xác nhận.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step__num">2</div>
+        <i data-lucide="map-pin" class="step__icon"></i>
+        <h3 class="step__title">KTV tới tận nơi</h3>
+        <p class="step__desc">Kỹ thuật viên CARDIY có chứng chỉ, mang theo dụng cụ, theo dõi vị trí trực tiếp trên bản đồ.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step__num">3</div>
+        <i data-lucide="shield-check" class="step__icon"></i>
+        <h3 class="step__title">Thanh toán minh bạch</h3>
+        <p class="step__desc">Hoá đơn điện tử, bảo hành 6 tháng, lịch sử bảo dưỡng được lưu vĩnh viễn trong app.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES + BOOKING ============ -->
+<section class="section section--alt" id="services">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Dịch vụ &amp; báo giá</span>
+      <h2 class="h-section">Bảng giá cố định. Không phụ phí ngầm.</h2>
+      <p class="lead">10+ dịch vụ phổ biến nhất được niêm yết giá công khai. Bấm vào một dịch vụ để thêm vào báo giá nhanh phía dưới.</p>
+    </div>
+
+    <div class="services">
+      <div class="service" data-price="450000" data-name="Thay dầu + lọc">
+        <div class="service__ic"><i data-lucide="droplets"></i></div>
+        <h3 class="service__name">Thay dầu máy + lọc</h3>
+        <div class="service__price">450.000 ₫</div>
+        <div class="service__time">~ 45 phút</div>
+      </div>
+      <div class="service" data-price="680000" data-name="Má phanh">
+        <div class="service__ic"><i data-lucide="disc-3"></i></div>
+        <h3 class="service__name">Thay má phanh</h3>
+        <div class="service__price">680.000 ₫</div>
+        <div class="service__time">~ 60 phút</div>
+      </div>
+      <div class="service" data-price="350000" data-name="Cân thước lái">
+        <div class="service__ic"><i data-lucide="car"></i></div>
+        <h3 class="service__name">Cân chỉnh thước lái</h3>
+        <div class="service__price">350.000 ₫</div>
+        <div class="service__time">~ 50 phút</div>
+      </div>
+      <div class="service" data-price="1850000" data-name="Bình ắc-quy">
+        <div class="service__ic"><i data-lucide="battery-charging"></i></div>
+        <h3 class="service__name">Thay bình ắc-quy</h3>
+        <div class="service__price">1.850.000 ₫</div>
+        <div class="service__time">~ 30 phút</div>
+      </div>
+      <div class="service" data-price="550000" data-name="Vệ sinh điều hoà">
+        <div class="service__ic"><i data-lucide="wind"></i></div>
+        <h3 class="service__name">Vệ sinh điều hoà</h3>
+        <div class="service__price">550.000 ₫</div>
+        <div class="service__time">~ 75 phút</div>
+      </div>
+      <div class="service" data-price="250000" data-name="Cảm biến + đèn báo">
+        <div class="service__ic"><i data-lucide="gauge"></i></div>
+        <h3 class="service__name">Cảm biến + đèn báo</h3>
+        <div class="service__price">Từ 250.000 ₫</div>
+        <div class="service__time">~ 30 phút</div>
+      </div>
+      <div class="service" data-price="1450000" data-name="Gói bảo dưỡng 10k">
+        <div class="service__ic"><i data-lucide="wrench"></i></div>
+        <h3 class="service__name">Gói bảo dưỡng 10k</h3>
+        <div class="service__price">1.450.000 ₫</div>
+        <div class="service__time">~ 90 phút</div>
+      </div>
+      <div class="service" data-price="2400000" data-name="Đánh bóng + ceramic">
+        <div class="service__ic"><i data-lucide="sparkles"></i></div>
+        <h3 class="service__name">Đánh bóng + phủ ceramic</h3>
+        <div class="service__price">2.400.000 ₫</div>
+        <div class="service__time">~ 4 giờ</div>
+      </div>
+    </div>
+
+    <!-- ============ BOOKING FORM ============ -->
+    <form class="quote reveal" id="booking-form" novalidate>
+      <div id="booking">
+        <h3>Báo giá &amp; đặt lịch nhanh</h3>
+        <p class="lead" style="font-size:15px;margin-bottom:20px">
+          Điền thông tin, chọn xe + dịch vụ. Báo giá cập nhật tức thì. KTV sẽ liên hệ xác nhận trong 15 phút.
+        </p>
+
+        <div class="field--row">
+          <div class="field">
+            <label for="q-name">Họ và tên</label>
+            <input type="text" id="q-name" name="name" placeholder="Nguyễn Văn A" required />
+          </div>
+          <div class="field">
+            <label for="q-phone">Số điện thoại</label>
+            <input type="tel" id="q-phone" name="phone" placeholder="0901 234 567" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="q-car">Dòng xe</label>
+          <select id="q-car" name="car">
+            <option value="sedan-small" data-mult="1">Sedan hạng B (Vios, City, Accent)</option>
+            <option value="sedan-mid" data-mult="1.15">Sedan hạng C (Altis, Mazda 3, Civic)</option>
+            <option value="suv" data-mult="1.3">SUV / CUV (CR-V, CX-5, Tucson)</option>
+            <option value="pickup" data-mult="1.35">Bán tải (Ranger, Hilux, Triton)</option>
+            <option value="luxury" data-mult="1.6">Xe sang (Mercedes, BMW, Audi)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Dịch vụ cần làm</label>
+          <div class="checks">
+            <label class="check"><input type="checkbox" data-price="450000" data-time="45" checked />Thay dầu + lọc <small>450k</small></label>
+            <label class="check"><input type="checkbox" data-price="680000" data-time="60" />Má phanh <small>680k</small></label>
+            <label class="check"><input type="checkbox" data-price="350000" data-time="50" />Cân thước lái <small>350k</small></label>
+            <label class="check"><input type="checkbox" data-price="550000" data-time="75" />Vệ sinh điều hoà <small>550k</small></label>
+            <label class="check"><input type="checkbox" data-price="1850000" data-time="30" />Bình ắc-quy <small>1.85tr</small></label>
+            <label class="check"><input type="checkbox" data-price="1450000" data-time="90" />Gói bảo dưỡng 10k <small>1.45tr</small></label>
+            <label class="check"><input type="checkbox" data-price="250000" data-time="30" />Cảm biến + đèn báo <small>250k</small></label>
+            <label class="check"><input type="checkbox" data-price="2400000" data-time="240" />Đánh bóng + ceramic <small>2.4tr</small></label>
+          </div>
+        </div>
+
+        <div class="field--row">
+          <div class="field">
+            <label for="q-loc">Khu vực</label>
+            <select id="q-loc" name="location">
+              <option value="hcm">TP. Hồ Chí Minh</option>
+              <option value="hn">Hà Nội</option>
+              <option value="dn">Đà Nẵng</option>
+              <option value="other">Tỉnh khác</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="q-date">Ngày muốn làm</label>
+            <input type="date" id="q-date" name="date" />
+          </div>
+        </div>
+      </div>
+
+      <div class="quote__summary">
+        <div class="qs-overline">Tạm tính</div>
+        <div>
+          <span class="qs-total" id="qs-total">450.000</span>
+          <span class="qs-suffix">₫</span>
+        </div>
+        <div class="qs-note">
+          Tổng thời gian dự kiến: <strong id="qs-eta" style="color:#fff">45 phút</strong>.<br />
+          Đã bao gồm phụ tùng chính hãng, công thợ &amp; bảo hành 6 tháng. KTV tới tận nơi miễn phí trong nội thành.
+        </div>
+        <ul class="qs-list" id="qs-list">
+          <li><span>Thay dầu + lọc</span><span class="v">450.000 ₫</span></li>
+        </ul>
+        <div class="qs-btn-row">
+          <button type="submit" class="btn btn--accent btn--lg" style="flex:1;min-width:180px">
+            Xác nhận đặt lịch
+            <i data-lucide="arrow-right" class="ic"></i>
+          </button>
+          <a href="#ai" class="btn btn--inverse">
+            <i data-lucide="message-circle" class="ic"></i>
+            Hỏi AI
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ TRACKING ============ -->
+<section class="section" id="tracking">
+  <div class="container tracking">
+    <div class="tracking__copy reveal">
+      <span class="eyebrow eyebrow--yellow">
+        <i data-lucide="map-pin" class="ic" style="width:12px;height:12px"></i>
+        Live tracking
+      </span>
+      <h2 class="h-section">Biết KTV đang ở đâu — như gọi xe công nghệ.</h2>
+      <p class="lead">
+        Theo dõi vị trí kỹ thuật viên trên bản đồ trực tiếp, cập nhật 4 giây/lần.
+        ETA chính xác, lộ trình rõ ràng — không còn cảnh "chờ thợ tới mà không biết khi nào".
+      </p>
+      <ul>
+        <li><i data-lucide="radar" class="ic"></i> Cập nhật vị trí KTV mỗi 4 giây</li>
+        <li><i data-lucide="route" class="ic"></i> Lộ trình + ETA tự động tính lại</li>
+        <li><i data-lucide="phone" class="ic"></i> Gọi/nhắn KTV trực tiếp trong app</li>
+        <li><i data-lucide="bell-ring" class="ic"></i> Thông báo khi KTV sắp tới (1 km)</li>
+      </ul>
+      <button class="btn btn--primary" data-action="book">
+        Trải nghiệm ngay
+        <i data-lucide="arrow-right" class="ic"></i>
+      </button>
+    </div>
+
+    <div class="map reveal" aria-label="Mô phỏng theo dõi kỹ thuật viên trên bản đồ">
+      <div class="map__grid"></div>
+      <div class="map__roads">
+        <svg viewBox="0 0 600 540" preserveAspectRatio="none">
+          <!-- Background roads -->
+          <g stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none">
+            <path d="M0,100 L600,100" />
+            <path d="M0,220 L600,220" />
+            <path d="M0,340 L600,340" />
+            <path d="M0,460 L600,460" />
+            <path d="M120,0 L120,540" />
+            <path d="M260,0 L260,540" />
+            <path d="M380,0 L380,540" />
+            <path d="M500,0 L500,540" />
+          </g>
+          <!-- Larger streets -->
+          <g stroke="rgba(255,255,255,0.14)" stroke-width="3" fill="none">
+            <path d="M0,300 L600,300" />
+            <path d="M200,0 L200,540" />
+          </g>
+          <!-- Route (KTV → customer) -->
+          <path class="map__route"
+            d="M170 160 Q 220 220 260 260 T 380 320 Q 420 330 460 340"
+            stroke-width="5" />
+        </svg>
+      </div>
+
+      <div class="map__pin is-ktv">
+        <div class="pulse"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="map__pin is-customer">
+        <div class="pulse"></div>
+        <div class="dot"></div>
+      </div>
+
+      <div class="map__driver">
+        <div class="av">NH</div>
+        <div>
+          <div class="name">Nguyễn Văn Hùng</div>
+          <div class="sub">
+            <strong>★ 4.9</strong>
+            <span>·</span>
+            <span>3 năm kinh nghiệm</span>
+            <span>·</span>
+            <span>Toyota chuyên</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="map__eta">
+        <div class="v">8'</div>
+        <div class="l">ETA</div>
+      </div>
+
+      <div class="map__timeline">
+        <div class="tl-step is-done">
+          <div class="dot"></div>
+          <span>Đặt lịch</span>
+        </div>
+        <div class="tl-bar is-done"></div>
+        <div class="tl-step is-done">
+          <div class="dot"></div>
+          <span>KTV xác nhận</span>
+        </div>
+        <div class="tl-bar is-done"></div>
+        <div class="tl-step is-active">
+          <div class="dot"></div>
+          <span>Đang đến</span>
+        </div>
+        <div class="tl-bar"></div>
+        <div class="tl-step">
+          <div class="dot"></div>
+          <span>Đang sửa</span>
+        </div>
+        <div class="tl-bar"></div>
+        <div class="tl-step">
+          <div class="dot"></div>
+          <span>Hoàn tất</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FLEET DASHBOARD PREVIEW ============ -->
+<section class="section section--alt" id="fleet">
+  <div class="container fleet">
+    <div class="window reveal">
+      <div class="window__bar">
+        <div class="window__dots"><span></span><span></span><span></span></div>
+        <div class="window__url"><i data-lucide="lock" style="width:12px;height:12px;margin-right:6px"></i>fleet.cardiy.vn/dashboard</div>
+      </div>
+      <div class="window__body">
+        <div class="window__row">
+          <div class="biz-logo">PL</div>
+          <div class="biz">
+            Phi Long Taxi Co.
+            <small>24 xe · TP.HCM · gói Fleet Pro</small>
+          </div>
+          <span class="pill">Live</span>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="kpi__val is-success">21</div>
+            <div class="kpi__label">Xe đang chạy</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__val is-warning">3</div>
+            <div class="kpi__label">Đang bảo dưỡng</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__val is-brand">89%</div>
+            <div class="kpi__label">Uptime tháng này</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi__val">156<span style="font-size:14px;color:var(--fg-3);margin-left:2px">M ₫</span></div>
+            <div class="kpi__label">Chi phí T5/26</div>
+          </div>
+        </div>
+
+        <div class="fleet-table">
+          <div class="fleet-table__head">
+            <div>Xe</div>
+            <div>Trạng thái</div>
+            <div>Số km</div>
+            <div>Bảo dưỡng kế tiếp</div>
+          </div>
+          <div class="fleet-table__row">
+            <div>
+              <div class="fleet-table__plate">51K-238.79</div>
+              <div class="fleet-table__model">Toyota Vios · 2021</div>
+            </div>
+            <div><span class="fleet-status fleet-status--run">Đang chạy</span></div>
+            <div class="fleet-table__km">42.180</div>
+            <div class="fleet-table__next">15/06 · Dầu máy</div>
+          </div>
+          <div class="fleet-table__row">
+            <div>
+              <div class="fleet-table__plate">51K-117.42</div>
+              <div class="fleet-table__model">Hyundai Accent · 2020</div>
+            </div>
+            <div><span class="fleet-status fleet-status--fix">Đang sửa</span></div>
+            <div class="fleet-table__km">68.940</div>
+            <div class="fleet-table__next">Hôm nay · Phanh</div>
+          </div>
+          <div class="fleet-table__row">
+            <div>
+              <div class="fleet-table__plate">51K-902.13</div>
+              <div class="fleet-table__model">Mitsubishi Xpander · 2022</div>
+            </div>
+            <div><span class="fleet-status fleet-status--due">Quá hạn</span></div>
+            <div class="fleet-table__km">51.220</div>
+            <div class="fleet-table__next" style="color:var(--cardiy-danger)">Quá 12 ngày</div>
+          </div>
+          <div class="fleet-table__row">
+            <div>
+              <div class="fleet-table__plate">51K-455.61</div>
+              <div class="fleet-table__model">Honda City · 2021</div>
+            </div>
+            <div><span class="fleet-status fleet-status--run">Đang chạy</span></div>
+            <div class="fleet-table__km">37.840</div>
+            <div class="fleet-table__next">28/06 · Lọc gió</div>
+          </div>
+          <div class="fleet-table__row">
+            <div>
+              <div class="fleet-table__plate">51K-660.08</div>
+              <div class="fleet-table__model">Kia Soluto · 2020</div>
+            </div>
+            <div><span class="fleet-status fleet-status--idle">Nghỉ</span></div>
+            <div class="fleet-table__km">59.310</div>
+            <div class="fleet-table__next">02/07 · Bảo dưỡng 60k</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fleet__copy reveal">
+      <span class="eyebrow">
+        <i data-lucide="building-2" class="ic" style="width:12px;height:12px"></i>
+        CARDIY Fleet · Doanh nghiệp
+      </span>
+      <h2 class="h-section">Một dashboard. Cả đội xe.</h2>
+      <p class="lead">
+        Dành cho fleet 5–500 xe. Theo dõi toàn bộ đội xe trong một bảng điều khiển, lên lịch bảo dưỡng tự động,
+        nhận một hoá đơn VAT hàng tháng — không phải gọi từng garage.
+      </p>
+      <ul>
+        <li><i data-lucide="bar-chart-3" class="ic"></i>
+          <div><strong>Báo cáo chi phí real-time</strong><span>Cost per km, cost per vehicle, MTBF — xuất PDF / Excel hàng tháng.</span></div>
+        </li>
+        <li><i data-lucide="calendar-clock" class="ic"></i>
+          <div><strong>Lịch bảo dưỡng tự động</strong><span>AI dự đoán mốc bảo dưỡng dựa trên km thực &amp; thói quen lái.</span></div>
+        </li>
+        <li><i data-lucide="file-text" class="ic"></i>
+          <div><strong>1 hoá đơn VAT / tháng</strong><span>Không phải gom 50 hoá đơn nhỏ — kế toán đỡ vất vả.</span></div>
+        </li>
+        <li><i data-lucide="users-round" class="ic"></i>
+          <div><strong>KTV ưu tiên + giá B2B</strong><span>Giảm 12–18%, KTV phản hồi trong &lt; 30 phút giờ hành chính.</span></div>
+        </li>
+      </ul>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn--primary" data-action="contact-fleet">
+          Liên hệ đội Fleet
+          <i data-lucide="arrow-right" class="ic"></i>
+        </button>
+        <button class="btn btn--outline" data-action="soon" data-msg="Demo Fleet sẽ sớm có mặt. Liên hệ sales để xem trước.">
+          <i data-lucide="play-circle" class="ic"></i>
+          Xem demo
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ APP SHOWCASE ============ -->
+<section class="section" id="app">
+  <div class="container app">
+    <div class="reveal">
+      <span class="eyebrow eyebrow--yellow">
+        <i data-lucide="smartphone" class="ic" style="width:12px;height:12px"></i>
+        App CARDIY · iOS &amp; Android
+      </span>
+      <h2 class="h-section">Bỏ túi một garage thông minh.</h2>
+      <p class="lead">Quản lý 1 hay 10 chiếc xe, theo dõi từng lần thay dầu, nhận nhắc nhở từ AI trước cả khi xe có vấn đề. Tất cả trong một app.</p>
+
+      <ul style="list-style:none;padding:0;margin:24px 0;display:flex;flex-direction:column;gap:14px">
+        <li style="display:flex;gap:12px;align-items:flex-start">
+          <i data-lucide="bell" style="color:var(--cardiy-blue-500);flex-shrink:0;margin-top:2px"></i>
+          <div><strong>Nhắc bảo dưỡng thông minh</strong><br />
+            <span style="color:var(--fg-2);font-size:14px">AI học thói quen lái xe, đề xuất lịch bảo dưỡng tối ưu cho từng dòng xe.</span></div>
+        </li>
+        <li style="display:flex;gap:12px;align-items:flex-start">
+          <i data-lucide="map" style="color:var(--cardiy-blue-500);flex-shrink:0;margin-top:2px"></i>
+          <div><strong>Theo dõi KTV trên bản đồ</strong><br />
+            <span style="color:var(--fg-2);font-size:14px">Live ETA cập nhật 4 giây/lần như gọi xe công nghệ.</span></div>
+        </li>
+        <li style="display:flex;gap:12px;align-items:flex-start">
+          <i data-lucide="file-text" style="color:var(--cardiy-blue-500);flex-shrink:0;margin-top:2px"></i>
+          <div><strong>Lịch sử bảo dưỡng vĩnh viễn</strong><br />
+            <span style="color:var(--fg-2);font-size:14px">Xuất PDF khi bán xe, tăng giá trị bán lại 10–15%.</span></div>
+        </li>
+      </ul>
+
+      <div class="store-btns">
+        <button class="store-btn" data-platform="App Store">
+          <i data-lucide="apple" class="ic"></i>
+          <div>
+            <div class="sb-small">Tải về trên</div>
+            <div class="sb-big">App Store</div>
+          </div>
+        </button>
+        <button class="store-btn" data-platform="Google Play">
+          <i data-lucide="play" class="ic"></i>
+          <div>
+            <div class="sb-small">Tải về trên</div>
+            <div class="sb-big">Google Play</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="phone-stack reveal" aria-hidden="true">
+      <div class="phone phone--main">
+        <div class="phone__screen">
+          <div class="ps-bar">
+            <span>9:41</span>
+            <span style="display:flex;gap:6px;align-items:center">
+              <i data-lucide="signal" style="width:14px;height:14px"></i>
+              <i data-lucide="wifi" style="width:14px;height:14px"></i>
+              <i data-lucide="battery-full" style="width:18px;height:14px"></i>
+            </span>
+          </div>
+          <div class="ps-greet">Chào Hùng <small>Xe của bạn đang tốt</small></div>
+          <div class="ps-card">
+            <div class="ps-car-name">Toyota Vios 1.5G</div>
+            <div class="ps-plate">51K-238.79</div>
+            <div class="ps-km"><small>SỐ KM</small>42.180</div>
+          </div>
+          <div class="ps-actions">
+            <div class="ps-action"><i data-lucide="calendar-plus" class="ic"></i>Đặt lịch</div>
+            <div class="ps-action"><i data-lucide="map-pin" class="ic"></i>Garage</div>
+            <div class="ps-action"><i data-lucide="sparkles" class="ic"></i>Trợ lý</div>
+            <div class="ps-action"><i data-lucide="history" class="ic"></i>Lịch sử</div>
+          </div>
+          <div class="ps-status">
+            <i data-lucide="bell" class="ic" style="width:18px;height:18px"></i>
+            <div><strong>Bảo dưỡng 50.000 km</strong> · gợi ý đặt thứ Bảy 8h30</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone phone--side">
+        <div class="phone__screen">
+          <div class="ps-title">KTV đang đến</div>
+          <div class="ps-eta">8'</div>
+          <div class="ps-line">Nguyễn Văn Hùng · 1.2 km · ★ 4.9</div>
+          <div class="ps-mock-map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AI SECTION ============ -->
+<section class="section section--ink" id="ai">
+  <div class="container">
+    <div class="ai-grid">
+      <div class="reveal">
+        <span class="eyebrow eyebrow--ink">
+          <i data-lucide="sparkles" class="ic" style="width:12px;height:12px"></i>
+          Trợ lý AI
+        </span>
+        <h2 class="h-section" style="color:#fff">Chiếc xe biết tự kể về nó.</h2>
+        <p class="lead" style="color:rgba(255,255,255,0.75)">
+          Hỏi bất cứ điều gì — từ "đèn check engine có nguy hiểm không?" đến "lốp mòn còn bao lâu?".
+          Trợ lý CARDIY hiểu xe của bạn vì có toàn bộ lịch sử bảo dưỡng &amp; thông số OBD.
+        </p>
+        <ul style="list-style:none;padding:0;margin:28px 0;display:flex;flex-direction:column;gap:12px;color:rgba(255,255,255,0.85);font:400 15px/1.55 var(--font-sans)">
+          <li style="display:flex;gap:10px;align-items:center"><i data-lucide="check-circle-2" style="color:var(--cardiy-yellow-500)"></i>Hiểu tiếng Việt &amp; thuật ngữ ô tô địa phương</li>
+          <li style="display:flex;gap:10px;align-items:center"><i data-lucide="check-circle-2" style="color:var(--cardiy-yellow-500)"></i>Cảnh báo sớm dựa trên thói quen lái</li>
+          <li style="display:flex;gap:10px;align-items:center"><i data-lucide="check-circle-2" style="color:var(--cardiy-yellow-500)"></i>Đặt lịch ngay trong cuộc trò chuyện</li>
+        </ul>
+      </div>
+
+      <div class="chat reveal">
+        <div class="chat__head">
+          <div class="av"><i data-lucide="sparkles" class="ic" style="width:18px;height:18px"></i></div>
+          <div>
+            <div class="ct">Trợ lý CARDIY</div>
+            <div class="cs">Đang trực tuyến · trả lời trong &lt; 5s</div>
+          </div>
+        </div>
+        <div class="chat__body" id="chat-body">
+          <div class="msg user">Xe mình kêu "kẹt kẹt" ở bánh trước lúc rẽ trái, có sao không?</div>
+          <div class="msg bot">
+            Tiếng <strong>kẹt kẹt khi rẽ</strong> ở bánh trước thường do <strong>rotuyn lái</strong> hoặc <strong>cao su càng A</strong> hao mòn — hay gặp ở Vios chạy &gt; 40.000 km.
+            Mình đề xuất:
+            <ul><li>Kiểm tra rotuyn + cao su (~200k)</li><li>Cân chỉnh thước lái nếu mòn lệch</li></ul>
+            Tổng chi phí dự kiến: <strong>350.000 – 1.200.000 ₫</strong> tuỳ tình trạng. Đặt lịch không?
+          </div>
+        </div>
+        <div class="chat__suggest" id="chat-suggest">
+          <button type="button" class="chip">Giá thay dầu?</button>
+          <button type="button" class="chip">Đặt lịch thứ Bảy</button>
+          <button type="button" class="chip">Bảo hành thế nào?</button>
+        </div>
+        <form class="chat__input" id="chat-form" autocomplete="off">
+          <input type="text" id="chat-input" placeholder="Hỏi gì đó về xe của bạn…" />
+          <button type="submit" class="chat__send" id="chat-send" aria-label="Gửi">
+            <i data-lucide="send" class="ic" style="width:18px;height:18px"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="reveal">
+        <div class="stat__num">12k+</div>
+        <div class="stat__label">Chủ xe đang dùng CARDIY mỗi tháng</div>
+      </div>
+      <div class="reveal">
+        <div class="stat__num">28'</div>
+        <div class="stat__label">Thời gian KTV trung bình tới nơi (nội thành)</div>
+      </div>
+      <div class="reveal">
+        <div class="stat__num">4.9★</div>
+        <div class="stat__label">Đánh giá trung bình của 8.000+ lượt dịch vụ</div>
+      </div>
+      <div class="reveal">
+        <div class="stat__num">6th</div>
+        <div class="stat__label">Bảo hành mọi gói bảo dưỡng tiêu chuẩn</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+      <span class="eyebrow">Khách hàng nói gì</span>
+      <h2 class="h-section">Sửa xe không còn là điều phiền phức.</h2>
+      <p class="lead" style="margin:0 auto">Hơn 8.000 lượt đánh giá thật từ chủ xe đã sử dụng CARDIY trong 12 tháng qua.</p>
+    </div>
+
+    <div class="tests">
+      <div class="testimonial reveal">
+        <div class="testimonial__stars">★★★★★</div>
+        <p class="testimonial__quote">"Đặt lịch lúc 9h, 10h KTV tới, 11h xong. Giá đúng như báo trên app, không phát sinh đồng nào. Lần đầu thấy sửa xe minh bạch vậy."</p>
+        <div class="testimonial__author">
+          <div class="av">TM</div>
+          <div>
+            <div class="name">Trần Minh</div>
+            <div class="meta">Vios 2021 · TP.HCM</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial reveal">
+        <div class="testimonial__stars">★★★★★</div>
+        <p class="testimonial__quote">"Trợ lý AI nhắc thay dầu trước khi mình kịp quên. App lưu hết lịch sử, lúc bán xe in PDF ra người mua tin ngay, được giá hơn."</p>
+        <div class="testimonial__author">
+          <div class="av" style="background:#FFC400;color:#0B0E13">LH</div>
+          <div>
+            <div class="name">Lê Hương</div>
+            <div class="meta">CX-5 2020 · Hà Nội</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial reveal">
+        <div class="testimonial__stars">★★★★★</div>
+        <p class="testimonial__quote">"Quản lý fleet 24 xe taxi, trước phải gọi 3-4 garage. Giờ một bảng điều khiển CARDIY, lịch bảo dưỡng tự xếp, hoá đơn VAT đầy đủ."</p>
+        <div class="testimonial__author">
+          <div class="av" style="background:#262C36">PT</div>
+          <div>
+            <div class="name">Phạm Tuấn</div>
+            <div class="meta">CEO · Phi Long Taxi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section section--alt" id="faq">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+      <span class="eyebrow">Câu hỏi thường gặp</span>
+      <h2 class="h-section">Mọi thứ bạn muốn biết.</h2>
+    </div>
+
+    <div class="faq">
+      <details class="faq__item" open>
+        <summary>CARDIY hoạt động ở những thành phố nào?</summary>
+        <p>Hiện tại CARDIY phục vụ tận nơi tại <strong>TP.HCM, Hà Nội và Đà Nẵng</strong>. Các tỉnh khác có thể đặt lịch tại garage đối tác (50+ điểm). Chúng tôi đang mở rộng tới Hải Phòng, Cần Thơ và Bình Dương trong Q3.</p>
+      </details>
+      <details class="faq__item">
+        <summary>KTV của CARDIY có chứng chỉ không?</summary>
+        <p>100% kỹ thuật viên CARDIY đều có chứng chỉ Cao đẳng Cơ khí Ô tô trở lên, được đào tạo nội bộ 4 tuần, và bảo hiểm trách nhiệm nghề nghiệp do CARDIY chi trả. Bạn xem được hồ sơ + đánh giá của KTV trước khi xác nhận lịch.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Phụ tùng có chính hãng không?</summary>
+        <p>Có. CARDIY làm việc trực tiếp với Toyota, Honda, Mazda, Ford, Hyundai và các nhà phân phối phụ tùng OEM. Mỗi phụ tùng đều có tem chống giả + hoá đơn VAT. Bảo hành 6 tháng đối với phụ tùng tiêu hao, 12 tháng với phụ tùng chính.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Nếu giá phát sinh thì sao?</summary>
+        <p>Báo giá trên app là <strong>giá cam kết</strong>. Nếu phát sinh, KTV sẽ chụp ảnh phụ tùng hỏng + gọi xác nhận với bạn trong app trước khi làm. Bạn có quyền từ chối — chỉ thanh toán phần đã làm.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Thanh toán bằng cách nào?</summary>
+        <p>VNPay, MoMo, ZaloPay, thẻ tín dụng quốc tế, hoặc tiền mặt cho KTV. Hoá đơn VAT điện tử gửi qua email ngay sau khi hoàn tất.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Tôi là chủ doanh nghiệp / fleet, có giá riêng không?</summary>
+        <p>Có. Gói B2B CARDIY Fleet bắt đầu từ 5 xe trở lên — giá ưu đãi 12–18%, một hoá đơn VAT hàng tháng, dashboard riêng, KTV ưu tiên. Liên hệ <a href="mailto:fleet@cardiy.vn" style="color:var(--cardiy-blue-500)">fleet@cardiy.vn</a>.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="container">
+  <div class="cta reveal">
+    <span class="eyebrow eyebrow--ink" style="margin-bottom:8px">Bắt đầu ngay hôm nay</span>
+    <h2>Xe của bạn xứng đáng được chăm sóc tốt hơn.</h2>
+    <p>Đặt lịch dịch vụ đầu tiên trong 30 giây — không cần đăng ký, không cần thẻ tín dụng. Nếu không hài lòng, CARDIY hoàn tiền 100%.</p>
+    <div class="cta__row">
+      <button class="btn btn--accent btn--lg" data-action="book">
+        Đặt lịch ngay
+        <i data-lucide="arrow-right" class="ic"></i>
+      </button>
+      <a href="#ai" class="btn btn--outline btn--lg" style="color:#fff;border-color:rgba(255,255,255,0.3)">
+        <i data-lucide="message-circle" class="ic"></i>
+        Trò chuyện với AI
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="assets/logo-cardiy-white.svg" alt="CARDIY" />
+        <p>CARDIY — Trợ Lý Ô Tô Thông Minh. Nền tảng kết nối chủ xe với kỹ thuật viên di động và mạng lưới garage đối tác trên toàn quốc.</p>
+        <form class="footer__news" id="newsletter">
+          <input type="email" id="newsletter-email" placeholder="email@cardiy.vn" required />
+          <button type="submit">
+            <i data-lucide="send" class="ic" style="width:14px;height:14px;color:var(--cardiy-ink-900)"></i>
+          </button>
+        </form>
+        <div class="footer__social">
+          <a href="#" aria-label="Facebook" data-action="soon" data-msg="Theo dõi CARDIY trên Facebook (sắp có)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.07C22 6.5 17.52 2 12 2S2 6.5 2 12.07c0 5 3.66 9.13 8.44 9.93v-7.02H7.9v-2.9h2.54V9.85c0-2.52 1.5-3.91 3.78-3.91 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.8 8.43-4.93 8.43-9.93Z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube" data-action="soon" data-msg="Kênh YouTube CARDIY sắp ra mắt">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.5a3 3 0 0 0-2.1-2.13C19.5 4 12 4 12 4s-7.5 0-9.4.37A3 3 0 0 0 .5 6.5C.1 8.4.1 12 .1 12s0 3.6.4 5.5a3 3 0 0 0 2.1 2.13C4.5 20 12 20 12 20s7.5 0 9.4-.37a3 3 0 0 0 2.1-2.13c.4-1.9.4-5.5.4-5.5s0-3.6-.4-5.5ZM9.75 15.5v-7L15.8 12l-6.05 3.5Z"/></svg>
+          </a>
+          <a href="#" aria-label="TikTok" data-action="soon" data-msg="TikTok CARDIY sắp ra mắt"><i data-lucide="music-2" class="ic"></i></a>
+          <a href="#" aria-label="Zalo" data-action="soon" data-msg="Zalo OA: zalo.me/cardiy"><i data-lucide="message-circle" class="ic"></i></a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Sản phẩm</h4>
+        <ul>
+          <li><a href="#how">Cách hoạt động</a></li>
+          <li><a href="#services">Bảng giá</a></li>
+          <li><a href="#app">Ứng dụng</a></li>
+          <li><a href="#ai">Trợ lý AI</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Doanh nghiệp</h4>
+        <ul>
+          <li><a href="#fleet">CARDIY Fleet</a></li>
+          <li><a href="#" data-action="soon" data-msg="Mạng lưới garage đối tác đang được mở rộng">Garage đối tác</a></li>
+          <li><a href="#" data-action="soon" data-msg="Tài liệu API sắp công khai">API &amp; tích hợp</a></li>
+          <li><a href="#" data-action="contact-fleet">Liên hệ B2B</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Công ty</h4>
+        <ul>
+          <li><a href="#" data-action="soon" data-msg="Trang giới thiệu công ty đang được hoàn thiện">Về CARDIY</a></li>
+          <li><a href="#" data-action="soon" data-msg="Form tuyển KTV sẽ mở vào tháng 6/26">Tuyển KTV</a></li>
+          <li><a href="#" data-action="soon" data-msg="Phòng báo chí: press@cardiy.vn">Báo chí</a></li>
+          <li><a href="mailto:hello@cardiy.vn">Liên hệ</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Hỗ trợ</h4>
+        <ul>
+          <li><a href="#faq">Câu hỏi thường gặp</a></li>
+          <li><a href="#" data-action="soon" data-msg="Trung tâm trợ giúp sắp ra mắt">Trung tâm trợ giúp</a></li>
+          <li><a href="#" data-action="soon" data-msg="Điều khoản sử dụng đang được soạn">Điều khoản</a></li>
+          <li><a href="#" data-action="soon" data-msg="Chính sách bảo mật đang được soạn">Bảo mật</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div>© 2026 CARDIY · Trợ Lý Ô Tô Thông Minh · Phi Long Group</div>
+      <div>Hotline: <strong style="color:#fff">1900 6868</strong> · hello@cardiy.vn</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ FLOATING MOBILE CTA ============ -->
+<div class="mob-cta">
+  <button class="btn btn--primary btn--lg" data-action="book">
+    Đặt lịch ngay · từ 450.000 ₫
+    <i data-lucide="arrow-right" class="ic"></i>
+  </button>
+</div>
+
+</body>
+</html>

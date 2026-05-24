@@ -1,0 +1,225 @@
+/* ============================================================
+   CARDIY Design System – Colors & Type
+   Trợ Lý Ô Tô Thông Minh
+   ============================================================ */
+
+/* --- Webfonts: Inter + Montserrat (Google Fonts) ----------- */
+/* Body: Inter — neutral, dense, exceptional VN diacritics
+   Headings: Montserrat — geometric, premium, automotive feel  */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  /* ---------------------------------------------------------
+     1. BRAND COLORS — Michelin Blue / Yellow / White
+     --------------------------------------------------------- */
+
+  /* Primary — Michelin Blue scale */
+  --cardiy-blue-50:  #EBF1FB;
+  --cardiy-blue-100: #D2DFF5;
+  --cardiy-blue-200: #A2BCEA;
+  --cardiy-blue-300: #6E94DC;
+  --cardiy-blue-400: #3F6FCE;
+  --cardiy-blue-500: #1E4FB8;   /* core brand */
+  --cardiy-blue-600: #173E94;
+  --cardiy-blue-700: #122F71;
+  --cardiy-blue-800: #0D224F;
+  --cardiy-blue-900: #08152F;
+
+  /* Accent — Michelin Yellow scale */
+  --cardiy-yellow-50:  #FFFAE0;
+  --cardiy-yellow-100: #FFF2B0;
+  --cardiy-yellow-200: #FFE881;
+  --cardiy-yellow-300: #FFDC4C;
+  --cardiy-yellow-400: #FFD11F;
+  --cardiy-yellow-500: #FFC400;  /* core accent */
+  --cardiy-yellow-600: #D9A300;
+  --cardiy-yellow-700: #A67D00;
+
+  /* Neutrals — warm-cool balanced gray */
+  --cardiy-white:    #FFFFFF;
+  --cardiy-ink-25:   #FAFBFC;
+  --cardiy-ink-50:   #F4F6F8;
+  --cardiy-ink-100:  #E6EAEF;
+  --cardiy-ink-200:  #CFD5DD;
+  --cardiy-ink-300:  #AAB3BE;
+  --cardiy-ink-400:  #7C8693;
+  --cardiy-ink-500:  #535C69;
+  --cardiy-ink-600:  #3A424E;
+  --cardiy-ink-700:  #262C36;
+  --cardiy-ink-800:  #161B23;
+  --cardiy-ink-900:  #0B0E13;
+
+  /* Semantic */
+  --cardiy-success: #16A34A;
+  --cardiy-success-bg: #DCFCE7;
+  --cardiy-warning: #F59E0B;
+  --cardiy-warning-bg: #FEF3C7;
+  --cardiy-danger:  #DC2626;
+  --cardiy-danger-bg: #FEE2E2;
+  --cardiy-info:    #0EA5E9;
+  --cardiy-info-bg: #E0F2FE;
+
+  /* Service-status (CARDIY-specific) */
+  --cardiy-status-booked:   #1E4FB8;   /* Đã đặt lịch */
+  --cardiy-status-enroute:  #FFC400;   /* KTV đang đến */
+  --cardiy-status-working:  #F59E0B;   /* Đang sửa */
+  --cardiy-status-done:     #16A34A;   /* Hoàn tất */
+  --cardiy-status-cancel:   #7C8693;   /* Đã huỷ */
+
+  /* ---------------------------------------------------------
+     2. SEMANTIC TOKENS
+     --------------------------------------------------------- */
+  --fg-1: var(--cardiy-ink-900);   /* primary text */
+  --fg-2: var(--cardiy-ink-600);   /* secondary text */
+  --fg-3: var(--cardiy-ink-400);   /* muted / placeholder */
+  --fg-inverse: var(--cardiy-white);
+  --fg-brand: var(--cardiy-blue-500);
+  --fg-link: var(--cardiy-blue-600);
+
+  --bg-1: var(--cardiy-white);          /* page */
+  --bg-2: var(--cardiy-ink-25);         /* subtle surface */
+  --bg-3: var(--cardiy-ink-50);         /* card hover / inset */
+  --bg-brand: var(--cardiy-blue-500);
+  --bg-brand-soft: var(--cardiy-blue-50);
+  --bg-accent: var(--cardiy-yellow-500);
+  --bg-accent-soft: var(--cardiy-yellow-50);
+  --bg-inverse: var(--cardiy-ink-900);
+
+  --border-1: var(--cardiy-ink-100);    /* hairline */
+  --border-2: var(--cardiy-ink-200);    /* normal */
+  --border-3: var(--cardiy-ink-300);    /* strong */
+  --border-brand: var(--cardiy-blue-500);
+
+  /* ---------------------------------------------------------
+     3. TYPOGRAPHY
+     --------------------------------------------------------- */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont,
+               "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Montserrat", "Inter", -apple-system, BlinkMacSystemFont,
+                  "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular",
+               Menlo, Consolas, monospace;
+
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+
+  /* Type scale (mobile-first, scales fluidly on desktop) */
+  --t-display-1: 800 44px/1.05 var(--font-display);
+  --t-display-2: 800 36px/1.1  var(--font-display);
+  --t-h1:        700 28px/1.15 var(--font-display);
+  --t-h2:        700 22px/1.2  var(--font-display);
+  --t-h3:        700 18px/1.25 var(--font-display);
+  --t-h4:        600 16px/1.3  var(--font-display);
+  --t-body-lg:   400 17px/1.55 var(--font-sans);
+  --t-body:      400 15px/1.55 var(--font-sans);
+  --t-body-sm:   400 13px/1.5  var(--font-sans);
+  --t-label:     500 13px/1.3  var(--font-sans);
+  --t-caption:   400 12px/1.4  var(--font-sans);
+  --t-overline:  600 11px/1.2  var(--font-sans);
+  --t-mono:      500 13px/1.5  var(--font-mono);
+
+  /* ---------------------------------------------------------
+     4. RADII
+     --------------------------------------------------------- */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --r-2xl: 28px;
+  --r-pill: 999px;
+
+  /* ---------------------------------------------------------
+     5. SHADOWS — soft, low-contrast, startup vibe
+     --------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px rgba(13, 34, 79, 0.06);
+  --shadow-sm: 0 1px 3px rgba(13, 34, 79, 0.08), 0 1px 2px rgba(13, 34, 79, 0.04);
+  --shadow-md: 0 4px 12px rgba(13, 34, 79, 0.08), 0 2px 4px rgba(13, 34, 79, 0.04);
+  --shadow-lg: 0 12px 28px rgba(13, 34, 79, 0.12), 0 4px 10px rgba(13, 34, 79, 0.06);
+  --shadow-xl: 0 24px 56px rgba(13, 34, 79, 0.16);
+  --shadow-brand: 0 8px 24px rgba(30, 79, 184, 0.28);
+  --shadow-accent: 0 8px 24px rgba(255, 196, 0, 0.35);
+
+  /* ---------------------------------------------------------
+     6. SPACING (4-px base grid)
+     --------------------------------------------------------- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ---------------------------------------------------------
+     7. MOTION
+     --------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+
+  /* ---------------------------------------------------------
+     8. LAYOUT
+     --------------------------------------------------------- */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+
+  --header-h: 64px;
+  --bottom-nav-h: 64px;
+  --tap-target-min: 48px;
+}
+
+/* =================== Semantic element styles =============== */
+
+html, body {
+  font: var(--t-body);
+  color: var(--fg-1);
+  background: var(--bg-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1 { font: var(--t-h1); letter-spacing: -0.01em; }
+h2 { font: var(--t-h2); letter-spacing: -0.005em; }
+h3 { font: var(--t-h3); }
+h4 { font: var(--t-h4); }
+p  { font: var(--t-body); color: var(--fg-2); }
+small { font: var(--t-caption); color: var(--fg-3); }
+code, pre { font: var(--t-mono); }
+a { color: var(--fg-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Utility text classes */
+.t-display-1 { font: var(--t-display-1); letter-spacing: -0.02em; }
+.t-display-2 { font: var(--t-display-2); letter-spacing: -0.015em; }
+.t-h1 { font: var(--t-h1); }
+.t-h2 { font: var(--t-h2); }
+.t-h3 { font: var(--t-h3); }
+.t-body-lg { font: var(--t-body-lg); }
+.t-body { font: var(--t-body); }
+.t-body-sm { font: var(--t-body-sm); }
+.t-label { font: var(--t-label); }
+.t-caption { font: var(--t-caption); color: var(--fg-3); }
+.t-overline {
+  font: var(--t-overline);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-2);
+}
+.t-mono { font: var(--t-mono); }
