@@ -552,8 +552,8 @@ Bạn cứ hỏi tự nhiên nhé — "xe mình kêu gì đó", "thay dầu giá
       if (window.lucide) window.lucide.createIcons({ attrs: { 'stroke-width': 1.75 } });
     }
     
-    document.querySelectorAll('.bsvc-card').forEach(card => {
-      card.addEventListener('change', updateBillTable);
+    document.querySelectorAll('.bsvc-card input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', updateBillTable);
     });
     updateBillTable();
     
