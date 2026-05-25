@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>CARDIY - Đăng nhập</title>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CARDIY - Đăng nhập</title>
   <meta name="theme-color" content="#1E4FB8">
   <link rel="icon" type="image/svg+xml" href="logo-cardiy-mark.svg">
   <link rel="stylesheet" href="tokens.css">
@@ -13,7 +13,7 @@
     .login-card { background: white; border-radius: 1rem; padding: 2rem; width: 100%; max-width: 420px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
     .login-logo { display: flex; align-items: center; gap: .75rem; margin-bottom: 2rem; }
     .login-logo img { height: 52px; }
-    
+
     .login-tabs { display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 1.5rem; }
     .login-tab { flex: 1; padding: .75rem; text-align: center; cursor: pointer; font-weight: 600; color: #6b7280; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .2s; }
     .login-tab.active { color: #1E4FB8; border-color: #1E4FB8; }
@@ -30,171 +30,171 @@
     .error-msg { background: #fef2f2; color: #dc2626; padding: .75rem; border-radius: .5rem; font-size: .875rem; margin-bottom: 1rem; display: none; }
     .success-msg { background: #f0fdf4; color: #16a34a; padding: .75rem; border-radius: .5rem; font-size: .875rem; margin-bottom: 1rem; display: none; }
     .panel { display: none; } .panel.active { display: block; }
-  </style>
-</head>
-<body>
-<div class="login-page">
-  <div class="login-card">
-    <div class="login-logo">
-      <img src="logo-cardiy-primary.svg" alt="CARDIY">
-    </div>
+    </style>
+  </head>
+  <body>
+    <div class="login-page">
+      <div class="login-card">
+        <div class="login-logo">
+          <img src="logo-cardiy-primary.svg" alt="CARDIY">
+        </div>div>
 
-    <div class="login-tabs">
-      <div class="login-tab active" data-tab="login">Đăng nhập</div>
-      <div class="login-tab" data-tab="register">Đăng ký</div>
-    </div>
+        <div class="login-tabs">
+          <div class="login-tab active" data-tab="login">Đăng nhập</div>div>
+          <div class="login-tab" data-tab="register">Đăng ký</div>div>
+        </div>div>
 
-    <div id="error-msg" class="error-msg"></div>
-    <div id="success-msg" class="success-msg"></div>
+        <div id="error-msg" class="error-msg"></div>div>
+        <div id="success-msg" class="success-msg"></div>div>
 
-    <!-- PANEL DANG NHAP -->
-    <div class="panel active" id="panel-login">
-      <form id="form-login">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="login-email" placeholder="email@example.com" required>
-        </div>
-        <div class="form-group">
-          <label>Mật khẩu</label>
-          <input type="password" id="login-password" placeholder="Nhập mật khẩu" required>
-        </div>
-        <button type="submit" class="btn-primary" id="btn-login">Đăng nhập</button>
-      </form>
-      <div class="divider">hoặc</div>
-      <button class="btn-google" id="btn-google-login">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.31z"/></svg>
-        Đăng nhập bằng Google
-      </button>
-    </div>
+        <!-- PANEL DANG NHAP -->
+        <div class="panel active" id="panel-login">
+          <form id="form-login" autocomplete="on">
+            <div class="form-group">
+              <label for="login-email">Email</label>label>
+              <input type="email" id="login-email" name="email" autocomplete="email" placeholder="email@example.com" required>
+            </div>div>
+            <div class="form-group">
+              <label for="login-password">Mật khẩu</label>label>
+              <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="Nhập mật khẩu" required>
+            </div>div>
+            <button type="submit" class="btn-primary" id="btn-login">Đăng nhập</button>button>
+          </form>form>
+          <div class="divider">hoặc</div>div>
+          <button class="btn-google" id="btn-google-login">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.31z"/></svg>svg>
+            Đăng nhập bằng Google
+          </button>button>
+        </div>div>
 
-    <!-- PANEL DANG KY -->
-    <div class="panel" id="panel-register">
-      <form id="form-register">
-        <div class="form-group">
-          <label>Họ và tên</label>
-          <input type="text" id="reg-name" placeholder="Nguyễn Văn A" required>
-        </div>
-        <div class="form-group">
-          <label>Số điện thoại</label>
-          <input type="tel" id="reg-phone" placeholder="0901234567" required>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="reg-email" placeholder="email@example.com" required>
-        </div>
-        <div class="form-group">
-          <label>Mật khẩu</label>
-          <input type="password" id="reg-password" placeholder="Tối thiểu 6 ký tự" required minlength="6">
-        </div>
-        <button type="submit" class="btn-primary" id="btn-register">Tạo tài khoản</button>
-      </form>
-      <div class="divider">hoặc</div>
-      <button class="btn-google" id="btn-google-register">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.31z"/></svg>
-        Đăng ký bằng Google
-      </button>
-    </div>
-  </div>
-</div>
+        <!-- PANEL DANG KY -->
+        <div class="panel" id="panel-register">
+          <form id="form-register" autocomplete="on">
+            <div class="form-group">
+              <label for="reg-name">Họ và tên</label>label>
+              <input type="text" id="reg-name" name="fullname" autocomplete="name" placeholder="Nguyễn Văn A" required>
+            </div>div>
+            <div class="form-group">
+              <label for="reg-phone">Số điện thoại</label>label>
+              <input type="tel" id="reg-phone" name="phone" autocomplete="tel" placeholder="0901234567" required>
+            </div>div>
+            <div class="form-group">
+              <label for="reg-email">Email</label>label>
+              <input type="email" id="reg-email" name="email" autocomplete="email" placeholder="email@example.com" required>
+            </div>div>
+            <div class="form-group">
+              <label for="reg-password">Mật khẩu</label>label>
+              <input type="password" id="reg-password" name="password" autocomplete="new-password" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+            </div>div>
+            <button type="submit" class="btn-primary" id="btn-register">Tạo tài khoản</button>button>
+          </form>form>
+          <div class="divider">hoặc</div>div>
+          <button class="btn-google" id="btn-google-register">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.31z"/></svg>svg>
+            Đăng ký bằng Google
+          </button>button>
+        </div>div>
+      </div>div>
+    </div>div>
 
-<script type="module">
-import { registerWithEmail, loginWithEmail, loginWithGoogle, onAuthChange } from './firebase-init.js';
+    <script type="module">
+      import { registerWithEmail, loginWithEmail, loginWithGoogle, onAuthChange } from './firebase-init.js';
 
-// Kiem tra neu da dang nhap, chuyen sang app
-onAuthChange(user => {
-  if (user) window.location.href = 'app.html';
-});
+      // Kiem tra neu da dang nhap, chuyen sang app
+      onAuthChange(user => {
+        if (user) window.location.href = 'app.html';
+      });
 
-// Tab switching
-document.querySelectorAll('.login-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.login-tab, .panel').forEach(el => el.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
-    hideMessages();
-  });
-});
+      // Tab switching
+      document.querySelectorAll('.login-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.login-tab, .panel').forEach(el => el.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+          hideMessages();
+        });
+      });
 
-function getViError(errMsg) {
-  if (!errMsg) return 'Đã có lỗi xảy ra. Vui lòng thử lại.';
-  const m = errMsg.toLowerCase();
-  if (m.includes('email-already-in-use') || m.includes('da duoc su dung')) return 'Email này đã được sử dụng. Vui lòng đăng nhập hoặc dùng email khác.';
-  if (m.includes('wrong-password') || m.includes('invalid-credential')) return 'Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại.';
-  if (m.includes('user-not-found')) return 'Không tìm thấy tài khoản với email này.';
-  if (m.includes('weak-password') || m.includes('mat khau qua yeu')) return 'Mật khẩu quá yếu. Vui lòng dùng ít nhất 6 ký tự.';
-  if (m.includes('invalid-email') || m.includes('email khong hop le')) return 'Email không hợp lệ.';
-  if (m.includes('too-many-requests')) return 'Quá nhiều lần thử. Vui lòng thử lại sau ít phút.';
-  if (m.includes('network-request-failed') || m.includes('loi ket noi')) return 'Lỗi kết nối mạng. Vui lòng kiểm tra internet và thử lại.';
-  if (m.includes('da duoc su dung')) return 'Email này đã được sử dụng. Vui lòng đăng nhập hoặc dùng email khác.';
-  return errMsg;
-}
+      function getViError(errMsg) {
+        if (!errMsg) return 'Đã có lỗi xảy ra. Vui lòng thử lại.';
+          const m = errMsg.toLowerCase();
+        if (m.includes('email-already-in-use') || m.includes('da duoc su dung')) return 'Email này đã được sử dụng. Vui lòng đăng nhập hoặc dùng email khác.';
+          if (m.includes('wrong-password') || m.includes('invalid-credential')) return 'Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại.';
+            if (m.includes('user-not-found')) return 'Không tìm thấy tài khoản với email này.';
+              if (m.includes('weak-password') || m.includes('mat khau qua yeu')) return 'Mật khẩu quá yếu. Vui lòng dùng ít nhất 6 ký tự.';
+                if (m.includes('invalid-email') || m.includes('email khong hop le')) return 'Email không hợp lệ.';
+                  if (m.includes('too-many-requests')) return 'Quá nhiều lần thử. Vui lòng thử lại sau ít phút.';
+                    if (m.includes('network-request-failed') || m.includes('loi ket noi')) return 'Lỗi kết nối mạng. Vui lòng kiểm tra internet và thử lại.';
+                      if (m.includes('da duoc su dung')) return 'Email này đã được sử dụng. Vui lòng đăng nhập hoặc dùng email khác.';
+                        return errMsg;
+      }
 
-function showError(msg) {
-  const el = document.getElementById('error-msg');
-  el.textContent = msg; el.style.display = 'block';
-  document.getElementById('success-msg').style.display = 'none';
-}
-function showSuccess(msg) {
-  const el = document.getElementById('success-msg');
-  el.textContent = msg; el.style.display = 'block';
-  document.getElementById('error-msg').style.display = 'none';
-}
-function hideMessages() {
-  document.getElementById('error-msg').style.display = 'none';
-  document.getElementById('success-msg').style.display = 'none';
-}
+      function showError(msg) {
+        const el = document.getElementById('error-msg');
+        el.textContent = msg; el.style.display = 'block';
+        document.getElementById('success-msg').style.display = 'none';
+      }
+      function showSuccess(msg) {
+        const el = document.getElementById('success-msg');
+        el.textContent = msg; el.style.display = 'block';
+        document.getElementById('error-msg').style.display = 'none';
+      }
+      function hideMessages() {
+        document.getElementById('error-msg').style.display = 'none';
+        document.getElementById('success-msg').style.display = 'none';
+      }
 
-// Dang nhap bang email
-document.getElementById('form-login').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const btn = document.getElementById('btn-login');
-  btn.textContent = 'Đang đăng nhập...';
-  btn.disabled = true;
-  const result = await loginWithEmail(
-    document.getElementById('login-email').value,
-    document.getElementById('login-password').value
-  );
-  if (result.success) {
-    showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
-    setTimeout(() => window.location.href = 'app.html', 1500);
-  } else {
-    showError(getViError(result.error));
-    btn.textContent = 'Đăng nhập'; btn.disabled = false;
-  }
-});
+      // Dang nhap bang email
+      document.getElementById('form-login').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-login');
+        btn.textContent = 'Đang đăng nhập...';
+        btn.disabled = true;
+        const result = await loginWithEmail(
+          document.getElementById('login-email').value,
+          document.getElementById('login-password').value
+          );
+        if (result.success) {
+          showSuccess('Đăng nhập thành công! Đang chuyển hướng...');
+          setTimeout(() => window.location.href = 'app.html', 1500);
+        } else {
+          showError(getViError(result.error));
+          btn.textContent = 'Đăng nhập'; btn.disabled = false;
+        }
+      });
 
-// Dang ky bang email
-document.getElementById('form-register').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const btn = document.getElementById('btn-register');
-  btn.textContent = 'Đang tạo tài khoản...';
-  btn.disabled = true;
-  const result = await registerWithEmail(
-    document.getElementById('reg-email').value,
-    document.getElementById('reg-password').value,
-    document.getElementById('reg-name').value,
-    document.getElementById('reg-phone').value
-  );
-  if (result.success) {
-    showSuccess('Tạo tài khoản thành công! Đang chuyển hướng...');
-    setTimeout(() => window.location.href = 'app.html', 1500);
-  } else {
-    showError(getViError(result.error));
-    btn.textContent = 'Tạo tài khoản'; btn.disabled = false;
-  }
-});
+      // Dang ky bang email
+      document.getElementById('form-register').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-register');
+        btn.textContent = 'Đang tạo tài khoản...';
+        btn.disabled = true;
+        const result = await registerWithEmail(
+          document.getElementById('reg-email').value,
+          document.getElementById('reg-password').value,
+          document.getElementById('reg-name').value,
+          document.getElementById('reg-phone').value
+          );
+        if (result.success) {
+          showSuccess('Tạo tài khoản thành công! Đang chuyển hướng...');
+          setTimeout(() => window.location.href = 'app.html', 1500);
+        } else {
+          showError(getViError(result.error));
+          btn.textContent = 'Tạo tài khoản'; btn.disabled = false;
+        }
+      });
 
-// Dang nhap/dang ky bang Google
-[document.getElementById('btn-google-login'), document.getElementById('btn-google-register')]
-  .forEach(btn => btn.addEventListener('click', async () => {
-    const result = await loginWithGoogle();
-    if (result.success) {
-      showSuccess('Đăng nhập Google thành công!');
-      setTimeout(() => window.location.href = 'app.html', 1000);
-    } else {
-      showError('Lỗi Google: ' + result.error);
-    }
-  }));
-</script>
-</body>
+      // Dang nhap/dang ky bang Google
+      [document.getElementById('btn-google-login'), document.getElementById('btn-google-register')]
+        .forEach(btn => btn.addEventListener('click', async () => {
+          const result = await loginWithGoogle();
+          if (result.success) {
+            showSuccess('Đăng nhập Google thành công!');
+            setTimeout(() => window.location.href = 'app.html', 1000);
+          } else {
+            showError('Lỗi Google: ' + result.error);
+          }
+        }));
+    </script>
+  </body>
 </html>
