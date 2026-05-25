@@ -32,9 +32,8 @@ const firebaseConfig = {
                 try {
                   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                   const user = userCredential.user;
-                  await updateProfile(user, { displayName: fullName });
-                  // Lam moi token truoc khi ghi Firestore (dam bao auth da san sang)
-                  await user.getIdToken(true);
+                  // Cap nhat displayName (optional, khong de block)
+                  updateProfile(user, { displayName: fullName }).catch(() => {});
                   // Luu thong tin user vao Firestore
                   await setDoc(doc(db, "users", user.uid), {
                     fullName,
@@ -51,12 +50,10 @@ const firebaseConfig = {
                   if (code === 'auth/email-already-in-use') msg = 'Email nay da duoc su dung. Vui long dang nhap hoac dung email khac.';
                   else if (code === 'auth/weak-password') msg = 'Mat khau qua yeu. Vui long dung it nhat 6 ky tu.';
                   else if (code === 'auth/invalid-email') msg = 'Email khong hop le.';
-                  else if (code === 'auth/network-request-failed') msg = 'Loi ket noi mang. Vui long kiem tra internet va thu lai.';
+                  else if (code === 'permission-denied' || code === 'firestore/permission-denied') msg = 'Khong co quyen ghi du lieu. Vui long lien he ho tro.';
                   return { success: false, error: msg, code };
                 }
               }
-
-                                                                                        // Dang nhap bang email/password
                                                                                         export async function loginWithEmail(email, password) {
                                                                                           try {
                                                                                               const userCredential = await signInWithEmailAndPassword(auth, email, password);
