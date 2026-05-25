@@ -354,20 +354,81 @@
   // ============================================================
   // Settings
   // ============================================================
-  $('#settings-form')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    toast('Đã lưu thay đổi.', 'check-circle-2');
+
+  // Load profile data into settings form
+  async function loadProfileSettings() {
+    if (!window.firebaseProfile) return;
+    try {
+      const result = await window.firebaseProfile.getUserProfile();
+      if (result.success && result.data) {
+        const d = result.data;
+        const el = (id) => document.getElementById(id);
+        if (el('profile-fullname')) el('profile-fullname').value = d.fullName || '';
+        if (el('profile-phone')) el('profile-phone').value = d.phone || '';
+        if (el('profile-email')) el('profile-email').value = d.email || '';
+        if (el('profile-region')) el('profile-region').value = d.region || '';
+        if (el('profile-address')) el('profile-address').value = d.address || '';
+        // Update display name in profile header
+        if (el('profile-display-name')) el('profile-display-name').textContent = d.fullName || d.email || '';
+        // Update avatar initials
+        if (el('profile-avatar-initials')) {
+          const name = d.fullName || d.email || 'U';
+          const parts = name.trim().split(' ');
+          const initials = parts.length >= 2
+            ? parts[0][0].toUpperCase() + parts[parts.length - 1][0].toUpperCase()
+            : name.substring(0, 2).toUpperCase();
+          el('profile-avatar-initials').textContent = initials;
+        }
+      }
+    } catch (e) { console.error('loadProfileSettings error:', e); }
+  }
+
+  // Load when settings view is shown
+  const origSetView = typeof setView === 'function' ? setView : null;
+  document.addEventListener('authReady', () => {
+    // Load profile after auth is ready
+    if (location.hash === '#settings') loadProfileSettings();
   });
-  $$('[data-action="logout"]').forEach(b => b.addEventListener('click', (e) => {
-    e.preventDefault();
-    openModal({
-      icon: 'log-out',
-      title: 'Đăng xuất?',
-      body: 'Bạn sẽ cần đăng nhập lại bằng SĐT.',
-      actions: [
-        { label: 'Đăng xuất', variant: 'primary', icon: 'log-out', onClick: () => { window.location.href = 'index.html'; } },
-        { label: 'Ở lại', variant: 'outline' }
-      ],
+  // Also load when navigating to settings tab
+  $$('.aside__nav button[data-view="settings"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTimeout(loadProfileSettings, 100);
     });
-  }));
-})();
+  });
+  // Load immediately if already on settings
+  if (location.hash === '#settings') {
+    const tryLoad = () => {
+      if (window.firebaseProfile) loadProfileSettings();
+      else setTimeout(tryLoad, 200);
+    };
+    setTimeout(tryLoad, 300);
+  }
+
+  $('#settings-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!window.firebaseProfile) {
+      toast('Không thể lưu: chưa kết nối Firebase.', 'alert-circle');
+      return;
+    }
+    const btn = e.target.querySelector('[type="submit"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Đang lưu...'; }
+    const profileData = {
+      fullName: document.getElementById('profile-fullname')?.value?.trim() || '',
+      phone: document.getElementById('profile-phone')?.value?.trim() || '',
+      email: document.getElementById('profile-email')?.value?.trim() || '',
+      region: document.getElementById('profile-region')?.value?.trim() || '',
+      address: document.getElementById('profile-address')?.value?.trim() || '',
+    };
+    const result = await window.firebaseProfile.updateUserProfile(profileData);
+    if (btn) { btn.disabled = false; btn.innerHTML = 'Lưu thay đổi <i data-lucide="check" class="ic"></i>'; if (typeof lucide !== 'undefined') lucide.createIcons(); }
+    if (result.success) {
+      toast('Đã lưu thay đổi thành công!', 'check-circle-2');
+      // Update display name in header
+      const nameEl = document.getElementById('profile-display-name');
+      if (nameEl && profileData.fullName) nameEl.textContent = profileData.fullName;
+    } else {
+      toast('Lỗi lưu: ' + (result.error || 'Vui lòng thử lại.'), 'alert-circle');
+    }
+  });
+
+  })();
