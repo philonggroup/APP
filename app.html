@@ -785,7 +785,7 @@ input, textarea, select {
   </div>
 
   <div class="aside__user">
-    <div class="av">NH</div>
+    <div class="av" id="profile-avatar-initials">NH</div>
     <div>
       <div class="name">Nguyễn Quốc Hùng</div>
       <div class="role">Chủ xe · 1 xe</div>
@@ -1388,30 +1388,30 @@ input, textarea, select {
           <div class="profile__head">
             <div class="av">NH</div>
             <div>
-              <h2>Nguyễn Quốc Hùng</h2>
+              <h2 id="profile-display-name">Nguyễn Quốc Hùng</h2>
               <div class="meta">Thành viên CARDIY từ tháng 5/2025 · Hạng Gold</div>
             </div>
           </div>
           <div class="profile__form">
             <div class="field">
               <label>Họ và tên</label>
-              <input type="text" value="Nguyễn Quốc Hùng" />
+              <input type="text" id="profile-fullname" placeholder="Họ và tên" />
             </div>
             <div class="field">
               <label>Số điện thoại</label>
-              <input type="tel" value="0901 234 567" />
+              <input type="tel" id="profile-phone" placeholder="Số điện thoại" />
             </div>
             <div class="field">
               <label>Email</label>
-              <input type="email" value="hung.nq@example.vn" />
+              <input type="email" id="profile-email" placeholder="Email" />
             </div>
             <div class="field">
               <label>Khu vực</label>
-              <input type="text" value="TP. Hồ Chí Minh" />
+              <input type="text" id="profile-region" placeholder="Khu vực" />
             </div>
             <div class="field field--full">
               <label>Địa chỉ mặc định (KTV tới)</label>
-              <input type="text" value="123 Nguyễn Văn Linh, Q.7, TP.HCM" />
+              <input type="text" id="profile-address" placeholder="Địa chỉ mặc định (KTV tới)" />
             </div>
           </div>
           <div style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap">
