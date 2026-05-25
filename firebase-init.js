@@ -225,4 +225,7 @@ export async function updateUserProfile(profileData) {
   }
 }
 
+// Expose profile functions globally for non-module scripts
+window.firebaseProfile = { getUserProfile, updateUserProfile };
+
 console.log("Firebase CARDIY initialized successfully!");
