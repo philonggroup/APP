@@ -30,23 +30,31 @@ const firebaseConfig = {
               // Dang ky bang email/password
               export async function registerWithEmail(email, password, fullName, phone) {
                 try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-                            await updateProfile(user, { displayName: fullName });
-                                // Luu thong tin user vao Firestore
-                                    await setDoc(doc(db, "users", user.uid), {
-                                          fullName,
-                                                phone,
-                                                      email,
-                                                            role: "customer",
-                                                                  createdAt: new Date().toISOString(),
-                                                                        uid: user.uid
-                                                                            });
-                                                                                return { success: true, user };
-                                                                                  } catch (error) {
-                                                                                      return { success: false, error: error.message };
-                                                                                        }
-                                                                                        }
+                  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                  const user = userCredential.user;
+                  await updateProfile(user, { displayName: fullName });
+                  // Lam moi token truoc khi ghi Firestore (dam bao auth da san sang)
+                  await user.getIdToken(true);
+                  // Luu thong tin user vao Firestore
+                  await setDoc(doc(db, "users", user.uid), {
+                    fullName,
+                    phone,
+                    email,
+                    role: "customer",
+                    createdAt: new Date().toISOString(),
+                    uid: user.uid
+                  });
+                  return { success: true, user };
+                } catch (error) {
+                  const code = error.code || '';
+                  let msg = error.message;
+                  if (code === 'auth/email-already-in-use') msg = 'Email nay da duoc su dung. Vui long dang nhap hoac dung email khac.';
+                  else if (code === 'auth/weak-password') msg = 'Mat khau qua yeu. Vui long dung it nhat 6 ky tu.';
+                  else if (code === 'auth/invalid-email') msg = 'Email khong hop le.';
+                  else if (code === 'auth/network-request-failed') msg = 'Loi ket noi mang. Vui long kiem tra internet va thu lai.';
+                  return { success: false, error: msg, code };
+                }
+              }
 
                                                                                         // Dang nhap bang email/password
                                                                                         export async function loginWithEmail(email, password) {
