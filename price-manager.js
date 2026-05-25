@@ -5,7 +5,7 @@
 // === CAU HINH ===
 // SAU KHI DEPLOY Apps Script, thay URL nay:
 const SHEET_API_URL = 'REPLACE_WITH_APPS_SCRIPT_WEB_APP_URL';
-const SHEET_ID = '1OTNA1wb6EoQ04uOa9nwXbnYsSSEEXzLb';
+const BANG_GIA_SHEET_ID = '1eGAy_qwBX5gImg-RYnJIreBDqNpZQ8UV';const NHAT_KY_JOB_SHEET_ID = '1OTNA1wb6EoQ04uOa9nwXbnYsSSEEXzLb';
 
 // === LAY BANG GIA TU GOOGLE SHEET ===
 async function fetchBangGia() {
