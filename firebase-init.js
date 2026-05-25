@@ -29,30 +29,13 @@ const firebaseConfig = {
 
               // Dang ky bang email/password
               export async function registerWithEmail(email, password, fullName, phone) {
-                const API_KEY = "AIzaSyAJq16mE_4I5NEDoHuHkPPQJjh1-FU4a3k";
                 try {
-                  // Buoc 1: Tao tai khoan qua REST API truc tiep
-                  const signUpResp = await fetch(
-                    "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + API_KEY,
-                    {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ email, password, returnSecureToken: true })
-                    }
-                  );
-                  const signUpData = await signUpResp.json();
-                  if (signUpData.error) {
-                    const ec = signUpData.error.message;
-                    let msg = ec;
-                    if (ec.includes('EMAIL_EXISTS')) msg = 'Email nay da duoc su dung. Vui long dang nhap hoac dung email khac.';
-                    else if (ec.includes('WEAK_PASSWORD')) msg = 'Mat khau qua yeu. Vui long dung it nhat 6 ky tu.';
-                    else if (ec.includes('INVALID_EMAIL')) msg = 'Email khong hop le.';
-                    return { success: false, error: msg, code: ec };
-                  }
-                  // Buoc 2: Dang nhap bang Firebase SDK de lay user object hop le
-                  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                  // Tao tai khoan Firebase Auth
+                  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                   const user = userCredential.user;
-                  // Buoc 3: Luu thong tin user vao Firestore
+                  // Cap nhat display name (khong blocking neu loi)
+                  updateProfile(user, { displayName: fullName }).catch(() => {});
+                  // Luu thong tin user vao Firestore
                   await setDoc(doc(db, "users", user.uid), {
                     fullName: fullName || email.split('@')[0],
                     phone,
@@ -61,15 +44,15 @@ const firebaseConfig = {
                     createdAt: new Date().toISOString(),
                     uid: user.uid
                   });
-                  // Buoc 4: Cap nhat display name (khong blocking)
-                  updateProfile(user, { displayName: fullName }).catch(() => {});
                   return { success: true, user };
                 } catch (error) {
                   const code = error.code || '';
                   let msg = error.message;
                   if (code === 'auth/email-already-in-use') msg = 'Email nay da duoc su dung. Vui long dang nhap hoac dung email khac.';
-                  else if (code === 'auth/wrong-password' || code === 'auth/invalid-credential') msg = 'Loi dang nhap sau khi tao tai khoan. Vui long thu lai.';
-                  else if (code === 'permission-denied') msg = 'Khong co quyen ghi du lieu. Vui long lien he ho tro.';
+                  else if (code === 'auth/weak-password') msg = 'Mat khau qua yeu. Vui long dung it nhat 6 ky tu.';
+                  else if (code === 'auth/invalid-email') msg = 'Email khong hop le.';
+                  else if (code === 'auth/network-request-failed') msg = 'Loi ket noi mang. Vui long kiem tra internet va thu lai.';
+                  else if (code === 'permission-denied') msg = 'Loi quyen truy cap. Vui long lien he ho tro.';
                   return { success: false, error: msg, code };
                 }
               }
