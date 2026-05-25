@@ -185,4 +185,44 @@ const firebaseConfig = {
                                                                                                                                                                                                                                                                                                                                                                                               getUserCars
                                                                                                                                                                                                                                                                                                                                                                                               };
                                                                                                                                                                                                                                                                                                                                                                                               
-                                                                                                                                                                                                                                                                                                                                                                                              console.log("Firebase CARDIY initialized successfully!");
+                                                                                                                                                                                                                                                                                                                                                                                              
+// ============================================================
+// FIRESTORE FUNCTIONS - USER PROFILE
+// ============================================================
+
+// Lay thong tin profile user tu Firestore
+export async function getUserProfile() {
+  try {
+    const user = auth.currentUser;
+    if (!user) return { success: false, error: "Chua dang nhap" };
+    const docSnap = await getDoc(doc(db, "users", user.uid));
+    if (docSnap.exists()) {
+      return { success: true, data: docSnap.data() };
+    } else {
+      return { success: true, data: { fullName: user.displayName || '', email: user.email || '', phone: '' } };
+    }
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+// Cap nhat thong tin profile user len Firestore
+export async function updateUserProfile(profileData) {
+  try {
+    const user = auth.currentUser;
+    if (!user) return { success: false, error: "Chua dang nhap" };
+    await updateDoc(doc(db, "users", user.uid), {
+      ...profileData,
+      updatedAt: new Date().toISOString()
+    });
+    // Also update Firebase Auth displayName if fullName changed
+    if (profileData.fullName) {
+      updateProfile(user, { displayName: profileData.fullName }).catch(() => {});
+    }
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+console.log("Firebase CARDIY initialized successfully!");
