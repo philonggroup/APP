@@ -347,9 +347,9 @@ function renderAdminRows(){
 
 document.getElementById('exportBtn').addEventListener('click',function(){
   var filtered=adminBranch==='ALL'?STAFF:STAFF.filter(function(s){return s.br===adminBranch;});
-  var txt='Ten	Chi nhanh	Vai tro	Cong	P1+P2	P3	P4	Bao hiem	Tam ung	Thuc linh
+  var txt='Ten\tChi nhanh\tVai tro\tCong\tP1+P2\tP3\tP4\tBao hiem\tTam ung\tThuc linh
 ';
-  for(var i=0;i<filtered.length;i++){var s=filtered[i];var p=person(s.id);var c=compute(p);txt+=s.nv+'	'+s.br+'	'+s.role+'	'+c.cong+'	'+(c.P1+c.P2)+'	'+c.P3+'	'+c.P4+'	'+(+p.bh||0)+'	'+(+p.ung||0)+'	'+c.net+'
+  for(var i=0;i<filtered.length;i++){var s=filtered[i];var p=person(s.id);var c=compute(p);txt+=s.nv+'\t'+s.br+'\t'+s.role+'\t'+c.cong+'\t'+(c.P1+c.P2)+'\t'+c.P3+'\t'+c.P4+'\t'+(+p.bh||0)+'\t'+(+p.ung||0)+'\t'+c.net+'
 ';}
   navigator.clipboard.writeText(txt).then(function(){alert('Da copy! Dan vao Excel.');}).catch(function(){alert('Khong the copy.');});
 });
