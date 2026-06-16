@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8"/>
-<title>CARDIY · Xem Lương Cá Nhân</title>
+<title>PLG · Bảng Lương</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="theme-color" content="#1E4FB8"/>
 <link rel="icon" type="image/svg+xml" href="logo-cardiy-mark.svg"/>
@@ -14,7 +14,7 @@
 body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#1E4FB8 0%,#1565C0 50%,#0D47A1 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
 .login-card{background:#fff;border-radius:1.25rem;padding:2.5rem 2rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .login-logo{display:flex;align-items:center;gap:.75rem;justify-content:center;margin-bottom:2rem}
-.login-logo img{height:44px}
+.login-logo img{height:52px;max-width:160px;object-fit:contain}
 .login-logo span{font-size:1.5rem;font-weight:800;color:#1E4FB8}
 .login-logo span b{color:#f59e0b}
 .login-title{text-align:center;margin-bottom:1.75rem}
@@ -73,8 +73,8 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#1E4FB8 0%
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">
-      <img src="logo-cardiy-mark.svg" alt="CARDIY">
-      <span>CARDIY <b>NS</b></span>
+      <img src="logo-plg.png" alt="PLG" style="height:44px;object-fit:contain">
+      <span style="display:none"></span>
     </div>
     <div class="login-title">
       <h2>Xem bảng lương của bạn</h2>
@@ -92,14 +92,14 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#1E4FB8 0%
       <input type="text" id="inp-code" placeholder="Nhập mã của bạn..." autocomplete="off" autocapitalize="characters">
     </div>
     <button class="btn-login" id="btn-login">Xem bảng lương</button>
-    <div class="login-note">Đây là trang nội bộ – chỉ dành cho nhân viên TEAMPHILONG</div>
+    <div class="login-note">Đây là trang nội bộ – chỉ dành cho nhân viên PLG</div>
   </div>
 </div>
 <div id="dashboard" class="dashboard">
   <div class="topbar">
     <div class="topbar__left">
-      <img src="logo-cardiy-mark.svg" height="32" alt="CARDIY">
-      <span class="topbar__logo">CARDIY <span>BẢNG LƯƠNG</span></span>
+      <img src="logo-plg.png" height="36" alt="PLG" style="object-fit:contain">
+      <span class="topbar__logo"> <span>BẢNG LƯƠNG</span></span>
     </div>
     <div style="display:flex;align-items:center;gap:1rem">
       <span class="topbar__user" id="topbar-name"></span>
