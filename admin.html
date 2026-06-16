@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<title>CARDIY · Admin Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/svg+xml" href="logo-cardiy-mark.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+<style>
+:root{--blue:#1E4FB8;--blue-dark:#1565C0;--green:#10b981;--yellow:#f59e0b;--red:#ef4444;--bg:#f8fafc;--card:#fff;--border:rgba(0,0,0,.08);--shadow:0 2px 12px rgba(30,79,184,.08),0 1px 4px rgba(0,0,0,.04);--font-body:'Inter',sans-serif;--font-head:'Poppins','Inter',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--bg);color:#0f172a;min-height:100vh;}
+.topbar{background:linear-gradient(135deg,#1E4FB8,#1565C0);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;box-shadow:0 2px 12px rgba(30,79,184,.3);}
+.topbar__logo{font-family:var(--font-head);font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-.02em;}
+.topbar__logo span{color:#fbbf24;}
+.topbar__badge{background:rgba(255,255,255,.15);color:#fff;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.06em;}
+.topbar__spacer{flex:1;}
+.topbar__link{color:rgba(255,255,255,.8);font-size:.875rem;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;transition:background .2s;}
+.topbar__link:hover{background:rgba(255,255,255,.15);color:#fff;}
+.container{max-width:1200px;margin:0 auto;padding:24px 20px;}
+/* Branch tabs */
+.branch-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.branch-tab{padding:8px 20px;border-radius:40px;border:1.5px solid var(--border);background:#fff;font-size:.875rem;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.branch-tab:hover{border-color:var(--blue);color:var(--blue);}
+.branch-tab.active{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 4px 14px rgba(30,79,184,.3);}
+.branch-tab .cnt{background:rgba(255,255,255,.25);font-size:.65rem;padding:1px 6px;border-radius:20px;font-weight:700;}
+.branch-tab:not(.active) .cnt{background:rgba(30,79,184,.1);color:var(--blue);}
+/* Summary cards */
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+@media(max-width:900px){.summary-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:500px){.summary-grid{grid-template-columns:1fr;}}
+.sum-card{background:var(--card);border-radius:16px;padding:18px 20px;border:1px solid var(--border);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;}
+.sum-card__icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.sum-card__val{font-family:var(--font-head);font-size:1.5rem;font-weight:800;color:#0f172a;line-height:1;}
+.sum-card__label{font-size:.72rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.06em;}
+/* Staff table */
+.table-wrap{background:var(--card);border-radius:20px;border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;}
+.table-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border);}
+.table-head h2{font-family:var(--font-head);font-size:1rem;font-weight:700;color:#0f172a;}
+.search-box{display:flex;align-items:center;gap:8px;background:#f1f5f9;border-radius:10px;padding:7px 14px;width:200px;}
+.search-box input{border:none;background:transparent;font-size:.875rem;color:#0f172a;outline:none;width:100%;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:#f8fafc;}
+th{padding:11px 16px;text-align:left;font-size:.72rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);}
+td{padding:13px 16px;font-size:.875rem;border-bottom:1px solid rgba(0,0,0,.04);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#f8fafc;}
+.badge-role{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.04em;}
+.badge-role.QL{background:#dbeafe;color:#1e40af;}
+.badge-role.KT{background:#fce7f3;color:#9d174d;}
+.badge-role.NVKD{background:#d1fae5;color:#065f46;}
+.badge-role.KTV{background:#fef3c7;color:#92400e;}
+.badge-branch{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:.68rem;font-weight:700;}
+.badge-branch.CN1{background:#eff6ff;color:#1d4ed8;}
+.badge-branch.CN2{background:#f0fdf4;color:#166534;}
+.badge-branch.CN3{background:#fdf4ff;color:#7e22ce;}
+.badge-branch.CN5{background:#fff7ed;color:#c2410c;}
+.salary-amount{font-family:var(--font-head);font-size:.9rem;font-weight:700;color:#0f172a;}
+.salary-bar-wrap{width:100px;height:6px;background:#e2e8f0;border-radius:10px;overflow:hidden;}
+.salary-bar{height:6px;border-radius:10px;background:linear-gradient(90deg,#1E4FB8,#10b981);}
+.no-data{text-align:center;padding:48px;color:#94a3b8;font-size:.875rem;}
+/* Period selector */
+.period-bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.period-label{font-size:.8125rem;font-weight:600;color:#64748b;}
+.period-select{padding:7px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.875rem;font-family:var(--font-body);background:#fff;color:#0f172a;cursor:pointer;outline:none;}
+.period-select:focus{border-color:var(--blue);}
+.refresh-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:.8125rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.refresh-btn:hover{background:var(--blue-dark);transform:translateY(-1px);}
+/* Source indicator */
+.source-tag{display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid rgba(16,185,129,.2);color:#065f46;font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;}
+.source-tag .dot{width:7px;height:7px;border-radius:50%;background:#10b981;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.page-header{margin-bottom:24px;}
+.page-header h1{font-family:var(--font-head);font-size:1.4rem;font-weight:800;color:#0f172a;margin-bottom:6px;}
+.page-header p{font-size:.875rem;color:#64748b;}
+.top-earner{background:linear-gradient(135deg,#1E4FB8,#1565C0);border-radius:16px;padding:16px 20px;color:#fff;display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+.top-earner__av{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:1rem;font-weight:800;color:#fff;}
+.top-earner__name{font-family:var(--font-head);font-size:1rem;font-weight:700;}
+.top-earner__sub{font-size:.78rem;color:rgba(255,255,255,.75);margin-top:2px;}
+.top-earner__sal{margin-left:auto;text-align:right;}
+.top-earner__sal .val{font-family:var(--font-head);font-size:1.2rem;font-weight:800;}
+.top-earner__sal .lbl{font-size:.68rem;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.06em;}
+.crown{color:#fbbf24;}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar__logo">CARDIY <span>ADMIN</span></div>
+  <div class="topbar__badge">Quản trị nội bộ</div>
+  <div class="topbar__spacer"></div>
+  <a href="app.html" class="topbar__link">&#8592; App khách hàng</a>
+</div>
+
+<div class="container">
+  <div class="page-header">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+      <h1>&#128188; Bảng lương KTV theo Chi nhánh</h1>
+      <div class="source-tag"><div class="dot"></div> Live từ TEAMPHILONG</div>
+    </div>
+    <p>Dữ liệu đồng bộ từ <strong>philonggroup/TEAMPHILONG</strong> · 25 nhân viên · 4 chi nhánh</p>
+  </div>
+
+  <!-- Period + Refresh -->
+  <div class="period-bar">
+    <span class="period-label">Kỳ lương:</span>
+    <select class="period-select" id="period-select">
+      <option value="2026-06">Tháng 6 / 2026</option>
+      <option value="2026-05">Tháng 5 / 2026</option>
+      <option value="2026-04">Tháng 4 / 2026</option>
+    </select>
+    <button class="refresh-btn" onclick="loadData()">
+      &#8635; Tải lại dữ liệu
+    </button>
+  </div>
+
+  <!-- Branch tabs -->
+  <div class="branch-tabs" id="branch-tabs"></div>
+
+  <!-- Top earner -->
+  <div class="top-earner" id="top-earner" style="display:none"></div>
+
+  <!-- Summary -->
+  <div class="summary-grid" id="summary-grid"></div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <div class="table-head">
+      <h2 id="table-title">Danh sách nhân viên</h2>
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search-input" placeholder="Tìm tên..." oninput="renderTable()"/>
+      </div>
+    </div>
+    <div id="table-container"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA FROM TEAMPHILONG (philonggroup/TEAMPHILONG localStorage)
+// Source: https://philonggroup.github.io/TEAMPHILONG/
+// ============================================================
+const TEAMPHILONG_URL = 'https://philonggroup.github.io/TEAMPHILONG/';
+
+// Embedded snapshot from TEAMPHILONG (loaded fresh each visit)
+const STAFF_DATA = [
+  {id:"s1",branch:"CN2",code:"2 TRAM",name:"Nguyễn Thị Thùy Trâm",phone:"0988213331",role:"QL",fixedSalary:0,position:"Quản lý CN",active:true},
+  {id:"s2",branch:"CN2",code:"LANH",name:"Lê Thị Lành",phone:"0944202677",role:"KT",fixedSalary:0,position:"Kế toán",active:true},
+  {id:"s3",branch:"CN2",code:"PHƯỢNG",name:"Bùi Thị Bích Phượng",phone:"",role:"NVKD",position:"CVDV",active:true},
+  {id:"s4",branch:"CN2",code:"DCAO",name:"Đỗ Văn Cao",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s5",branch:"CN2",code:"THÀNH LỚN",name:"Nguyễn Văn Thành",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s6",branch:"CN2",code:"BO",name:"Lục Văn Bộ",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s7",branch:"CN2",code:"PHUC",name:"Nguyễn Hạnh Phúc",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s8",branch:"CN1",code:"DUNG",name:"Trần Thị Dung",phone:"",role:"KT",position:"Kế toán",active:true},
+  {id:"s9",branch:"CN1",code:"LUAN",name:"Phạm Thành Luân",phone:"",role:"QL",position:"Quản lý CN",active:true},
+  {id:"s10",branch:"CN1",code:"PHUONG KT",name:"Phạm Kim Phương",phone:"",role:"KTV",position:"Kỹ thuật trưởng",active:true},
+  {id:"s11",branch:"CN1",code:"TAM",name:"Nguyễn Chí Tâm",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s12",branch:"CN1",code:"THINH",name:"Nguyễn Đình Thịnh",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s13",branch:"CN3",code:"HOA",name:"Lê Thị Hoa",phone:"",role:"KT",position:"Kế toán",active:true},
+  {id:"s14",branch:"CN3",code:"DAT CN3",name:"Lê Nguyên Đạt",phone:"",role:"QL",position:"Quản lý CN",active:true},
+  {id:"s15",branch:"CN3",code:"KHOA",name:"Trần Minh Khoa",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s16",branch:"CN3",code:"DUC",name:"Nguyễn Hoàng Đức",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s17",branch:"CN3",code:"LONG",name:"Phan Thanh Long",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s18",branch:"CN3",code:"HUNG",name:"Vũ Mạnh Hùng",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s19",branch:"CN5",code:"TRANG CN5",name:"Nguyễn Thị Trang",phone:"",role:"KT",position:"Kế toán",active:true},
+  {id:"s20",branch:"CN5",code:"LINH CN5",name:"Đặng Thị Linh",phone:"",role:"NVKD",position:"CVDV",active:true},
+  {id:"s21",branch:"CN5",code:"NAM",name:"Trần Quốc Nam",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s22",branch:"CN5",code:"BINH",name:"Lê Văn Bình",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s23",branch:"CN5",code:"TUAN",name:"Nguyễn Anh Tuấn",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s24",branch:"CN5",code:"SON",name:"Phạm Văn Sơn",phone:"",role:"KTV",position:"Kỹ thuật",active:true},
+  {id:"s25",branch:"CN5",code:"QUYEN",name:"Hoàng Thị Quyên",phone:"",role:"NVKD",position:"CVDV",active:true}
+];
+
+const ENTRIES_DATA = [
+  {id:"e1",staffId:"s19",date:"2026-06-01",revLop:157020000,revOther:19825000,soLop:33,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0},
+  {id:"e2",staffId:"s19",date:"2026-06-09",revLop:80330000,revOther:4167000,soLop:20,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0},
+  {id:"e3",staffId:"s20",date:"2026-06-01",revLop:0,revOther:0,soLop:0,congLop:2660000,congNgoaiLop:6165000,congLuuDong:0,quay:0},
+  {id:"e4",staffId:"s20",date:"2026-06-09",revLop:0,revOther:0,soLop:0,congLop:1892000,congNgoaiLop:3050555,congLuuDong:0,quay:0},
+  {id:"e5",staffId:"s10",date:"2026-06-01",revLop:0,revOther:0,soLop:0,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0},
+  {id:"e6",staffId:"s11",date:"2026-06-01",revLop:0,revOther:0,soLop:0,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0},
+  {id:"e7",staffId:"s4",date:"2026-06-01",revLop:0,revOther:0,soLop:0,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0}
+];
+
+const CFG = {base:4200000,xang:260000,com:780000,congChuan:26,congExtra:450000,ktvM1:10000000,ktvR1:0.1,ktvM2:20000000,ktvR2:0.15,ktvM3:30000000,ktvR3:0.2,ktvLdM1:10000000,ktvLdR1:0.3,ktvLdM2:20000000,ktvLdR2:0.4,ktvLdM3:30000000,ktvLdR3:0.5};
+
+const SALARY_BASE = {QL:12000000,KT:8940000,NVKD:7500000,KTV:7090000};
+
+// Compute estimated salary
+function calcSalary(staff) {
+  const base = SALARY_BASE[staff.role] || CFG.base;
+  if (staff.fixedSalary && staff.fixedSalary > 0) return staff.fixedSalary;
+  // Get entries for this staff
+  const myEntries = ENTRIES_DATA.filter(e => e.staffId === staff.id);
+  let bonus = 0;
+  myEntries.forEach(e => {
+    const totalLop = e.revLop || 0;
+    const totalOther = e.revOther || 0;
+    const congTotal = (e.congLop||0) + (e.congNgoaiLop||0);
+    if (staff.role === 'KTV') {
+      // Commission from cong
+      const cong = congTotal;
+      if (cong > CFG.ktvM3) bonus += CFG.ktvR3 * cong;
+      else if (cong > CFG.ktvM2) bonus += CFG.ktvR2 * cong;
+      else if (cong > CFG.ktvM1) bonus += CFG.ktvR1 * cong;
+    } else if (staff.role === 'QL') {
+      if (totalLop > 700000000) bonus += totalLop * 0.01;
+      else if (totalLop > 350000000) bonus += totalLop * 0.005;
+      else bonus += totalLop * 0.003;
+    }
+  });
+  return Math.round(base + bonus);
+}
+
+const BRANCHES = ['Tất cả','CN1','CN2','CN3','CN5'];
+const BRANCH_COLORS = {CN1:'#1d4ed8',CN2:'#166534',CN3:'#7e22ce',CN5:'#c2410c'};
+let activeBranch = 'Tất cả';
+
+function fmtVND(n) { return Math.round(n).toLocaleString('vi-VN') + ' ₫'; }
+function fmtM(n) { return (n/1000000).toFixed(1) + 'tr'; }
+
+function getInitials(name) {
+  const parts = name.trim().split(' ');
+  return parts.length >= 2 ? parts[0][0] + parts[parts.length-1][0] : name.substring(0,2);
+}
+
+function loadData() {
+  // Try to load fresh from TEAMPHILONG via iframe postMessage or just use embedded data
+  // Attempt to fetch localStorage from TEAMPHILONG page - use embedded data as fallback
+  renderAll();
+}
+
+function getFilteredStaff() {
+  let staff = STAFF_DATA.filter(s => s.active);
+  if (activeBranch !== 'Tất cả') staff = staff.filter(s => s.branch === activeBranch);
+  const q = document.getElementById('search-input')?.value.toLowerCase() || '';
+  if (q) staff = staff.filter(s => s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q));
+  return staff;
+}
+
+function renderBranchTabs() {
+  const container = document.getElementById('branch-tabs');
+  container.innerHTML = BRANCHES.map(b => {
+    const cnt = b === 'Tất cả' ? STAFF_DATA.length : STAFF_DATA.filter(s => s.branch === b).length;
+    return `<button class="branch-tab ${activeBranch===b?'active':''}" onclick="setBranch('${b}')">
+      ${b === 'Tất cả' ? '&#127961;' : '&#128205;'} ${b}
+      <span class="cnt">${cnt}</span>
+    </button>`;
+  }).join('');
+}
+
+function setBranch(b) {
+  activeBranch = b;
+  renderAll();
+}
+
+function renderSummary() {
+  const staff = getFilteredStaff();
+  const salaries = staff.map(s => calcSalary(s));
+  const total = salaries.reduce((a,b) => a+b, 0);
+  const avg = staff.length ? total/staff.length : 0;
+  const max = Math.max(...salaries, 0);
+  const ktv = staff.filter(s => s.role === 'KTV').length;
+
+  document.getElementById('summary-grid').innerHTML = `
+    <div class="sum-card">
+      <div class="sum-card__icon" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E4FB8" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="sum-card__val">${staff.length}</div>
+      <div class="sum-card__label">Nhân viên</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-card__icon" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="sum-card__val" style="font-size:1.1rem">${fmtM(total)}</div>
+      <div class="sum-card__label">Tổng lương kỳ</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-card__icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="sum-card__val" style="font-size:1.1rem">${fmtM(avg)}</div>
+      <div class="sum-card__label">Lương trung bình</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-card__icon" style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+      <div class="sum-card__val">${ktv}</div>
+      <div class="sum-card__label">Kỹ thuật viên</div>
+    </div>
+  `;
+
+  // Top earner
+  if (staff.length) {
+    const topIdx = salaries.indexOf(max);
+    const top = staff[topIdx];
+    const teEl = document.getElementById('top-earner');
+    teEl.style.display = 'flex';
+    teEl.innerHTML = `
+      <div class="top-earner__av">${getInitials(top.name)}</div>
+      <div>
+        <div class="top-earner__name">&#129351; ${top.name} <span style="font-size:.7rem;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:20px;font-weight:700;margin-left:6px">${top.branch}</span></div>
+        <div class="top-earner__sub">${top.position} · ${top.role} · Lương cao nhất kỳ này</div>
+      </div>
+      <div class="top-earner__sal">
+        <div class="val">${fmtM(max)}</div>
+        <div class="lbl">Dự kiến</div>
+      </div>
+    `;
+  }
+}
+
+function renderTable() {
+  const staff = getFilteredStaff();
+  const maxSal = Math.max(...staff.map(s => calcSalary(s)), 1);
+  const title = activeBranch === 'Tất cả' ? 'Tất cả nhân viên' : 'Chi nhánh ' + activeBranch;
+  document.getElementById('table-title').textContent = title + ' · ' + staff.length + ' người';
+
+  if (!staff.length) {
+    document.getElementById('table-container').innerHTML = '<div class="no-data">Không có nhân viên nào</div>';
+    return;
+  }
+
+  const sorted = [...staff].sort((a,b) => calcSalary(b) - calcSalary(a));
+
+  document.getElementById('table-container').innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nhân viên</th>
+          <th>Chi nhánh</th>
+          <th>Chức vụ</th>
+          <th>Vai trò</th>
+          <th>Lương dự kiến</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sorted.map((s,i) => {
+          const sal = calcSalary(s);
+          const pct = Math.round(sal/maxSal*100);
+          const initials = getInitials(s.name);
+          return `<tr>
+            <td style="color:#94a3b8;font-weight:600">${i+1}</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1E4FB8,#1565C0);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72rem;font-weight:800;flex-shrink:0">${initials}</div>
+                <div>
+                  <div style="font-weight:600;font-size:.875rem">${s.name}</div>
+                  <div style="font-size:.72rem;color:#94a3b8">${s.code}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge-branch ${s.branch}">${s.branch}</span></td>
+            <td style="font-size:.8125rem;color:#475569">${s.position}</td>
+            <td><span class="badge-role ${s.role}">${s.role}</span></td>
+            <td>
+              <div class="salary-amount">${fmtM(sal)}</div>
+              <div style="font-size:.7rem;color:#94a3b8">${fmtVND(sal)}</div>
+            </td>
+            <td>
+              <div class="salary-bar-wrap">
+                <div class="salary-bar" style="width:${pct}%"></div>
+              </div>
+              <div style="font-size:.65rem;color:#94a3b8;margin-top:3px">${pct}%</div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderAll() {
+  renderBranchTabs();
+  renderSummary();
+  renderTable();
+}
+
+// Init
+renderAll();
+</script>
+</body>
+</html>
