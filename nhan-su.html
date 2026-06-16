@@ -1,457 +1,392 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8"/>
-<title>PLG · Bảng Lương</title>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="theme-color" content="#1E4FB8"/>
-<link rel="icon" type="image/svg+xml" href="logo-cardiy-mark.svg"/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1E4FB8">
+<title>PLG - Bang Luong Nhan Su</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#1E4FB8 0%,#1565C0 50%,#0D47A1 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
-.login-card{background:#fff;border-radius:1.25rem;padding:2.5rem 2rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.login-logo{display:flex;align-items:center;gap:.75rem;justify-content:center;margin-bottom:2rem}
-.login-logo img{height:52px;max-width:160px;object-fit:contain}
-.login-logo span{font-size:1.5rem;font-weight:800;color:#1E4FB8}
-.login-logo span b{color:#f59e0b}
-.login-title{text-align:center;margin-bottom:1.75rem}
-.login-title h2{font-size:1.35rem;font-weight:700;color:#1a1a2e;margin-bottom:.4rem}
-.login-title p{font-size:.875rem;color:#64748b}
-.form-group{margin-bottom:1.25rem}
-.form-group label{display:block;font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em}
-.form-group select,.form-group input{width:100%;padding:.75rem 1rem;border:1.5px solid #e2e8f0;border-radius:.625rem;font-size:.95rem;font-family:inherit;color:#1a1a2e;background:#f8fafc;transition:border-color .2s}
-.form-group select:focus,.form-group input:focus{outline:none;border-color:#1E4FB8;background:#fff}
-.btn-login{width:100%;padding:.875rem;background:linear-gradient(135deg,#1E4FB8,#1565C0);color:#fff;border:none;border-radius:.625rem;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s;margin-top:.5rem}
-.btn-login:hover{opacity:.9}
-.login-note{text-align:center;margin-top:1.25rem;font-size:.8rem;color:#94a3b8}
-.err-msg{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:.5rem;padding:.75rem 1rem;font-size:.875rem;margin-bottom:1rem;display:none}
-.dashboard{display:none;min-height:100vh;background:#f1f5f9;flex-direction:column}
-.topbar{background:linear-gradient(90deg,#1E4FB8,#1565C0);color:#fff;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
-.topbar__left{display:flex;align-items:center;gap:.75rem}
-.topbar__logo{font-size:1.1rem;font-weight:800}
-.topbar__logo span{color:#fbbf24;font-size:.75rem;font-weight:600;background:rgba(255,255,255,.15);padding:.15rem .4rem;border-radius:.25rem;margin-left:.4rem}
-.topbar__user{font-size:.875rem;opacity:.9}
-.btn-logout{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:.4rem .9rem;border-radius:.5rem;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .2s}
-.btn-logout:hover{background:rgba(255,255,255,.25)}
-.main-content{padding:1.5rem;max-width:900px;margin:0 auto;width:100%}
-.welcome-banner{background:linear-gradient(135deg,#1E4FB8,#7c3aed);color:#fff;border-radius:1rem;padding:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.25rem}
-.welcome-avatar{width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;flex-shrink:0}
-.welcome-text h2{font-size:1.25rem;font-weight:700;margin-bottom:.25rem}
-.welcome-text p{font-size:.875rem;opacity:.85}
-.welcome-salary{margin-left:auto;text-align:right}
-.welcome-salary .amount{font-size:1.75rem;font-weight:800}
-.welcome-salary .label{font-size:.75rem;opacity:.8;text-transform:uppercase;letter-spacing:.05em}
-.salary-section{background:#fff;border-radius:1rem;padding:1.5rem;margin-bottom:1.25rem;box-shadow:0 1px 8px rgba(0,0,0,.06)}
-.section-title{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:1.25rem;display:flex;align-items:center;gap:.5rem;padding-bottom:.75rem;border-bottom:2px solid #f1f5f9}
-.section-title svg{color:#1E4FB8}
-.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
-.detail-item{background:#f8fafc;border-radius:.75rem;padding:1rem;border:1px solid #e2e8f0}
-.detail-item__label{font-size:.75rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem}
-.detail-item__value{font-size:1.1rem;font-weight:700;color:#1a1a2e}
-.detail-item__sub{font-size:.75rem;color:#94a3b8;margin-top:.2rem}
-.detail-item.highlight{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#93c5fd}
-.detail-item.highlight .detail-item__value{color:#1E4FB8}
-.detail-item.green{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac}
-.detail-item.green .detail-item__value{color:#16a34a}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem}
-.info-item{display:flex;flex-direction:column;gap:.25rem}
-.info-item__label{font-size:.75rem;font-weight:600;color:#94a3b8;text-transform:uppercase}
-.info-item__value{font-size:.9rem;font-weight:600;color:#1a1a2e}
-.no-data{text-align:center;padding:3rem;color:#94a3b8}
-.no-data p{font-size:.95rem}
-@media(max-width:600px){
-  .welcome-salary{display:none}
-  .detail-grid{grid-template-columns:repeat(2,1fr)}
-  .main-content{padding:1rem}
-}
-
-.tab-bar{display:flex;gap:8px;margin:0 0 20px;border-bottom:2px solid var(--bd);padding-bottom:0;}
-.tab-btn{padding:10px 20px;border:none;background:none;font-size:15px;font-weight:600;color:var(--fg2);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;}
-.tab-btn.active{color:var(--blu-600);border-bottom-color:var(--blu-600);}
-.tab-pane{display:none;}.tab-pane.active{display:block;}
-.cc-card{background:#fff;border-radius:16px;padding:24px;margin-bottom:16px;box-shadow:var(--sh-sm);}
-.cc-clock{font-size:48px;font-weight:800;letter-spacing:2px;color:var(--blu-600);text-align:center;margin:8px 0;}
-.cc-date{text-align:center;color:var(--fg2);font-size:14px;margin-bottom:20px;}
-.btn-checkin{width:100%;padding:16px;border-radius:12px;border:none;font-size:18px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.5px;}
-.btn-checkin.in{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;}
-.btn-checkin.out{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;}
-.btn-checkin:disabled{opacity:.5;cursor:not-allowed;}
-.gps-status{text-align:center;font-size:13px;color:var(--fg2);margin:10px 0;min-height:20px;}
-.gps-status.ok{color:#16a34a;}.gps-status.err{color:#dc2626;}
-.cc-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
-.cc-sum-item{background:#f8fafc;border-radius:12px;padding:14px;text-align:center;}
-.cc-sum-val{font-size:22px;font-weight:800;color:var(--blu-600);}
-.cc-sum-lbl{font-size:11px;color:var(--fg2);margin-top:2px;}
-.cc-history{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--sh-sm);}
-.cc-history h3{font-size:14px;font-weight:700;color:var(--fg);margin:0 0 14px;}
-.cc-row{display:flex;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);gap:12px;}
-.cc-row:last-child{border:none;}
-.cc-row-date{min-width:36px;text-align:center;}
-.cc-row-day{font-size:18px;font-weight:800;color:var(--blu-600);}
-.cc-row-wd{font-size:10px;color:var(--fg2);}
-.cc-row-info{flex:1;}
-.cc-row-time{font-size:14px;font-weight:600;}
-.cc-row-hrs{font-size:12px;color:var(--fg2);}
-.cc-row-gps{font-size:11px;color:#16a34a;margin-top:2px;}
-.cc-row-badge{padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;}
-.badge-ok{background:#dcfce7;color:#15803d;}
-.badge-late{background:#fef9c3;color:#a16207;}
-.badge-abs{background:#fee2e2;color:#dc2626;}
-.notice-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:14px 16px;font-size:13px;color:#1d4ed8;margin-bottom:16px;}
+:root{--plg:#1E4FB8;--plg-d:#0F2A5E;--plg-l:#3D6FE0;--ink:#16203A;--muted:#6B778C;--line:#E6EBF3;--bg:#EEF2F9;--card:#fff;--green:#16A34A;--red:#DC2626;--r:18px;--sh:0 2px 10px rgba(16,42,94,.06)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0}
+body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45;-webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;min-height:100vh}.hide{display:none!important}
+button{font-family:inherit;cursor:pointer;border:none}.money{font-variant-numeric:tabular-nums}
+#login{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:28px 22px;background:radial-gradient(120% 80% at 50% -10%,#27407e 0%,#0F2A5E 55%,#0a1f47 100%);color:#fff}
+.brand{text-align:center;margin-bottom:24px}.brand .lg{font-weight:800;font-size:30px;letter-spacing:3px}.brand .lg span{color:#7FB0FF}
+.lead{text-align:center;margin:0 0 4px;font-size:21px;font-weight:700}.subt{text-align:center;margin:0 0 24px;font-size:13.5px;color:#B9C7E8}
+.panel{background:#fff;border-radius:22px;padding:22px 20px 24px;box-shadow:0 18px 50px rgba(0,0,0,.35);color:var(--ink)}
+.fld{margin-bottom:15px}.fld label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:0 0 7px 2px}
+.fld select,.fld input{width:100%;padding:14px;font-size:16px;font-family:inherit;color:var(--ink);background:#F6F8FC;border:1.5px solid var(--line);border-radius:13px;outline:none;transition:.15s}
+.fld select:focus,.fld input:focus{border-color:var(--plg);background:#fff;box-shadow:0 0 0 4px rgba(30,79,184,.12)}
+.btn{width:100%;padding:15px;font-size:16.5px;font-weight:700;color:#fff;border-radius:13px;background:linear-gradient(135deg,var(--plg),var(--plg-l));box-shadow:0 8px 20px rgba(30,79,184,.32);transition:.15s}
+.btn:active{transform:translateY(1px)}.err{display:none;background:#FDECEC;color:var(--red);font-size:13px;font-weight:500;padding:11px 13px;border-radius:11px;margin-bottom:14px;border:1px solid #F7CFCF}.err.show{display:block}
+.note{text-align:center;font-size:11.5px;color:#93A3CC;margin-top:18px}
+.top{background:linear-gradient(150deg,var(--plg) 0%,var(--plg-d) 110%);color:#fff;padding:calc(env(safe-area-inset-top)+16px) 18px 60px}
+.top .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.top .who .nm{font-size:19px;font-weight:800;line-height:1.1}.top .who .rl{font-size:12.5px;color:#C5D4F5;font-weight:500;margin-top:3px}
+.tbtns{display:flex;gap:8px;flex:none;flex-wrap:wrap}
+.tbtn{background:rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:600;padding:7px 10px;border-radius:11px}
+.period{margin-top:13px;display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.14);padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:500}
+.dot{width:6px;height:6px;border-radius:50%;background:#7FFFB0}
+.hero{margin:-46px 16px 0;background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px;position:relative;z-index:2}
+.hero .lbl{font-size:12.5px;color:var(--muted);font-weight:600}.hero .big{font-size:32px;font-weight:800;color:var(--plg-d);margin:2px 0}
+.hero .split{display:flex;gap:10px;margin-top:13px}.hero .split div{flex:1;border-radius:13px;padding:11px 12px}
+.hero .split .flex{background:#FFF7EA;border:1px solid #FCE6C0}.hero .split .fix{background:#F5F8FD;border:1px solid var(--line)}
+.hero .split .t{font-size:11px;color:var(--muted);font-weight:600}.hero .split .v{font-size:17px;font-weight:800;margin-top:3px}
+.hero .split .flex .v{color:#B5740A}.hero .split .fix .v{color:var(--plg-d)}
+.sec{margin:18px 16px 0}.sec-h{display:flex;align-items:center;gap:9px;margin:0 2px 9px}
+.sec-h .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:15px;flex:none}
+.sec-h .tt{font-size:15px;font-weight:800}.sec-h .ds{font-size:11.5px;color:var(--muted);font-weight:500}
+.pill{margin-left:auto;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px}
+.pill.flex{background:#FFF3DC;color:#B5740A}.pill.fix{background:#E8EEFB;color:var(--plg)}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.li{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--line);font-size:14px}
+.li:first-child{border-top:none}.li .k{color:var(--muted);font-weight:500}.li .k b{color:var(--ink);font-weight:700;display:block;font-size:14px}
+.li .k small{font-size:11.5px;color:#9AA6BD}.li .v{font-weight:700;font-variant-numeric:tabular-nums}
+.li.sum{background:#F7FAFE}.li.sum .k b{font-size:14.5px}.li.sum .v{font-size:16px;color:var(--plg-d);font-weight:800}
+.li.head{background:#FAFBFE;padding-top:13px;padding-bottom:9px}.li.head .k b{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--plg)}
+.togrow{margin:16px 16px 0;background:var(--card);border-radius:14px;box-shadow:var(--sh);padding:13px 16px;display:flex;align-items:center;gap:12px}
+.togrow .tl{flex:1}.togrow .tl b{font-size:14px;font-weight:700}.togrow .tl small{display:block;font-size:11.5px;color:var(--muted)}
+.switch{position:relative;width:48px;height:28px;flex:none}.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#CBD5E8;border-radius:999px;transition:.2s}
+.slider::before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked+.slider{background:var(--plg)}.switch input:checked+.slider::before{transform:translateX(20px)}
+.final{margin:18px 16px 22px;background:linear-gradient(150deg,#13327a,#0F2A5E);color:#fff;border-radius:var(--r);padding:18px;box-shadow:0 10px 26px rgba(15,42,94,.3)}
+.final .ln{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:14px}
+.final .ln .k{color:#B9C7E8;font-weight:500}.final .ln .v{font-weight:700;font-variant-numeric:tabular-nums}
+.final .ln.minus .v{color:#FFB4B4}.final hr{border:none;border-top:1px solid rgba(255,255,255,.16);margin:9px 0}
+.final .net{align-items:flex-end}.final .net .k{font-size:13px;font-weight:600;color:#CFE8FF}.final .net .v{font-size:26px;font-weight:800;color:#7FFFB0}
+.foot{text-align:center;font-size:11px;color:#93A3CC;padding:4px 16px 26px}
+.ov{position:fixed;inset:0;background:rgba(8,18,40,.5);z-index:50;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:520px;background:var(--bg);border-radius:22px 22px 0 0;max-height:92vh;overflow-y:auto;padding-bottom:calc(env(safe-area-inset-bottom)+16px);animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+.sheet .sh{position:sticky;top:0;background:var(--bg);padding:16px 18px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);z-index:2}
+.sheet .sh b{font-size:16px;font-weight:800}.sheet .sh small{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.xclose{background:#E8EDF6;color:var(--ink);width:34px;height:34px;border-radius:10px;font-size:18px;font-weight:700}
+.cfg{padding:14px 16px}.cfg .grp{background:#fff;border-radius:14px;box-shadow:var(--sh);padding:14px 14px 12px;margin-bottom:14px}
+.cfg .gl{font-size:12px;font-weight:800;color:var(--plg);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+.crow{display:flex;align-items:center;gap:8px;margin-bottom:9px}.crow .lab{flex:1}
+.crow label{font-size:12.5px;color:var(--muted);font-weight:600}
+.crow input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px;font-size:15px;font-family:inherit;font-weight:600;background:#F7FAFE;outline:none;text-align:right;font-variant-numeric:tabular-nums}
+.crow input.txt{text-align:left}.crow input:focus{border-color:var(--plg);background:#fff}
+.kpirow{display:flex;align-items:center;gap:8px;margin-bottom:9px}.kpirow .kl{flex:1.4}.kpirow .ka{flex:1}
+.kpirow input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px;font-size:14px;font-family:inherit;background:#F7FAFE;outline:none}
+.kpirow .ka input{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}.kpirow input:focus{border-color:var(--plg);background:#fff}
+.kdel{width:38px;height:40px;flex:none;background:#FDECEC;color:var(--red);border-radius:10px;font-size:18px;font-weight:700}
+.kadd{width:100%;border:1.5px dashed var(--plg-l);color:var(--plg);background:#F3F7FF;border-radius:11px;padding:11px;font-size:14px;font-weight:700;margin-top:4px}
+.p3tot{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--plg-d);padding:8px 2px 2px;border-top:1px dashed var(--line);margin-top:6px}
+.cfgbtns{display:flex;gap:10px;margin-top:4px}
+.cfgbtns .save{flex:1;background:linear-gradient(135deg,var(--plg),var(--plg-l));color:#fff;font-size:15px;font-weight:700;padding:14px;border-radius:13px}
+.cfgbtns .rst{background:#fff;border:1.5px solid var(--line);color:var(--muted);font-size:13px;font-weight:700;padding:14px;border-radius:13px}
+.cfg .hint{font-size:11.5px;color:#9AA6BD;text-align:center;margin-top:6px}
+.adm{padding:16px;margin-top:-20px;position:relative;z-index:2}
+.scard{background:linear-gradient(135deg,var(--plg),var(--plg-d));color:#fff;border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;gap:14px;flex-wrap:wrap}
+.scard .sv{flex:1;min-width:90px}.scard .sl{font-size:11px;color:#C5D4F5;font-weight:600}.scard .sa{font-size:19px;font-weight:800;margin-top:2px}
+.btabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.btab{padding:7px 14px;border-radius:999px;font-size:12.5px;font-weight:700;background:#E8EDF6;color:var(--muted);cursor:pointer}
+.btab.on{background:var(--plg);color:#fff}
+.stbl{background:#fff;border-radius:14px;box-shadow:var(--sh);overflow:hidden;margin-bottom:14px}
+.sr{display:grid;grid-template-columns:1fr 48px 72px 82px 34px;align-items:center;padding:9px 12px;border-top:1px solid var(--line);gap:4px;font-size:12px}
+.sr:first-child{border-top:none}.sr.th{background:#FAFBFE;font-size:10.5px;font-weight:800;color:var(--plg);text-transform:uppercase}
+.sr .sn{font-weight:700;font-size:12.5px}.sr .sp{font-size:10.5px;color:var(--muted);margin-top:1px}
+.sr .sv{font-variant-numeric:tabular-nums;font-weight:700;text-align:right;font-size:11.5px}
+.sr .snet{font-weight:800;color:var(--green);font-size:12px;text-align:right}
+.eb{background:#EEF4FF;color:var(--plg);border-radius:7px;padding:5px 6px;font-size:11px;font-weight:700;border:none;cursor:pointer}
+.actbtns{display:flex;gap:8px;margin-bottom:14px}
+.pbtn{flex:1;background:#16A34A;color:#fff;padding:11px;border-radius:12px;font-size:13px;font-weight:700;text-align:center;cursor:pointer}
+.xbtn{flex:1;background:var(--plg);color:#fff;padding:11px;border-radius:12px;font-size:13px;font-weight:700;text-align:center;cursor:pointer}
+@media print{.top,.tbtns,.togrow,.actbtns,.btabs,.cfgbtns,.tbtn,.eb{display:none!important}.wrap{max-width:100%}body{background:#fff}.card,.stbl,.scard{box-shadow:none;border:1px solid #ddd}#adminDash,#dash{display:block!important}}
 </style>
 </head>
 <body>
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">
-      <img src="logo-plg.png" alt="PLG" style="height:44px;object-fit:contain">
-      <span style="display:none"></span>
-    </div>
-    <div class="login-title">
-      <h2>Xem bảng lương của bạn</h2>
-      <p>Chọn tên và nhập mã xác nhận để tiếp tục</p>
-    </div>
-    <div id="err-msg" class="err-msg">Tên hoặc mã nhân viên không đúng. Vui lòng thử lại.</div>
-    <div class="form-group">
-      <label>Họ và tên</label>
-      <select id="sel-name">
-        <option value="">-- Chọn nhân viên --</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Mã nhân viên</label>
-      <input type="text" id="inp-code" placeholder="Nhập mã của bạn..." autocomplete="off" autocapitalize="characters">
-    </div>
-    <button class="btn-login" id="btn-login">Xem bảng lương</button>
-    <div class="login-note">Đây là trang nội bộ – chỉ dành cho nhân viên PLG</div>
-  </div>
+<div class="wrap">
+<section id="login">
+<div class="brand"><div class="lg">PHI<span>LONG</span></div></div>
+<h1 class="lead">Bong luong nhan su PLG</h1>
+<p class="subt">Chon ten va nhap ma de tiep tuc</p>
+<div class="panel">
+<div class="err" id="err">Ma khong dung. Vui long thu lai.</div>
+<div class="fld"><label>HO VA TEN</label>
+<select id="selName"><option value="">-- Chon nhan vien --</option></select></div>
+<div class="fld"><label>MA NHAN VIEN</label>
+<input id="inCode" autocomplete="off" placeholder="Nhap ma cua ban..."></div>
+<button class="btn" id="btnLogin">Xem bang luong</button>
+<p class="note">Trang noi bo - chi danh cho nhan su PLG</p>
 </div>
-<div id="dashboard" class="dashboard">
-  <div class="topbar">
-    <div class="topbar__left">
-      <img src="logo-plg.png" height="36" alt="PLG" style="object-fit:contain">
-      <span class="topbar__logo"> <span>BẢNG LƯƠNG</span></span>
-    </div>
-    <div style="display:flex;align-items:center;gap:1rem">
-      <span class="topbar__user" id="topbar-name"></span>
-      <button class="btn-logout" id="btn-logout">Đăng xuất</button>
-    </div>
-  </div>
-  <div class="tab-bar">
-    <button class="tab-btn active" id="tab-luong" onclick="switchTab('luong')">&#x1F4B0; Bảng lương</button>
-    <button class="tab-btn" id="tab-cc" onclick="switchTab('chamcong')">&#x1F4CD; Chấm công GPS</button>
-  </div>
-  <div id="pane-luong" class="tab-pane active"><div class="main-content" id="main-content"></div></div>
-  <div id="pane-chamcong" class="tab-pane"></div>
+</section>
+<section id="dash" class="hide">
+<div class="top">
+<div class="row">
+<div class="who"><div class="nm" id="dNm">-</div><div class="rl" id="dRl">-</div></div>
+<div class="tbtns">
+<button class="tbtn" id="btnCfg">Nhap lieu</button>
+<button class="tbtn" id="btnOut">Dang xuat</button>
+</div>
+</div>
+<div class="period"><span class="dot"></span><span id="dPeriod">Thang 6 / 2026</span> · <span id="dCong">26 cong</span></div>
+</div>
+<div class="hero">
+<div class="lbl">Thuc linh ky nay</div>
+<div class="big money" id="dNet">-</div>
+<div class="split">
+<div class="flex"><div class="t">Linh hoat P3+P4</div><div class="v money" id="dFlex">-</div></div>
+<div class="fix"><div class="t">Luong thang P1+P2</div><div class="v money" id="dFix">-</div></div>
+</div>
+</div>
+<div class="sec">
+<div class="sec-h">
+<div class="ic" style="background:#FFF3DC;color:#B5740A">&#9889;</div>
+<div><div class="tt">Linh hoat (P3 + P4)</div><div class="ds">Hoa hong KPI va Cung Chia</div></div>
+<span class="pill flex">LINH HOAT</span>
+</div>
+<div class="card" id="cardFlex"></div>
+</div>
+<div class="togrow">
+<div class="tl"><b>Hien luong thang (P1+P2)</b><small>Luong cung - cuoi thang theo ngay cong</small></div>
+<label class="switch"><input type="checkbox" id="togFix"><span class="slider"></span></label>
+</div>
+<div class="sec hide" id="secFix">
+<div class="sec-h">
+<div class="ic" style="background:#E8EEFB;color:var(--plg)">&#128197;</div>
+<div><div class="tt">Luong thang (P1+P2)</div><div class="ds">Cuoi thang theo cong</div></div>
+<span class="pill fix">CUOI THANG</span>
+</div>
+<div class="card" id="cardFix"></div>
+</div>
+<div class="final">
+<div class="ln"><span class="k">Tong thu nhap P1+P2+P3+P4</span><span class="v money" id="fTong">-</span></div>
+<div class="ln minus"><span class="k">Bao hiem</span><span class="v money" id="fBh">-</span></div>
+<div class="ln minus"><span class="k">Tam ung</span><span class="v money" id="fUng">-</span></div>
+<hr>
+<div class="ln net"><span class="k">CON LINH</span><span class="v money" id="fNet">-</span></div>
+</div>
+<p class="foot">Co cau 4P - Cung Lam - Cung Tien - Cung Chien - Cung Chia<br>He thong dich vu o to Phi Long</p>
+</section>
+<section id="adminDash" class="hide">
+<div class="top">
+<div class="row">
+<div class="who"><div class="nm">QUAN TRI</div><div class="rl">Bang luong toan he thong</div></div>
+<div class="tbtns"><button class="tbtn" id="adminOut">Dang xuat</button></div>
+</div>
+<div class="period"><span class="dot"></span>Thang 6 / 2026</div>
+</div>
+<div class="adm">
+<div class="scard">
+<div class="sv"><div class="sl">Nhan su</div><div class="sa" id="adminTotal">-</div></div>
+<div class="sv"><div class="sl">Tong thuc linh</div><div class="sa" id="adminSumNet">-</div></div>
+<div class="sv"><div class="sl">Tong P3+P4</div><div class="sa" id="adminSumFlex">-</div></div>
+</div>
+<div class="actbtns">
+<button class="pbtn" onclick="window.print()">In bao cao</button>
+<button class="xbtn" id="exportBtn">Copy bang</button>
+</div>
+<div class="btabs" id="branchTabs"></div>
+<div class="stbl">
+<div class="sr th"><div>Nhan vien</div><div style="text-align:right">Cong</div><div style="text-align:right">P1+P2</div><div style="text-align:right">Thuc linh</div><div></div></div>
+<div id="staffRows"></div>
+</div>
+</div>
+</section>
+<div class="ov hide" id="ov">
+<div class="sheet">
+<div class="sh"><div><b id="cfgTitle">Nhap lieu luong</b><small id="cfgWho">-</small></div><button class="xclose" id="cfgClose">x</button></div>
+<div class="cfg">
+<div class="grp">
+<div class="gl">Ngay cong thuc te</div>
+<div class="crow"><div class="lab"><label>So cong lam viec</label></div><input id="cfgCong" type="number" inputmode="decimal" style="max-width:110px"></div>
+</div>
+<div class="grp">
+<div class="gl">P3 - Hoa hong va KPI</div>
+<div id="kpiList"></div>
+<button class="kadd" id="kpiAdd">+ Them chi so</button>
+<div class="p3tot"><span>Tong P3</span><span id="cfgP3">0 d</span></div>
+</div>
+<div class="grp">
+<div class="gl">P4 va khoan tru</div>
+<div class="kpirow"><div class="kl"><label style="font-size:12.5px;color:var(--muted);font-weight:600">P4 Cung Chia</label></div><div class="ka"><input id="cfgP4" type="number" inputmode="numeric"></div></div>
+<div class="kpirow"><div class="kl"><label style="font-size:12.5px;color:var(--muted);font-weight:600">Bao hiem</label></div><div class="ka"><input id="cfgBh" type="number" inputmode="numeric"></div></div>
+<div class="kpirow"><div class="kl"><label style="font-size:12.5px;color:var(--muted);font-weight:600">Tam ung</label></div><div class="ka"><input id="cfgUng" type="number" inputmode="numeric"></div></div>
+</div>
+<div class="cfgbtns"><button class="save" id="cfgSave">Luu thay doi</button><button class="rst" id="cfgReset">Khoi phuc</button></div>
+<div class="hint">Du lieu luu tren thiet bi nay</div>
+</div>
+</div>
+</div>
 </div>
 <script>
-'use strict';
-const STAFF_DATA=[{id:"s1",branch:"CN2",code:"2 TRAM",name:"Nguyễn Thị Thùy Trâm",phone:"0988213331",role:"QL",position:"Quản lý CN",fixedSalary:0},{id:"s2",branch:"CN2",code:"LANH",name:"Lê Thị Lành",phone:"0944202677",role:"KT",position:"Kế toán",fixedSalary:0},{id:"s3",branch:"CN2",code:"PHƯỢNG",name:"Bùi Thị Bích Phượng",phone:"",role:"NVKD",position:"CVDV",fixedSalary:0},{id:"s4",branch:"CN2",code:"DCAO",name:"Đỗ Văn Cao",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s5",branch:"CN2",code:"THÀNH LỚN",name:"Nguyễn Văn Thành",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s6",branch:"CN2",code:"BO",name:"Lục Văn Bộ",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s7",branch:"CN2",code:"PHUC",name:"Nguyễn Hạnh Phúc",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s8",branch:"CN1",code:"DUNG",name:"Trần Thị Dung",phone:"",role:"KT",position:"Kế toán",fixedSalary:0},{id:"s9",branch:"CN1",code:"LUAN",name:"Phạm Thành Luân",phone:"",role:"QL",position:"Quản lý CN",fixedSalary:0},{id:"s10",branch:"CN1",code:"PHUONG KT",name:"Phạm Kim Phương",phone:"",role:"KT",position:"Kế toán",fixedSalary:0},{id:"s11",branch:"CN1",code:"TAM",name:"Nguyễn Chí Tâm",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s12",branch:"CN1",code:"THINH",name:"Nguyễn Đình Thịnh",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s13",branch:"CN3",code:"HOA",name:"Lê Thị Hoa",phone:"",role:"KT",position:"Kế toán",fixedSalary:0},{id:"s14",branch:"CN3",code:"DAT CN3",name:"Lê Nguyên Đạt",phone:"",role:"QL",position:"Quản lý CN",fixedSalary:0},{id:"s15",branch:"CN3",code:"KHOA",name:"Trần Minh Khoa",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s16",branch:"CN3",code:"DUC",name:"Nguyễn Hoàng Đức",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s17",branch:"CN3",code:"LONG",name:"Phan Thanh Long",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s18",branch:"CN3",code:"HUNG",name:"Vũ Mạnh Hùng",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s19",branch:"CN5",code:"TRANG CN5",name:"Nguyễn Thị Trang",phone:"",role:"QL",position:"Quản lý CN",fixedSalary:0},{id:"s20",branch:"CN5",code:"LINH CN5",name:"Đặng Thị Linh",phone:"",role:"NVKD",position:"CVDV",fixedSalary:0},{id:"s21",branch:"CN5",code:"NAM",name:"Trần Quốc Nam",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s22",branch:"CN5",code:"BINH",name:"Lê Văn Bình",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s23",branch:"CN5",code:"TUAN",name:"Nguyễn Anh Tuấn",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s24",branch:"CN5",code:"SON",name:"Phạm Văn Sơn",phone:"",role:"KTV",position:"Kỹ thuật",fixedSalary:0},{id:"s25",branch:"CN5",code:"QUYEN",name:"Hoàng Thị Quyên",phone:"",role:"NVKD",position:"CVDV",fixedSalary:0}];
-const ENTRIES_DATA=[{id:"e1",staffId:"s19",date:"2026-06-01",revLop:157020000,revOther:19825000,soLop:33,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0},{id:"e2",staffId:"s19",date:"2026-06-09",revLop:80330000,revOther:4167000,soLop:20,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0},{id:"e3",staffId:"s20",date:"2026-06-01",revLop:0,revOther:0,soLop:0,congLop:2660000,congNgoaiLop:6165000,congLuuDong:0,quay:0},{id:"e4",staffId:"s20",date:"2026-06-09",revLop:0,revOther:0,soLop:0,congLop:1892000,congNgoaiLop:3050555,congLuuDong:0,quay:0},{id:"e5",staffId:"s10",date:"2026-06-01",revLop:0,revOther:0,soLop:0,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0},{id:"e6",staffId:"s11",date:"2026-06-01",revLop:0,revOther:0,soLop:0,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0},{id:"e7",staffId:"s4",date:"2026-06-01",revLop:0,revOther:0,soLop:0,congLop:0,congNgoaiLop:0,congLuuDong:0,quay:0}];
-const CFG={base:4200000,xang:260000,com:780000,congChuan:26,congExtra:450000,ktvM1:10000000,ktvR1:0.1,ktvM2:20000000,ktvR2:0.15,ktvM3:30000000,ktvR3:0.2,ktvLdM1:10000000,ktvLdR1:0.3,ktvLdM2:20000000,ktvLdR2:0.4,ktvLdM3:30000000,ktvLdR3:0.5};
+const STAFF=[
+{id:"s1",br:"CN2",code:"2 TRAM",nv:"Nguyen Thi Thuy Tram",role:"QL",pos:"Quan ly CN"},
+{id:"s2",br:"CN2",code:"LANH",nv:"Le Thi Lanh",role:"KT",pos:"Ke toan"},
+{id:"s3",br:"CN2",code:"PHUONG",nv:"Bui Thi Bich Phuong",role:"NVKD",pos:"CVDV"},
+{id:"s4",br:"CN2",code:"DCAO",nv:"Do Van Cao",role:"KTV",pos:"Ky thuat"},
+{id:"s5",br:"CN2",code:"THANH LON",nv:"Nguyen Van Thanh",role:"KTV",pos:"Ky thuat"},
+{id:"s6",br:"CN2",code:"BO",nv:"Luc Van Bo",role:"KTV",pos:"Ky thuat"},
+{id:"s7",br:"CN2",code:"PHUC",nv:"Nguyen Hanh Phuc",role:"KTV",pos:"Ky thuat"},
+{id:"s8",br:"CN1",code:"DUNG",nv:"Tran Thi Dung",role:"KT",pos:"Ke toan"},
+{id:"s9",br:"CN1",code:"LUAN",nv:"Pham Thanh Luan",role:"QL",pos:"Quan ly CN"},
+{id:"s10",br:"CN1",code:"PHUONG KT",nv:"Pham Kim Phuong",role:"KT",pos:"Ke toan"},
+{id:"s11",br:"CN1",code:"TAM",nv:"Nguyen Chi Tam",role:"KTV",pos:"Ky thuat"},
+{id:"s12",br:"CN1",code:"THINH",nv:"Nguyen Dinh Thinh",role:"KTV",pos:"Ky thuat"},
+{id:"s13",br:"CN3",code:"HOA",nv:"Le Thi Hoa",role:"KT",pos:"Ke toan"},
+{id:"s14",br:"CN3",code:"DAT CN3",nv:"Le Nguyen Dat",role:"QL",pos:"Quan ly CN"},
+{id:"s15",br:"CN3",code:"KHOA",nv:"Tran Minh Khoa",role:"KTV",pos:"Ky thuat"},
+{id:"s16",br:"CN3",code:"DUC",nv:"Nguyen Hoang Duc",role:"KTV",pos:"Ky thuat"},
+{id:"s17",br:"CN3",code:"LONG",nv:"Phan Thanh Long",role:"KTV",pos:"Ky thuat"},
+{id:"s18",br:"CN3",code:"HUNG",nv:"Vu Manh Hung",role:"KTV",pos:"Ky thuat"},
+{id:"s19",br:"CN5",code:"TRANG CN5",nv:"Nguyen Thi Trang",role:"QL",pos:"Quan ly CN"},
+{id:"s20",br:"CN5",code:"LINH CN5",nv:"Dang Thi Linh",role:"NVKD",pos:"CVDV"},
+{id:"s21",br:"CN5",code:"NAM",nv:"Tran Quoc Nam",role:"KTV",pos:"Ky thuat"},
+{id:"s22",br:"CN5",code:"BINH",nv:"Le Van Binh",role:"KTV",pos:"Ky thuat"},
+{id:"s23",br:"CN5",code:"TUAN",nv:"Nguyen Anh Tuan",role:"KTV",pos:"Ky thuat"},
+{id:"s24",br:"CN5",code:"SON",nv:"Pham Van Son",role:"KTV",pos:"Ky thuat"},
+{id:"s25",br:"CN5",code:"QUYEN",nv:"Hoang Thi Quyen",role:"NVKD",pos:"CVDV"}
+];
+const ADMIN_CODE="ADMIN2026";
 const SALARY_BASE={QL:12000000,KT:8940000,NVKD:7500000,KTV:7090000};
-function fmtVND(n){return Math.round(n).toLocaleString('vi-VN');}
-function fmtM(n){if(n>=1000000)return(n/1000000).toFixed(1).replace(/\.0$/,'')+'tr';if(n>=1000)return(n/1000).toFixed(0)+'k';return fmtVND(n);}
-function getInitials(name){const parts=name.trim().split(' ');return parts.length>=2?(parts[parts.length-2][0]+parts[parts.length-1][0]).toUpperCase():name.substring(0,2).toUpperCase();}
-function calcSalary(staff){
-  const base=SALARY_BASE[staff.role]||CFG.base;
-  if(staff.fixedSalary&&staff.fixedSalary>0)return staff.fixedSalary;
-  const myE=ENTRIES_DATA.filter(e=>e.staffId===staff.id);
-  let bonus=0;
-  myE.forEach(e=>{
-    const cong=(e.congLop||0)+(e.congNgoaiLop||0);
-    const rev=(e.revLop||0)+(e.revOther||0);
-    if(staff.role==='KTV'){if(cong>CFG.ktvM3)bonus+=cong*CFG.ktvR3;else if(cong>CFG.ktvM2)bonus+=cong*CFG.ktvR2;else if(cong>CFG.ktvM1)bonus+=cong*CFG.ktvR1;}
-    else if(staff.role==='QL'){bonus+=(e.revLop||0)*0.005+(e.revOther||0)*0.01;}
-    else if(staff.role==='NVKD'){bonus+=cong*0.12;}
-    else{bonus+=(e.revLop||0)*0.002;}
+const P1BASE=5240000,CONGCHUAN=26,OT=450000;
+const vnd=n=>Math.round(n||0).toLocaleString('vi-VN')+' d';
+const vndm=n=>(Math.round((n||0)/100000)/10).toLocaleString('vi-VN',{maximumFractionDigits:1})+'tr';
+function person(id){const base=STAFF.find(s=>s.id===id);if(!base)return null;let ov={};try{ov=JSON.parse(localStorage.getItem('plg4p_'+id))||{};}catch(e){}return {...base,...ov,p3items:(ov.p3items||[])};}
+function compute(p){
+  const cong=+p.cong||CONGCHUAN;
+  const p1core=Math.round(P1BASE*Math.min(cong,CONGCHUAN)/CONGCHUAN);
+  const ot=Math.round(Math.max(cong-CONGCHUAN,0)*OT);
+  const P1=p1core+ot;
+  const base2=SALARY_BASE[p.role]||0;
+  const P2=Math.round(base2*Math.min(cong,CONGCHUAN)/CONGCHUAN);
+  const P3=(p.p3items||[]).reduce((s,i)=>s+(+i.a||0),0);
+  const P4=+p.p4||0;
+  const tong=P1+P2+P3+P4;
+  const net=tong-(+p.bh||0)-(+p.ung||0);
+  return {P1,P2,P3,P4,tong,net,cong};
+}
+function liH(k,sub){return '<div class=\"li head\"><div class=\"k\"><b>'+k+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div><div class=\"v\"></div></div>';}
+function liI(k,v,sub){return '<div class=\"li\"><div class=\"k\"><b>'+k+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div><div class=\"v\">'+vnd(v)+'</div></div>';}
+function liS(k,v){return '<div class=\"li sum\"><div class=\"k\"><b>'+k+'</b></div><div class=\"v\">'+vnd(v)+'</div></div>';}
+let CUR=null;
+function render(id){
+  CUR=id;const p=person(id);if(!p)return;const c=compute(p);
+  document.getElementById('dNm').textContent=p.nv;
+  document.getElementById('dRl').textContent=p.pos+' - '+p.br;
+  document.getElementById('dCong').textContent=(+c.cong)+' cong';
+  document.getElementById('dNet').textContent=vnd(c.net);
+  document.getElementById('dFlex').textContent=vnd(c.P3+c.P4);
+  document.getElementById('dFix').textContent=vnd(c.P1+c.P2);
+  let fl=liH('P3 - Hoa hong va KPI');
+  if(p.p3items&&p.p3items.length){p.p3items.forEach(i=>fl+=liI(i.l||'Chi so',+i.a||0));}
+  else{fl+=liI('Chua co du lieu P3',0);}
+  fl+=liS('Cong P3',c.P3);
+  fl+=liI('P4 - Cung Chia',c.P4);
+  fl+=liS('LINH HOAT P3+P4',c.P3+c.P4);
+  document.getElementById('cardFlex').innerHTML=fl;
+  let fx=liH('P1 - Cung Lam','Luong ngay cong');
+  fx+=liI('Luong co ban',c.P1,''+c.cong+' cong');
+  fx+=liS('Cong P1',c.P1);
+  fx+=liH('P2 - Cung Tien','Luong vi tri & vai tro');
+  fx+=liI(p.role+' - '+p.pos,c.P2,''+c.cong+' cong');
+  fx+=liS('Cong P2',c.P2);
+  fx+=liS('LUONG CUNG P1+P2',c.P1+c.P2);
+  document.getElementById('cardFix').innerHTML=fx;
+  document.getElementById('fTong').textContent=vnd(c.tong);
+  document.getElementById('fBh').textContent='- '+vnd(+p.bh||0);
+  document.getElementById('fUng').textContent='- '+vnd(+p.ung||0);
+  document.getElementById('fNet').textContent=vnd(c.net);
+}
+let cfgTarget=null,cfgItems=[];
+function openCfg(id){
+  cfgTarget=id;const p=person(id);if(!p)return;
+  document.getElementById('cfgTitle').textContent='Nhap lieu: '+p.nv;
+  document.getElementById('cfgWho').textContent=p.pos+' - '+p.br;
+  document.getElementById('cfgCong').value=p.cong||CONGCHUAN;
+  document.getElementById('cfgP4').value=p.p4||0;
+  document.getElementById('cfgBh').value=p.bh||0;
+  document.getElementById('cfgUng').value=p.ung||0;
+  cfgItems=(p.p3items||[]).map(x=>({...x}));
+  drawKpi();document.getElementById('ov').classList.remove('hide');
+}
+function drawKpi(){
+  const box=document.getElementById('kpiList');box.innerHTML='';
+  cfgItems.forEach((it,i)=>{
+    const row=document.createElement('div');row.className='kpirow';
+    row.innerHTML='<div class=\"kl\"><input class=\"txt\" data-ki=\"'+i+'\" value=\"'+(it.l||'').replace(/"/g,'&quot;')+'\" placeholder=\"Ten chi so\"></div><div class=\"ka\"><input type=\"number\" data-ka=\"'+i+'\" value=\"'+(it.a||0)+'\"></div><button class=\"kdel\" data-kd=\"'+i+'\">x</button>';
+    box.appendChild(row);
   });
-  return base+bonus+CFG.xang+CFG.com;
+  document.getElementById('cfgP3').textContent=vnd(cfgItems.reduce((s,i)=>s+(+i.a||0),0));
 }
-const sel=document.getElementById('sel-name');
-STAFF_DATA.forEach(s=>{const o=document.createElement('option');o.value=s.id;o.textContent=s.name+' ('+s.branch+')';sel.appendChild(o);});
-document.getElementById('btn-login').addEventListener('click',doLogin);
-document.getElementById('inp-code').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-function doLogin(){
-  const sid=document.getElementById('sel-name').value;
-  const code=document.getElementById('inp-code').value.trim().toUpperCase();
-  const err=document.getElementById('err-msg');
-  if(!sid){err.textContent='Vui lòng chọn tên nhân viên.';err.style.display='block';return;}
-  const staff=STAFF_DATA.find(s=>s.id===sid);
-  if(!staff||staff.code.trim().toUpperCase()!==code){err.textContent='Mã nhân viên không đúng. Vui lòng thử lại.';err.style.display='block';document.getElementById('inp-code').focus();return;}
-  err.style.display='none';
-  showDashboard(staff);
-}
-function showDashboard(staff){
-  document.getElementById('login-screen').style.display='none';
-  const db=document.getElementById('dashboard');
-  db.style.display='flex';
-  document.getElementById('topbar-name').textContent=staff.name;
-  document.body.style.cssText='background:#f1f5f9;display:block;padding:0;min-height:100vh;font-family:Inter,sans-serif';
-  renderSalaryPage(staff);
-  window._loggedEmployee = staff;
-}
-document.getElementById('btn-logout').addEventListener('click',()=>{
-  ccDestroy();
-  window._loggedEmployee = null;
-  switchTab('luong');
-  document.getElementById('dashboard').style.display='none';
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('sel-name').value='';
-  document.getElementById('inp-code').value='';
-  document.body.style.cssText='font-family:Inter,sans-serif;background:linear-gradient(135deg,#1E4FB8 0%,#1565C0 50%,#0D47A1 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem';
+document.getElementById('kpiList').addEventListener('input',e=>{
+  if(e.target.dataset.ki!=null)cfgItems[+e.target.dataset.ki].l=e.target.value;
+  if(e.target.dataset.ka!=null){cfgItems[+e.target.dataset.ka].a=+e.target.value||0;document.getElementById('cfgP3').textContent=vnd(cfgItems.reduce((s,i)=>s+(+i.a||0),0));}
 });
-function renderSalaryPage(staff){
-  const salary=calcSalary(staff);
-  const myE=ENTRIES_DATA.filter(e=>e.staffId===staff.id);
-  const initials=getInitials(staff.name);
-  const baseS=SALARY_BASE[staff.role]||CFG.base;
-  const bonusAmt=salary-baseS-CFG.xang-CFG.com;
-  const roleLabel={QL:'Quản lý CN',KT:'Kế toán',NVKD:'Chuyên viên DV',KTV:'Kỹ thuật viên'}[staff.role]||staff.role;
-  let eHtml='';
-  if(myE.length===0){eHtml='<div class="no-data"><p>Chưa có dữ liệu trong kỳ này</p></div>';}
-  else{myE.forEach((e,i)=>{const d=new Date(e.date).toLocaleDateString('vi-VN');const cong=(e.congLop||0)+(e.congNgoaiLop||0);eHtml+='<div class="detail-item"><div class="detail-item__label">Lần '+(i+1)+' – '+d+'</div>';if(staff.role==='KTV'){eHtml+='<div class="detail-item__value">'+fmtM(cong)+' đ</div><div class="detail-item__sub">Công: '+fmtM(e.congLop||0)+' + ngoài: '+fmtM(e.congNgoaiLop||0)+'</div>';}else{eHtml+='<div class="detail-item__value">'+fmtM((e.revLop||0)+(e.revOther||0))+' đ</div><div class="detail-item__sub">DT: '+fmtM(e.revLop||0)+' + DV: '+fmtM(e.revOther||0)+'</div>';}eHtml+='</div>';});}
-  document.getElementById('main-content').innerHTML=`<div class="welcome-banner"><div class="welcome-avatar">${initials}</div><div class="welcome-text"><h2>Xin chào, ${staff.name}!</h2><p>${roleLabel} &bull; ${staff.branch}</p></div><div class="welcome-salary"><div class="amount">${fmtM(salary)}</div><div class="label">Lương dự kiến</div></div></div><div class="salary-section"><div class="section-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Tổng quan lương kỳ Tháng 6 / 2026</div><div class="detail-grid"><div class="detail-item highlight"><div class="detail-item__label">Lương tổng dự kiến</div><div class="detail-item__value">${fmtM(salary)} đ</div><div class="detail-item__sub">${fmtVND(salary)} đồng</div></div><div class="detail-item"><div class="detail-item__label">Lương cơ bản</div><div class="detail-item__value">${fmtM(baseS)} đ</div><div class="detail-item__sub">${staff.role}</div></div><div class="detail-item green"><div class="detail-item__label">Thưởng / Hiệu suất</div><div class="detail-item__value">${fmtM(Math.max(0,bonusAmt))} đ</div><div class="detail-item__sub">Dựa trên hiệu suất</div></div><div class="detail-item"><div class="detail-item__label">Phụ cấp xăng + ăn</div><div class="detail-item__value">${fmtM(CFG.xang+CFG.com)} đ</div><div class="detail-item__sub">${fmtM(CFG.xang)}+${fmtM(CFG.com)}</div></div></div></div><div class="salary-section"><div class="section-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Dữ liệu hiệu suất</div>${myE.length>0?'<div class="detail-grid">'+eHtml+'</div>':eHtml}</div><div class="salary-section"><div class="section-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Thông tin cá nhân</div><div class="info-grid"><div class="info-item"><div class="info-item__label">Họ tên</div><div class="info-item__value">${staff.name}</div></div><div class="info-item"><div class="info-item__label">Chức vụ</div><div class="info-item__value">${staff.position}</div></div><div class="info-item"><div class="info-item__label">Chi nhánh</div><div class="info-item__value">${staff.branch}</div></div><div class="info-item"><div class="info-item__label">Vai trò</div><div class="info-item__value">${roleLabel}</div></div>${staff.phone?'<div class="info-item"><div class="info-item__label">Số điện thoại</div><div class="info-item__value">'+staff.phone+'</div></div>':''}</div></div>`;
-}
-
-function switchTab(tab) {
-  document.getElementById('pane-luong').classList.toggle('active', tab==='luong');
-  document.getElementById('pane-chamcong').classList.toggle('active', tab==='chamcong');
-  document.getElementById('tab-luong').classList.toggle('active', tab==='luong');
-  document.getElementById('tab-cc').classList.toggle('active', tab==='chamcong');
-  if(tab==='chamcong') {
-    const _emp = window._loggedEmployee; if(_emp)
-    ccInit(_emp);
+document.getElementById('kpiList').addEventListener('click',e=>{if(e.target.dataset.kd!=null){cfgItems.splice(+e.target.dataset.kd,1);drawKpi();}});
+document.getElementById('kpiAdd').addEventListener('click',()=>{cfgItems.push({l:'',a:0});drawKpi();const inps=document.querySelectorAll('#kpiList .txt');if(inps.length)inps[inps.length-1].focus();});
+document.getElementById('cfgSave').addEventListener('click',()=>{
+  if(!cfgTarget)return;
+  const ov={cong:+document.getElementById('cfgCong').value||CONGCHUAN,p3items:cfgItems.filter(i=>i.l||+i.a).map(i=>({l:i.l||'Chi so',a:+i.a||0})),p4:+document.getElementById('cfgP4').value||0,bh:+document.getElementById('cfgBh').value||0,ung:+document.getElementById('cfgUng').value||0};
+  try{localStorage.setItem('plg4p_'+cfgTarget,JSON.stringify(ov));}catch(e){}
+  document.getElementById('ov').classList.add('hide');
+  if(CUR===cfgTarget)render(CUR);else renderAdmin();
+});
+document.getElementById('cfgReset').addEventListener('click',()=>{if(confirm('Khoi phuc mac dinh?')){try{localStorage.removeItem('plg4p_'+cfgTarget);}catch(e){}document.getElementById('ov').classList.add('hide');if(CUR===cfgTarget)render(CUR);else renderAdmin();}});
+document.getElementById('cfgClose').addEventListener('click',()=>document.getElementById('ov').classList.add('hide'));
+document.getElementById('ov').addEventListener('click',e=>{if(e.target.id==='ov')document.getElementById('ov').classList.add('hide');});
+document.getElementById('btnCfg').addEventListener('click',()=>openCfg(CUR));
+document.getElementById('togFix').addEventListener('change',e=>document.getElementById('secFix').classList.toggle('hide',!e.target.checked));
+let adminBranch='ALL';
+function renderAdmin(){
+  const branches=['ALL','CN1','CN2','CN3','CN5'];
+  const tabsEl=document.getElementById('branchTabs');
+  if(!tabsEl.children.length){
+    branches.forEach(b=>{const btn=document.createElement('button');btn.className='btab'+(b==='ALL'?' on':'');btn.textContent=b==='ALL'?'Tat ca':b;btn.onclick=()=>{adminBranch=b;document.querySelectorAll('.btab').forEach(x=>x.classList.remove('on'));btn.classList.add('on');renderAdminRows();};tabsEl.appendChild(btn);});
   }
+  renderAdminRows();
 }
-
-// ===== CHAM CONG GPS =====
-let ccCurrentUser = null;
-let ccToday = null;
-let ccClockTimer = null;
-
-function ccInit(emp) {
-  ccCurrentUser = emp;
-  ccUpdateClock();
-  ccClockTimer = setInterval(ccUpdateClock, 1000);
-  ccRender();
-}
-
-function ccDestroy() {
-  if(ccClockTimer) clearInterval(ccClockTimer);
-  ccCurrentUser = null;
-}
-
-function ccUpdateClock() {
-  const el = document.getElementById('cc-clock');
-  if(!el) return;
-  const now = new Date();
-  const hh = String(now.getHours()).padStart(2,'0');
-  const mm = String(now.getMinutes()).padStart(2,'0');
-  const ss = String(now.getSeconds()).padStart(2,'0');
-  el.textContent = hh+':'+mm+':'+ss;
-  const days = ['CN','T2','T3','T4','T5','T6','T7'];
-  document.getElementById('cc-date').textContent = days[now.getDay()]+', '+now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear();
-}
-
-function ccKey(emp) {
-  return 'PLG_CC_'+emp.code;
-}
-
-function ccGetData(emp) {
-  try { return JSON.parse(localStorage.getItem(ccKey(emp))||'{}'); } catch(e){ return {}; }
-}
-
-function ccSaveData(emp, data) {
-  localStorage.setItem(ccKey(emp), JSON.stringify(data));
-  // Also write to shared key for salary.html to read
-  ccSyncToSalary(emp, data);
-}
-
-function ccSyncToSalary(emp, data) {
-  // salary.html reads PLG_ATTENDANCE key: { [empCode]: { [YYYY-MM]: { [DD]: {in,out,lat,lng,addr} } } }
-  try {
-    let shared = JSON.parse(localStorage.getItem('PLG_ATTENDANCE')||'{}');
-    shared[emp.code] = data;
-    localStorage.setItem('PLG_ATTENDANCE', JSON.stringify(shared));
-  } catch(e){}
-}
-
-function ccTodayKey() {
-  const now = new Date();
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  const dd = String(now.getDate()).padStart(2,'0');
-  return now.getFullYear()+'-'+mm+'-'+dd;
-}
-
-function ccMonthKey() {
-  const now = new Date();
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  return now.getFullYear()+'-'+mm;
-}
-
-function ccGetGPS(callback) {
-  const statusEl = document.getElementById('cc-gps-status');
-  if(statusEl) { statusEl.className='gps-status'; statusEl.textContent='Đang lấy vị trí GPS...'; }
-  if(!navigator.geolocation){
-    if(statusEl){statusEl.className='gps-status err';statusEl.textContent='Trình duyệt không hỗ trợ GPS';}
-    callback(null);return;
-  }
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      const lat = pos.coords.latitude.toFixed(6);
-      const lng = pos.coords.longitude.toFixed(6);
-      if(statusEl){statusEl.className='gps-status ok';statusEl.textContent='GPS: '+lat+', '+lng;}
-      // Reverse geocode via open API
-      fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json')
-        .then(r=>r.json())
-        .then(d=>{
-          const addr = d.display_name ? d.display_name.split(',').slice(0,3).join(', ') : lat+','+lng;
-          callback({lat,lng,addr});
-        })
-        .catch(()=>callback({lat,lng,addr:lat+','+lng}));
-    },
-    err => {
-      if(statusEl){statusEl.className='gps-status err';statusEl.textContent='Không lấy được GPS: '+err.message;}
-      callback(null);
-    },
-    {enableHighAccuracy:true,timeout:10000}
-  );
-}
-
-function ccCheckIn() {
-  const emp = ccCurrentUser;
-  if(!emp) return;
-  const btn = document.getElementById('cc-btn');
-  if(btn){btn.disabled=true;btn.textContent='Đang lấy GPS...';}
-  ccGetGPS(function(gps){
-    const data = ccGetData(emp);
-    const today = ccTodayKey();
-    const month = ccMonthKey();
-    if(!data[month]) data[month]={};
-    const now = new Date();
-    const timeStr = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-    if(!data[month][today]) data[month][today]={};
-    data[month][today].in = timeStr;
-    data[month][today].inTs = now.getTime();
-    if(gps){ data[month][today].lat=gps.lat; data[month][today].lng=gps.lng; data[month][today].addr=gps.addr; }
-    ccSaveData(emp, data);
-    ccRender();
-    if(btn){btn.disabled=false;}
+function renderAdminRows(){
+  const filtered=adminBranch==='ALL'?STAFF:STAFF.filter(s=>s.br===adminBranch);
+  let rows='',sumNet=0,sumFlex=0;
+  filtered.forEach(s=>{
+    const p=person(s.id),c=compute(p);
+    sumNet+=c.net;sumFlex+=c.P3+c.P4;
+    rows+='<div class=\"sr\"><div><div class=\"sn\">'+s.nv+'</div><div class=\"sp\">'+s.role+' - '+s.br+'</div></div><div class=\"sv\">'+c.cong+'</div><div class=\"sv\">'+vndm(c.P1+c.P2)+'</div><div class=\"snet\">'+vndm(c.net)+'</div><div><button class=\"eb\" onclick=\"openCfg(''+s.id+'')\">Sua</button></div></div>';
   });
+  document.getElementById('staffRows').innerHTML=rows;
+  document.getElementById('adminTotal').textContent=filtered.length;
+  document.getElementById('adminSumNet').textContent=vndm(sumNet);
+  document.getElementById('adminSumFlex').textContent=vndm(sumFlex);
 }
-
-function ccCheckOut() {
-  const emp = ccCurrentUser;
-  if(!emp) return;
-  const btn = document.getElementById('cc-btn');
-  if(btn){btn.disabled=true;btn.textContent='Đang lấy GPS...';}
-  ccGetGPS(function(gps){
-    const data = ccGetData(emp);
-    const today = ccTodayKey();
-    const month = ccMonthKey();
-    if(!data[month]) data[month]={};
-    if(!data[month][today]) data[month][today]={};
-    const now = new Date();
-    const timeStr = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-    data[month][today].out = timeStr;
-    data[month][today].outTs = now.getTime();
-    if(gps){ data[month][today].outLat=gps.lat; data[month][today].outLng=gps.lng; data[month][today].outAddr=gps.addr; }
-    ccSaveData(emp, data);
-    ccRender();
-    if(btn){btn.disabled=false;}
-  });
-}
-
-function ccCalcHours(entry) {
-  if(!entry||!entry.inTs||!entry.outTs) return null;
-  const diff = (entry.outTs - entry.inTs)/3600000;
-  return diff > 0 ? diff : null;
-}
-
-function ccRender() {
-  const emp = ccCurrentUser;
-  if(!emp) return;
-  const pane = document.getElementById('pane-chamcong');
-  if(!pane) return;
-
-  const data = ccGetData(emp);
-  const month = ccMonthKey();
-  const today = ccTodayKey();
-  const monthData = data[month]||{};
-  const todayEntry = monthData[today]||{};
-
-  // Count stats
-  let totalDays=0, totalHrs=0, lateDays=0;
-  const workStart = 8; // 8:00 considered start
-  Object.entries(monthData).forEach(([d,e])=>{
-    if(e.in){ totalDays++;
-      const h = ccCalcHours(e); if(h) totalHrs+=h;
-      const inH = parseInt((e.in||'0:0').split(':')[0]);
-      const inM = parseInt((e.in||'0:0').split(':')[1]);
-      if(inH>workStart||(inH===workStart&&inM>15)) lateDays++;
-    }
-  });
-
-  // Determine button state
-  const hasIn = !!todayEntry.in;
-  const hasOut = !!todayEntry.out;
-  let btnClass='btn-checkin in', btnText='CHECK IN', btnFn='ccCheckIn()';
-  if(hasIn && !hasOut){ btnClass='btn-checkin out'; btnText='CHECK OUT'; btnFn='ccCheckOut()'; }
-  if(hasIn && hasOut){ btnClass='btn-checkin in'; btnText='Đã chấm hôm nay ✓'; btnFn=''; }
-
-  // Build history (last 15 days of this month)
-  const days = Object.keys(monthData).sort().reverse().slice(0,15);
-  const wds = ['CN','T2','T3','T4','T5','T6','T7'];
-  let histHtml = '';
-  if(days.length===0){
-    histHtml = '<p style="color:var(--fg2);text-align:center;padding:20px 0;font-size:14px;">Chưa có dữ liệu chấm công tháng này</p>';
-  } else {
-    days.forEach(d=>{
-      const e = monthData[d];
-      const dt = new Date(d+'T00:00:00');
-      const dayNum = dt.getDate();
-      const wd = wds[dt.getDay()];
-      const hrs = ccCalcHours(e);
-      const inH = e.in ? parseInt(e.in.split(':')[0]) : 0;
-      const inM = e.in ? parseInt(e.in.split(':')[1]) : 0;
-      const isLate = e.in && (inH>workStart||(inH===workStart&&inM>15));
-      const badge = !e.in ? '<span class="cc-row-badge badge-abs">Vắng</span>' : isLate ? '<span class="cc-row-badge badge-late">Trễ</span>' : '<span class="cc-row-badge badge-ok">Đúng giờ</span>';
-      const gpsLine = e.addr ? '<div class="cc-row-gps">📍 '+e.addr+'</div>' : '';
-      const hrsLine = hrs ? (hrs.toFixed(1)+' giờ') : (e.in && !e.out ? 'Chưa check out' : '');
-      histHtml += '<div class="cc-row"><div class="cc-row-date"><div class="cc-row-day">'+dayNum+'</div><div class="cc-row-wd">'+wd+'</div></div><div class="cc-row-info"><div class="cc-row-time">'+(e.in||'--:--')+' → '+(e.out||'--:--')+'</div><div class="cc-row-hrs">'+hrsLine+'</div>'+gpsLine+'</div>'+badge+'</div>';
-    });
+document.getElementById('exportBtn').addEventListener('click',()=>{
+  const filtered=adminBranch==='ALL'?STAFF:STAFF.filter(s=>s.br===adminBranch);
+  let txt='Ten	Chi nhanh	Vai tro	Cong	P1+P2	P3	P4	Bao hiem	Tam ung	Thuc linh
+';
+  filtered.forEach(s=>{const p=person(s.id),c=compute(p);txt+=s.nv+'	'+s.br+'	'+s.role+'	'+c.cong+'	'+(c.P1+c.P2)+'	'+c.P3+'	'+c.P4+'	'+(+p.bh||0)+'	'+(+p.ung||0)+'	'+c.net+'
+';});
+  navigator.clipboard.writeText(txt).then(()=>alert('Da copy bang! Dan vao Excel de xem.')).catch(()=>alert('Khong the copy. Vui long thu lai.'));
+});
+document.getElementById('adminOut').addEventListener('click',()=>{document.getElementById('adminDash').classList.add('hide');document.getElementById('login').classList.remove('hide');document.getElementById('inCode').value='';window.scrollTo(0,0);});
+const sel=document.getElementById('selName');
+STAFF.forEach(s=>sel.insertAdjacentHTML('beforeend','<option value="'+s.id+'">'+s.nv+' ('+s.br+')</option>'));
+function doLogin(){
+  const sid=sel.value,code=(document.getElementById('inCode').value||'').trim().toUpperCase(),err=document.getElementById('err');
+  if(code===ADMIN_CODE){
+    err.classList.remove('show');
+    document.getElementById('login').classList.add('hide');
+    document.getElementById('adminDash').classList.remove('hide');
+    renderAdmin();window.scrollTo(0,0);return;
   }
-
-  // Today status
-  let todayStatus = '';
-  if(todayEntry.in && todayEntry.out){
-    const hrs = ccCalcHours(todayEntry);
-    todayStatus = '<div class="notice-box">✅ Hôm nay: Vào '+todayEntry.in+' — Ra '+todayEntry.out+(hrs?' ('+hrs.toFixed(1)+'h)':'')+(todayEntry.addr?' | 📍'+todayEntry.addr:'')+' </div>';
-  } else if(todayEntry.in){
-    todayStatus = '<div class="notice-box" style="background:#fff7ed;border-color:#fed7aa;color:#c2410c;">⏱ Đang làm việc — Check in lúc '+todayEntry.in+(todayEntry.addr?' | 📍'+todayEntry.addr:'')+' </div>';
-  }
-
-  pane.innerHTML = `
-<div class="cc-card">
-  <div id="cc-clock" class="cc-clock">--:--:--</div>
-  <div id="cc-date" class="cc-date"></div>
-  ${todayStatus}
-  <div id="cc-gps-status" class="gps-status"></div>
-  <button id="cc-btn" class="${btnClass}" onclick="${btnFn||'void(0)'}" ${btnFn?'':'disabled'}>${btnText}</button>
-</div>
-<div class="cc-summary">
-  <div class="cc-sum-item"><div class="cc-sum-val">${totalDays}</div><div class="cc-sum-lbl">Ngày công</div></div>
-  <div class="cc-sum-item"><div class="cc-sum-val">${totalHrs.toFixed(0)}</div><div class="cc-sum-lbl">Giờ làm</div></div>
-  <div class="cc-sum-item"><div class="cc-sum-val">${lateDays}</div><div class="cc-sum-lbl">Ngày trễ</div></div>
-</div>
-<div class="cc-history"><h3>Lịch sử chấm công tháng ${ccMonthKey().split('-')[1]}/${ccMonthKey().split('-')[0]}</h3>${histHtml}</div>
-`;
-  ccUpdateClock();
+  if(!sid){err.textContent='Vui long chon nhan vien.';err.classList.add('show');return;}
+  const s=STAFF.find(x=>x.id===sid);
+  if(!s||code!==s.code.toUpperCase()){err.textContent='Ma khong dung. Vui long thu lai.';err.classList.add('show');return;}
+  err.classList.remove('show');
+  document.getElementById('togFix').checked=false;
+  document.getElementById('secFix').classList.add('hide');
+  render(sid);
+  document.getElementById('login').classList.add('hide');
+  document.getElementById('dash').classList.remove('hide');
+  window.scrollTo(0,0);
 }
+document.getElementById('btnLogin').addEventListener('click',doLogin);
+document.getElementById('inCode').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('btnOut').addEventListener('click',()=>{document.getElementById('dash').classList.add('hide');document.getElementById('login').classList.remove('hide');document.getElementById('inCode').value='';sel.value='';window.scrollTo(0,0);});
 </script>
 </body>
 </html>
