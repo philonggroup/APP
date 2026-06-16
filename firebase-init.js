@@ -2,16 +2,16 @@
 // CARDIY - Firebase Configuration & Authentication
 // ============================================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, updateProfile } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAJq16mE_4I5NEDoHuHkPPQJjh1-FU4a3k",
     authDomain: "cardiy-6b27b.firebaseapp.com",
       projectId: "cardiy-6b27b",
-        storageBucket: "cardiy-6b27b.firebasestorage.app",
+        storageBucket: "cardiy-6b27b.firebasestorage.app",h
           messagingSenderId: "875643200086",
             appId: "1:875643200086:web:a6dadc829d0c7f300b51f7",
               measurementId: "G-7JV07BPQBJ"
@@ -211,10 +211,10 @@ export async function updateUserProfile(profileData) {
   try {
     const user = auth.currentUser;
     if (!user) return { success: false, error: "Chua dang nhap" };
-    await updateDoc(doc(db, "users", user.uid), {
+    await setDoc(doc(db, "users", user.uid), {
       ...profileData,
       updatedAt: new Date().toISOString()
-    });
+    }, { merge: true });
     // Also update Firebase Auth displayName if fullName changed
     if (profileData.fullName) {
       updateProfile(user, { displayName: profileData.fullName }).catch(() => {});
