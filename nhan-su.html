@@ -54,6 +54,51 @@ body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--bg);colo
 .eb{background:#EEF4FF;color:var(--plg);border-radius:7px;padding:5px 6px;font-size:11px;font-weight:700;border:none;cursor:pointer}
 .actbtns{display:flex;gap:8px;margin-bottom:14px}.pbtn{flex:1;background:#16A34A;color:#fff;padding:11px;border-radius:12px;font-size:13px;font-weight:700;text-align:center;cursor:pointer;border:none}.xbtn{flex:1;background:var(--plg);color:#fff;padding:11px;border-radius:12px;font-size:13px;font-weight:700;text-align:center;cursor:pointer;border:none}
 @media print{.top,.tbtns,.togrow,.actbtns,.btabs,.cfgbtns,.tbtn,.eb{display:none!important}.wrap{max-width:100%}body{background:#fff}.card,.stbl,.scard{box-shadow:none;border:1px solid #ddd}#adminDash,#dash{display:block!important}}
+/* === PLG KPI LEVEL SYSTEM === */
+.kpi-hero{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border-radius:16px;padding:16px;margin-bottom:12px;color:#fff}
+.kpi-hero .ttl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px}
+.kpi-hero .val{font-size:28px;font-weight:800;color:#fff;margin-bottom:4px}
+.kpi-hero .sub{font-size:12px;color:#94a3b8}
+.kpi-row{display:flex;gap:8px;margin-top:10px}
+.kpi-chip{flex:1;background:rgba(255,255,255,.08);border-radius:10px;padding:8px 10px;text-align:center}
+.kpi-chip .cv{font-size:16px;font-weight:800;color:#60a5fa}
+.kpi-chip .ck{font-size:10px;color:#94a3b8;margin-top:2px}
+.level-bar{margin-top:14px}
+.level-bar .lb-ttl{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.level-bar .lb-name{font-size:11px;font-weight:700;color:#94a3b8}
+.level-bar .lb-pct{font-size:12px;font-weight:800;color:#fbbf24}
+.level-bar .track{background:rgba(255,255,255,.1);border-radius:99px;height:6px;overflow:hidden}
+.level-bar .fill{height:6px;border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.level-bar .fill.m1{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.level-bar .fill.m2{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.level-bar .fill.m3{background:linear-gradient(90deg,#10b981,#34d399)}
+.level-milestones{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.lv-badge{flex:1;min-width:60px;padding:6px 4px;border-radius:8px;text-align:center;border:1.5px solid rgba(255,255,255,.1);cursor:default;transition:all .3s}
+.lv-badge .lv-ico{font-size:16px}
+.lv-badge .lv-lbl{font-size:9px;color:#94a3b8;margin-top:2px}
+.lv-badge .lv-val{font-size:9px;font-weight:700;color:#64748b}
+.lv-badge.reached{border-color:#fbbf24;background:rgba(251,191,36,.12)}
+.lv-badge.reached .lv-lbl{color:#fbbf24}
+.lv-badge.reached .lv-val{color:#fbbf24}
+.lv-badge.current{border-color:#10b981;background:rgba(16,185,129,.15);box-shadow:0 0 12px rgba(16,185,129,.3)}
+.lv-badge.current .lv-lbl{color:#34d399}
+.lv-badge.current .lv-val{color:#34d399}
+.celebrate{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);animation:fadeIn .3s}
+.celebrate .cb{background:#fff;border-radius:20px;padding:32px 24px;text-align:center;max-width:280px;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+.celebrate .cb .ico{font-size:56px;margin-bottom:8px}
+.celebrate .cb .ttl{font-size:20px;font-weight:800;color:#1e293b;margin-bottom:4px}
+.celebrate .cb .sub{font-size:14px;color:#64748b;margin-bottom:16px}
+.celebrate .cb button{background:#1e293b;color:#fff;border:none;border-radius:12px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;width:100%}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.p12-toggle{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#f8fafc;border-radius:12px;margin-bottom:8px;cursor:pointer;border:1.5px solid #e2e8f0;transition:all .2s}
+.p12-toggle:hover{background:#f1f5f9;border-color:#cbd5e1}
+.p12-toggle input[type=checkbox]{width:20px;height:20px;accent-color:var(--plg);cursor:pointer}
+.p12-toggle .ptl{flex:1;font-size:13px;font-weight:700;color:#1e293b}
+.p12-toggle .pts{font-size:11px;color:#64748b;font-weight:500}
+.kpi-guide{margin-top:8px;padding:10px 12px;background:#f0fdf4;border-radius:10px;border-left:3px solid #10b981}
+.kpi-guide .gttl{font-size:11px;font-weight:700;color:#065f46;margin-bottom:4px}
+.kpi-guide .gitem{font-size:11px;color:#047857;padding:2px 0}
 </style>
 </head>
 <body>
@@ -84,42 +129,80 @@ body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--bg);colo
 <div class="period"><span class="dot"></span><span id="dPeriod">Thang 6 / 2026</span> - <span id="dCong">26 cong</span></div>
 </div>
 <div class="hero">
-<div class="lbl">Thuc linh ky nay</div>
+<div class="lbl">Thực lĩnh kỳ này</div>
 <div class="big money" id="dNet">-</div>
 <div class="split">
-<div class="flex"><div class="t">Linh hoat P3+P4</div><div class="v money" id="dFlex">-</div></div>
-<div class="fix"><div class="t">Luong thang P1+P2</div><div class="v money" id="dFix">-</div></div>
+<div class="flex"><div class="t">Linh hoạt P3+P4</div><div class="v money" id="dFlex">-</div></div>
+<div class="fix"><div class="t">Lương tháng P1+P2</div><div class="v money" id="dFix">-</div></div>
 </div>
 </div>
+
+<!-- KPI HERO CARD - P3+P4 LÊN TRÊN CÙNG -->
 <div class="sec">
+<div class="kpi-hero" id="kpiHero">
+  <div class="ttl">🎯 LINH HOẠT P3 + P4 — CHỈ SỐ THÁNG NÀY</div>
+  <div class="val" id="khVal">-</div>
+  <div class="sub" id="khSub">Hoa hồng KPI + Cung chia</div>
+  <div class="kpi-row">
+    <div class="kpi-chip"><div class="cv" id="khP3">-</div><div class="ck">P3 Hoa hồng</div></div>
+    <div class="kpi-chip"><div class="cv" id="khP4">-</div><div class="ck">P4 Cung chia</div></div>
+    <div class="kpi-chip"><div class="cv" id="khCong">-</div><div class="ck">Ngày công</div></div>
+  </div>
+  <!-- PROGRESS BARS MỨC -->
+  <div class="level-bar" id="lvBar1" style="margin-top:14px">
+    <div class="lb-ttl"><span class="lb-name" id="lv1Name">Mức 1</span><span class="lb-pct" id="lv1Pct">0%</span></div>
+    <div class="track"><div class="fill m1" id="lv1Fill" style="width:0%"></div></div>
+  </div>
+  <div class="level-bar" id="lvBar2">
+    <div class="lb-ttl"><span class="lb-name" id="lv2Name">Mức 2</span><span class="lb-pct" id="lv2Pct">0%</span></div>
+    <div class="track"><div class="fill m2" id="lv2Fill" style="width:0%"></div></div>
+  </div>
+  <div class="level-bar" id="lvBar3">
+    <div class="lb-ttl"><span class="lb-name" id="lv3Name">Mức 3</span><span class="lb-pct" id="lv3Pct">0%</span></div>
+    <div class="track"><div class="fill m3" id="lv3Fill" style="width:0%"></div></div>
+  </div>
+  <!-- BADGES MỨC -->
+  <div class="level-milestones" id="lvBadges">
+    <div class="lv-badge" id="lvB0"><div class="lv-ico">🌱</div><div class="lv-lbl">Khởi đầu</div><div class="lv-val" id="lvV0">-</div></div>
+    <div class="lv-badge" id="lvB1"><div class="lv-ico">⭐</div><div class="lv-lbl">Mức 1</div><div class="lv-val" id="lvV1">-</div></div>
+    <div class="lv-badge" id="lvB2"><div class="lv-ico">🔥</div><div class="lv-lbl">Mức 2</div><div class="lv-val" id="lvV2">-</div></div>
+    <div class="lv-badge" id="lvB3"><div class="lv-ico">🏆</div><div class="lv-lbl">Mức 3</div><div class="lv-val" id="lvV3">-</div></div>
+  </div>
+  <!-- HƯỚNG DẪN -->
+  <div class="kpi-guide" id="kpiGuide">
+    <div class="gttl">📌 Chỉ số dẫn dắt</div>
+    <div class="gitem" id="guideText">Đang tải...</div>
+  </div>
+</div>
 <div class="sec-h">
 <div class="ic" style="background:#FFF3DC;color:#B5740A">&#9889;</div>
-<div><div class="tt">Linh hoat (P3 + P4)</div><div class="ds">Hoa hong KPI va Cung Chia</div></div>
-<span class="pill flex">LINH HOAT</span>
+<div class="tt">Linh hoạt (P3 + P4)</div><div class="ds">Hoa hồng KPI và Cung Chia</div><span class="pill flex">LINH HOẠT</span>
 </div>
 <div class="card" id="cardFlex"></div>
 </div>
-<div class="togrow">
-<div class="tl"><b>Hien luong thang (P1+P2)</b><small>Luong cung - cuoi thang theo ngay cong</small></div>
-<label class="switch"><input type="checkbox" id="togFix"><span class="slider"></span></label>
+
+<!-- P1+P2 - NÚT TICK CHỌN XEM -->
+<div class="p12-toggle" id="togP12row" onclick="togP12()">
+  <input type="checkbox" id="togP12chk" onclick="event.stopPropagation();togP12()">
+  <div>
+    <div class="ptl">💼 Xem lương P1 + P2 (cơ bản)</div>
+    <div class="pts">Tính theo ngày công thực tế check-in</div>
+  </div>
 </div>
 <div class="sec hide" id="secFix">
 <div class="sec-h">
 <div class="ic" style="background:#E8EEFB;color:var(--plg)">&#128197;</div>
-<div><div class="tt">Luong thang (P1+P2)</div><div class="ds">Cuoi thang theo cong</div></div>
-<span class="pill fix">CUOI THANG</span>
+<div class="tt">Lương tháng (P1+P2)</div><div class="ds">Cuối tháng theo công</div><span class="pill fix">CUỐI THÁNG</span>
 </div>
 <div class="card" id="cardFix"></div>
 </div>
 <div class="final">
-<div class="ln"><span class="k">Tong thu nhap P1+P2+P3+P4</span><span class="v money" id="fTong">-</span></div>
-<div class="ln minus"><span class="k">Bao hiem</span><span class="v money" id="fBh">-</span></div>
-<div class="ln minus"><span class="k">Tam ung</span><span class="v money" id="fUng">-</span></div>
-<hr>
-<div class="ln net"><span class="k">CON LINH</span><span class="v money" id="fNet">-</span></div>
+<div class="ln"><span class="k">Tổng thu nhập P1+P2+P3+P4</span><span class="v money" id="fTong">-</span></div>
+<div class="ln minus"><span class="k">Bảo hiểm</span><span class="v money" id="fBh">-</span></div>
+<div class="ln minus"><span class="k">Tạm ứng</span><span class="v money" id="fUng">-</span></div>
+<div class="ln net"><span class="k">CÒN LĨNH</span><span class="v money" id="fNet">-</span></div>
 </div>
-<p class="foot">Co cau 4P - Cung Lam - Cung Tien - Cung Chien - Cung Chia</p>
-</section>
+<p class="foot">Cơ cấu 4P — Cùng Làm — Cùng Tiến — Cùng Chia — Cùng Phát Triển</p>
 <section id="adminDash" class="hide">
 <div class="top">
 <div class="row">
@@ -204,6 +287,7 @@ var SALARY_BASE={QL:12000000,KT:8940000,NVKD:7500000,KTV:7090000};
 var P1BASE=5240000,CONGCHUAN=26,OT=450000;
 function vnd(n){return Math.round(n||0).toLocaleString('vi-VN')+' d';}
 function vndm(n){return (Math.round((n||0)/100000)/10).toLocaleString('vi-VN',{maximumFractionDigits:1})+'tr';}
+function getData(){try{return JSON.parse(localStorage.getItem('plbl_v4')||'{}');}catch(e){return {};}}
 function person(id){
   var base=null;
   for(var i=0;i<STAFF.length;i++){if(STAFF[i].id===id){base=STAFF[i];break;}}
@@ -240,13 +324,14 @@ function render(id){
   document.getElementById('dNet').textContent=vnd(c.net);
   document.getElementById('dFlex').textContent=vnd(c.P3+c.P4);
   document.getElementById('dFix').textContent=vnd(c.P1+c.P2);
-  var fl=liH('P3 - Hoa hong va KPI');
-  if(p.p3items&&p.p3items.length){for(var i=0;i<p.p3items.length;i++){fl+=liI(p.p3items[i].l||'Chi so',+(p.p3items[i].a)||0);}}
-  else{fl+=liI('Chua co du lieu P3',0);}
-  fl+=liS('Cong P3',c.P3);
-  fl+=liI('P4 - Cung Chia',c.P4);
-  fl+=liS('LINH HOAT P3+P4',c.P3+c.P4);
-  document.getElementById('cardFlex').innerHTML=fl;
+var fl=liH('P3 — Hoa hồng và KPI');
+if(p.p3items&&p.p3items.length){for(var i=0;i<p.p3items.length;i++){fl+=liI(p.p3items[i].l||'Khoản '+( i+1),vnd(+(p.p3items[i].a)||0));}}
+else{fl+=liI('Chưa có dữ liệu P3',0);}
+fl+=liS('Cộng P3',c.P3);
+fl+=liI('P4 — Cung Chia',c.P4);
+fl+=liS('LINH HOẠT P3+P4',c.P3+c.P4);
+document.getElementById('cardFlex').innerHTML=fl;
+renderKpiLevel(c,p);
   var fx=liH('P1 - Cung Lam','Luong ngay cong');
   fx+=liI('Luong co ban theo cong',c.P1,c.cong+' cong');
   fx+=liS('Cong P1',c.P1);
@@ -259,6 +344,93 @@ function render(id){
   document.getElementById('fBh').textContent='- '+vnd(+p.bh||0);
   document.getElementById('fUng').textContent='- '+vnd(+p.ung||0);
   document.getElementById('fNet').textContent=vnd(c.net);
+}
+// Hàm dẫn dắt KPI Level
+function renderKpiLevel(c,p){
+  var cfg=getData().cfg||{};
+  var p3=c.P3||0; var p4=c.P4||0; var lh=p3+p4;
+  var cong=c.cong||0;
+  // Cập nhật KPI Hero
+  var el=function(id){return document.getElementById(id);};
+  if(el('khVal'))el('khVal').textContent=vnd(lh);
+  if(el('khP3'))el('khP3').textContent=vnd(p3);
+  if(el('khP4'))el('khP4').textContent=vnd(p4);
+  if(el('khCong'))el('khCong').textContent=cong+' công';
+  if(el('khSub'))el('khSub').textContent=(cong?'Đã cập nhật đến ngày '+getToday():'Chưa có dữ liệu thực tế');
+  // Mức doanh thu (NVKD) hoặc công (KTV)
+  var role=p.role||'KTV'; var isNVKD=(role==='NVKD'||role==='QL');
+  var revLop=0; var revOther=0; var congLop=0; var congNgoai=0;
+  // Tính từ entries
+  var data=getData(); var entries=(data.entries||[]).filter(function(e){return e.staffId===p.id;});
+  entries.forEach(function(e){revLop+=e.revLop||0;revOther+=e.revOther||0;congLop+=e.congLop||0;congNgoai+=e.congNgoaiLop||0;});
+  // Lấy config mức
+  var m1,m2,m3,m1L,m2L,m3L,unit;
+  if(isNVKD){
+    m1=cfg.lopB1||350000000; m2=cfg.lopB2||700000000; m3=m2*1.5;
+    m1L='350 Tr lốp'; m2L='700 Tr lốp'; m3L='>1 Tỷ lốp'; unit='DT Lốp';
+    var cur=revLop;
+    _updateBar('lv1',cur,m1,m1L,unit); _updateBar('lv2',cur,m2,m2L,unit); _updateBar('lv3',cur,m3,m3L,unit);
+    var guideMsg='🎯 DT Lốp hiện tại: '+vnd(revLop)+' — Còn cần '+vnd(Math.max(0,m1-revLop))+' để đạt Mức 1';
+    if(revLop>=m1) guideMsg='✅ Đã đạt Mức 1! Cần thêm '+vnd(Math.max(0,m2-revLop))+' để Mức 2';
+    if(revLop>=m2) guideMsg='🔥 Đã đạt Mức 2! Cần thêm '+vnd(Math.max(0,m3-revLop))+' để Mức 3';
+    if(revLop>=m3) guideMsg='🏆 XUẤT SẮC! Đã vượt Mức 3!';
+    if(el('guideText'))el('guideText').textContent=guideMsg;
+  } else {
+    m1=cfg.ktvWkLop||3600000; m2=cfg.ktvWkNgoai||7000000; m3=(cfg.ktvWkTong||9000000)*1.2;
+    m1L='3.6 Tr/tuần Lốp'; m2L='7 Tr/tuần NL'; m3L='Mức cao nhất'; unit='Công';
+    var tot=congLop+congNgoai; var prev=lh;
+    _updateBar('lv1',tot,m1*4,m1L,unit); _updateBar('lv2',tot,m2*4,m2L,unit); _updateBar('lv3',tot,m3*4,m3L,unit);
+    var guideMsg='🔧 Tổng công: '+vnd(tot)+' — Cần '+vnd(Math.max(0,m1*4-tot))+' để đạt Mức 1';
+    if(tot>=m1*4) guideMsg='✅ Mức 1! Cần thêm '+vnd(Math.max(0,m2*4-tot))+' công ngoài lốp cho Mức 2';
+    if(tot>=m2*4) guideMsg='🔥 Mức 2! Cần '+vnd(Math.max(0,m3*4-tot))+' thêm để Mức 3';
+    if(tot>=m3*4) guideMsg='🏆 XUẤT SẮC! Đã vượt Mức 3!';
+    if(el('guideText'))el('guideText').textContent=guideMsg;
+  }
+  // Cập nhật badges
+  _updateBadges(isNVKD?revLop:(congLop+congNgoai),m1,m2,m3);
+  // Badge mức 0 value
+  if(el('lvV0'))el('lvV0').textContent=vnd(0);
+  if(el('lvV1'))el('lvV1').textContent=vnd(m1);
+  if(el('lvV2'))el('lvV2').textContent=vnd(m2);
+  if(el('lvV3'))el('lvV3').textContent=vnd(m3);
+}
+function _updateBar(prefix,cur,max,label,unit){
+  var el=function(id){return document.getElementById(id);};
+  var pct=max>0?Math.min(100,Math.round(cur/max*100)):0;
+  if(el(prefix+'Name'))el(prefix+'Name').textContent=label;
+  if(el(prefix+'Pct'))el(prefix+'Pct').textContent=pct+'%';
+  if(el(prefix+'Fill')){el(prefix+'Fill').style.width=pct+'%';}
+}
+function _updateBadges(cur,m1,m2,m3){
+  var b0=document.getElementById('lvB0'); var b1=document.getElementById('lvB1');
+  var b2=document.getElementById('lvB2'); var b3=document.getElementById('lvB3');
+  var prev0=b0&&b0.classList.contains('current');
+  [b0,b1,b2,b3].forEach(function(b){if(b){b.classList.remove('reached','current');}});
+  if(cur>=m3){b3&&b3.classList.add('current');b1&&b1.classList.add('reached');b2&&b2.classList.add('reached');_maybeCelebrate('m3',b3);}
+  else if(cur>=m2){b2&&b2.classList.add('current');b1&&b1.classList.add('reached');_maybeCelebrate('m2',b2);}
+  else if(cur>=m1){b1&&b1.classList.add('current');_maybeCelebrate('m1',b1);}
+  else{b0&&b0.classList.add('current');}
+}
+var _celebCache={};
+function _maybeCelebrate(lvl,badgeEl){
+  if(_celebCache[lvl]||!badgeEl)return;
+  _celebCache[lvl]=true;
+  var box=document.createElement('div');box.className='celebrate';
+  var msgs={m1:{ico:'⭐',ttl:'Đạt Mức 1!',sub:'Bạn đang trên đà tuyệt vời. Tiếp tục nhé!'},m2:{ico:'🔥',ttl:'Đạt Mức 2!',sub:'Xuất sắc! Chỉ còn một bước nữa thôi!'},m3:{ico:'🏆',ttl:'VƯỢT MỨC 3!',sub:'Thật đáng tự hào! Bạn là số 1 tháng này!'}};
+  var m=msgs[lvl]||{ico:'🎉',ttl:'Chúc mừng!',sub:''};
+  box.innerHTML='<div class="cb"><div class="ico">'+m.ico+'</div><div class="ttl">'+m.ttl+'</div><div class="sub">'+m.sub+'</div><button onclick="this.closest('.celebrate').remove()">Đóng 👍</button></div>';
+  document.body.appendChild(box);
+  setTimeout(function(){if(box.parentNode)box.remove();},5000);
+}
+function getToday(){var d=new Date();return d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();}
+// Toggle P1+P2
+function togP12(){
+  var chk=document.getElementById('togP12chk');
+  var sec=document.getElementById('secFix');
+  if(!chk||!sec)return;
+  var show=!sec.classList.contains('hide');
+  if(show){sec.classList.add('hide');chk.checked=false;}
+  else{sec.classList.remove('hide');chk.checked=true;}
 }
 var cfgTarget=null,cfgItems=[];
 function openCfg(id){
