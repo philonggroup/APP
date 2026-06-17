@@ -378,5 +378,139 @@ document.getElementById('btnLogin').addEventListener('click',doLogin);
 document.getElementById('inCode').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 document.getElementById('btnOut').addEventListener('click',function(){document.getElementById('dash').classList.add('hide');document.getElementById('login').classList.remove('hide');document.getElementById('inCode').value='';selEl.value='';window.scrollTo(0,0);});
 </script>
+
+<!-- ============================================================
+     PLG SYNC MODULE v1.0 — Dong bo hai chieu Google Sheets <-> App Luong
+     Phi Long Auto CN2 — T6/2026
+     ============================================================ -->
+<script>
+(function(){
+'use strict';
+// == CAU HINH ==
+// SAU KHI DEPLOY APPS SCRIPT, THAY URL NAY:
+var WEB_APP_URL='https://script.google.com/macros/s/THAY_URL_CUA_BAN_VAO_DAY/exec';
+var STORAGE_KEY='plbl_v4';
+var SYNC_META_KEY='plg_sync_meta';
+var SYNC_INTERVAL=30*60*1000; // 30 phut
+
+function fmt(d){return d instanceof Date?d.toISOString().split('T')[0]:String(d).substring(0,10);}
+function today(){return fmt(new Date());}
+function weekRange(ds){var d=new Date(ds+'T12:00:00'),day=d.getDay(),diff=day===0?-6:1-day,mon=new Date(d);mon.setDate(d.getDate()+diff);var sun=new Date(mon);sun.setDate(mon.getDate()+6);return{from:fmt(mon),to:fmt(sun)};}
+function loadLocal(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');}catch(e){return{};}}
+function saveLocal(data){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}
+function getMeta(){try{return JSON.parse(localStorage.getItem(SYNC_META_KEY)||'{}');}catch(e){return{};}}
+function saveMeta(m){localStorage.setItem(SYNC_META_KEY,JSON.stringify(m));}
+
+// == BADGE THONG BAO ==
+function badge(msg,color){
+  var b=document.getElementById('plg-sb');
+  if(!b){b=document.createElement('div');b.id='plg-sb';
+    b.style.cssText='position:fixed;bottom:16px;right:16px;z-index:9999;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);transition:opacity .5s;cursor:pointer;';
+    b.onclick=function(){b.style.opacity='0';};document.body.appendChild(b);}
+  b.textContent=msg;b.style.background=color||'#1a73e8';b.style.opacity='1';
+  setTimeout(function(){if(b)b.style.opacity='0';},4000);
+}
+
+// == FETCH TU SHEETS ==
+async function fetchSheets(params){
+  if(!WEB_APP_URL||WEB_APP_URL.includes('THAY_URL')){badge('⚠️ Chua cau hinh URL Sheets','#f59e0b');return null;}
+  try{
+    var url=new URL(WEB_APP_URL);
+    Object.entries(params).forEach(function(kv){url.searchParams.set(kv[0],kv[1]);});
+    var r=await fetch(url.toString());
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  }catch(e){badge('Loi ket noi Sheets: '+e.message,'#ef4444');console.error('[PLGSync]',e);return null;}
+}
+
+// == DONG BO VE APP ==
+async function syncFrom(ky,refDate){
+  badge('⏳ Dang dong bo '+ky+'...','#f59e0b');
+  var params={};
+  if(ky==='ngay'){params.action='entries';var d=refDate||today();params.from=d;params.to=d;}
+  else if(ky==='tuan'){params.action='tuan';params.from=(refDate||today());}
+  else if(ky==='thang'){params.action='thang';params.ref=refDate||today();}
+  var result=await fetchSheets(params);
+  if(!result||!result.ok)return;
+  var entries=result.entries||(result.kpi?[]:result.entries)||[];
+  var data=loadLocal();
+  data.entries=(data.entries||[]).filter(function(e){return!e.id||!e.id.startsWith('gs_');});
+  data.entries=data.entries.concat(entries);
+  saveLocal(data);
+  saveMeta({lastSync:new Date().toISOString(),ky:ky,count:entries.length});
+  badge('✅ Dong bo xong — '+entries.length+' ban ghi','#10b981');
+  if(entries.length>0){
+    if(typeof render==='function'){setTimeout(function(){try{render(window._currentStaffId||'s1');}catch(ex){}},500);}
+  }
+  return result;
+}
+
+// == GUI NGUOC LEN SHEETS ==
+async function pushUp(){
+  badge('☁️ Dang gui len Sheets...','#6366f1');
+  var data=loadLocal();
+  var entries=(data.entries||[]).filter(function(e){return!e.id||!e.id.startsWith('gs_');});
+  try{
+    var r=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'ghi_kpi',entries:entries})});
+    var res=await r.json();
+    if(res.ok)badge('☁️ Da gui '+entries.length+' ban ghi len Sheets','#6366f1');
+    else badge('Loi: '+res.error,'#ef4444');
+  }catch(e){badge('Gui Sheets that bai','#ef4444');}
+}
+
+// == DONG BO TU DONG ==
+async function autoSync(){
+  var meta=getMeta();
+  var last=meta.lastSync?new Date(meta.lastSync):new Date(0);
+  if(Date.now()-last.getTime()<SYNC_INTERVAL){return;}
+  await syncFrom('thang',today());
+}
+
+// == THANH CONG CU ==
+function renderBar(){
+  if(document.getElementById('plg-sync-bar'))return;
+  var bar=document.createElement('div');
+  bar.id='plg-sync-bar';
+  bar.style.cssText='position:fixed;top:0;left:0;right:0;z-index:9998;background:#1e293b;color:#fff;display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:11px;font-family:sans-serif;flex-wrap:wrap;';
+  function btn(id,label,bg){return '<button id="'+id+'" style="background:'+bg+';color:#fff;border:none;border-radius:10px;padding:3px 9px;font-size:11px;cursor:pointer;font-weight:700">'+label+'</button>';}
+  bar.innerHTML='<span style="font-weight:800;color:#60a5fa;font-size:12px">📊 Sheets</span>'+
+    btn('plgs-ngay','📅 Hôm nay','#3b82f6')+
+    btn('plgs-tuan','📆 Tuần','#10b981')+
+    btn('plgs-thang','🗓 Tháng','#8b5cf6')+
+    btn('plgs-push','☁️ Gửi lên','#f59e0b')+
+    '<span id="plgs-info" style="margin-left:auto;opacity:.7;font-size:10px"></span>'+
+    '<button id="plgs-x" style="background:none;border:none;color:#aaa;cursor:pointer;font-size:13px;margin-left:4px">✕</button>';
+  document.body.insertBefore(bar,document.body.firstChild);
+  document.body.style.paddingTop='36px';
+  document.getElementById('plgs-ngay').onclick=function(){syncFrom('ngay',today());};
+  document.getElementById('plgs-tuan').onclick=function(){syncFrom('tuan',today());};
+  document.getElementById('plgs-thang').onclick=function(){syncFrom('thang',today());};
+  document.getElementById('plgs-push').onclick=pushUp;
+  document.getElementById('plgs-x').onclick=function(){bar.remove();document.body.style.paddingTop='';};
+  var meta=getMeta();
+  if(meta.lastSync){var m=Math.round((Date.now()-new Date(meta.lastSync))/60000);document.getElementById('plgs-info').textContent='Sync '+m+' phut truoc ('+( meta.count||0)+' entries)';}
+}
+
+// == EXPOSE API ==
+window.PLGSync={
+  syncNgay:function(d){return syncFrom('ngay',d||today());},
+  syncTuan:function(d){return syncFrom('tuan',d||today());},
+  syncThang:function(d){return syncFrom('thang',d||today());},
+  pushUp:pushUp,
+  setURL:function(url){WEB_APP_URL=url;localStorage.setItem('plg_webapp_url',url);badge('✅ Da luu URL','#10b981');}
+};
+
+// Cho phep dat URL qua localStorage de tranh can sua code
+var savedURL=localStorage.getItem('plg_webapp_url');
+if(savedURL)WEB_APP_URL=savedURL;
+
+// KHOI DONG
+function init(){
+  renderBar();
+  setTimeout(autoSync,3000);
+}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+})();
+</script>
 </body>
 </html>
