@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biên Bản Nhận hàng Gia Công</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d2240;
+    --gold: #c8922a;
+    --cream: #faf8f3;
+    --border: #d4c9a8;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 8px;
+  }
+
+  .page {
+    background: white;
+    width: 100%;
+    max-width: 794px;
+    padding: clamp(16px, 4vw, 48px) clamp(14px, 5vw, 56px);
+    position: relative;
+  }
+
+  .header { text-align: center; margin-bottom: 20px; }
+
+  .republic {
+    font-size: clamp(9px, 1.6vw, 12px);
+    font-weight: 700; letter-spacing: 1.5px;
+    color: var(--navy); text-transform: uppercase;
+  }
+  .motto {
+    font-size: clamp(9px, 1.4vw, 11px);
+    color: var(--muted); font-style: italic; margin-top: 3px;
+  }
+  .divider-thin {
+    width: 100px; height: 1px;
+    background: var(--gold); margin: 10px auto;
+  }
+  .doc-title {
+    font-size: clamp(14px, 3.2vw, 22px);
+    font-weight: 700; color: var(--navy);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .doc-subtitle {
+    font-size: clamp(9px, 1.3vw, 11px);
+    color: var(--muted); font-style: italic;
+  }
+
+  .date-line {
+    font-size: clamp(11px, 1.8vw, 13px);
+    color: var(--text); margin-bottom: 20px;
+    text-align: center; line-height: 2.2;
+  }
+  .date-line span {
+    display: inline-block;
+    border-bottom: 1px solid #999;
+    min-width: 38px; text-align: center; margin: 0 2px;
+  }
+
+  .party-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  .party-box {
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 12px 10px;
+    background: white;
+    position: relative;
+    min-width: 0;
+  }
+
+  .party-label {
+    position: absolute;
+    top: -11px; left: 12px;
+    background: white; padding: 0 6px;
+    font-size: clamp(8px, 1.3vw, 11px);
+    font-weight: 700; color: var(--text);
+    letter-spacing: 0.8px; text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .field-row {
+    display: flex; align-items: baseline;
+    margin-bottom: 3px; gap: 4px; min-width: 0;
+  }
+
+  .field-label {
+    color: var(--muted); white-space: nowrap; flex-shrink: 0;
+    font-size: clamp(10px, 1.5vw, 11.5px);
+  }
+
+  .field-input {
+    flex: 1; min-width: 0;
+    border: none; border-bottom: 1px dashed #bbb;
+    background: transparent;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: clamp(10px, 1.5vw, 12.5px);
+    color: var(--text); padding: 1px 4px; outline: none;
+  }
+  .field-input:focus {
+    border-bottom-color: var(--gold);
+    background: rgba(200,146,42,0.04);
+  }
+
+  .field-double {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+
+  .basis-section {
+    padding: 4px 0; margin-bottom: 6px;
+    font-size: clamp(10px, 1.5vw, 12.5px);
+  }
+
+  .section-title {
+    font-size: clamp(10px, 1.5vw, 12px);
+    font-weight: 700; color: var(--text); background: none;
+    padding: 6px 0; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 3px;
+  }
+
+  .section-wrap { margin-bottom: 8px; }
+
+  .goods-table {
+    width: 100%; border-collapse: collapse;
+    font-size: clamp(10px, 1.5vw, 12.5px); margin-bottom: 6px;
+  }
+  .goods-table th {
+    background: var(--navy); color: white;
+    padding: 7px 6px; font-weight: 600;
+    font-size: clamp(9px, 1.3vw, 11px);
+    text-align: center; border: 1px solid rgba(255,255,255,0.1);
+  }
+  .goods-table td {
+    border: 1px solid var(--border);
+    padding: 6px 6px; text-align: center; background: white;
+  }
+  .goods-table td:nth-child(2) { text-align: left; }
+  .goods-table td input {
+    width: 100%; border: none; background: transparent;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: clamp(10px, 1.5vw, 12.5px);
+    color: var(--text); text-align: inherit; outline: none;
+  }
+  .goods-table tr:hover td { background: rgba(200,146,42,0.05); }
+
+  .add-row-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--gold); cursor: pointer;
+    background: none; border: 1px dashed var(--gold);
+    padding: 4px 10px; border-radius: 3px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    transition: all 0.2s;
+  }
+  .add-row-btn:hover { background: rgba(200,146,42,0.08); }
+
+  .textarea-field {
+    width: 100%; border: 1px solid var(--border); border-radius: 3px;
+    padding: 9px; font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: clamp(10px, 1.5vw, 12.5px);
+    color: var(--text); background: white; resize: vertical;
+    min-height: 56px; outline: none;
+  }
+  .textarea-field:focus { border-color: var(--gold); }
+
+  .resp-list { list-style: none; font-size: clamp(10px, 1.5vw, 12.5px); }
+  .resp-list li {
+    padding: 1px 0 1px 18px; position: relative;
+    color: var(--text); line-height: 1.5;
+  }
+  .resp-list li::before {
+    content: '▸'; position: absolute; left: 0;
+    color: var(--gold); font-size: 11px; top: 8px;
+  }
+
+  .notice-bar { font-size: clamp(10px, 1.5vw, 12px); color: var(--text); margin-bottom: 8px; line-height: 1.6; }
+
+  .signature-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 20px; margin-top: 8px;
+  }
+  .sig-box { text-align: center; }
+  .sig-title {
+    font-size: clamp(10px, 1.5vw, 12px); font-weight: 700;
+    color: var(--navy); text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 3px;
+  }
+  .sig-sub {
+    font-size: clamp(9px, 1.2vw, 10.5px); color: var(--muted);
+    font-style: italic; margin-bottom: 60px;
+  }
+  .sig-line { border-top: 1px solid var(--text); width: 70%; margin: 0 auto; }
+  .sig-name { font-size: 11px; color: var(--muted); margin-top: 4px; font-style: italic; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .page { box-shadow: none; max-width: 100%; }
+    .add-row-btn, .print-btn { display: none !important; }
+  }
+
+  .print-btn {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--navy); color: white; border: none;
+    padding: 10px 20px; font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    border-radius: 4px; box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    transition: background 0.2s; display: flex; align-items: center;
+    gap: 6px; z-index: 100;
+  }
+  .print-btn:hover { background: var(--gold); }
+
+  /* QR corner: flex column, image + text stacked */
+  .qr-corner {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .qr-corner canvas, .qr-corner img {
+    width: 52px !important;
+    height: 52px !important;
+    display: block;
+  }
+  .qr-empty {
+    width: 52px; height: 52px;
+    border: 1.5px dashed #ccc;
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; color: #bbb; text-align: center; line-height: 1.3;
+  }
+  /* Text label below QR */
+  .qr-text {
+    font-size: 11px;
+    color: var(--text);
+    text-align: center;
+    word-break: break-all;
+    line-height: 1.4;
+    max-width: 120px;
+    display: none;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="qr-corner" id="qrCorner">
+    <div class="qr-empty" id="qrEmpty">QR<br>Code</div>
+    <div class="qr-text" id="qrText"></div>
+  </div>
+
+  <div class="header">
+    <div class="republic">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+    <div class="motto">Độc lập – Tự do – Hạnh phúc</div>
+    <div class="divider-thin"></div>
+    <div class="doc-title">Biên Bản Nhận hàng Gia Công</div>
+  </div>
+
+  <div class="date-line">
+    Hôm nay, ngày <span contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    tháng <span contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    năm <span contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>,
+    tại <span style="min-width:160px; border-bottom:1px solid #999; display:inline-block" contenteditable="true">&nbsp;</span>
+  </div>
+
+  <div class="party-grid">
+    <div class="party-box">
+      <div class="party-label">Bên Đặt Gia Công (Bên Nhận)</div>
+      <div class="field-row">
+        <span class="field-label">Tên đơn vị:</span>
+        <input class="field-input" type="text" placeholder="..." data-param="bg_ten">
+      </div>
+      <div class="field-row">
+        <span class="field-label">Địa chỉ:</span>
+        <input class="field-input" type="text" placeholder="..." data-param="bg_dia_chi">
+      </div>
+      <div class="field-row">
+        <span class="field-label">Đại diện:</span>
+        <input class="field-input" type="text" placeholder="..." data-param="bg_dai_dien">
+      </div>
+      <div class="field-double">
+        <div class="field-row">
+          <span class="field-label">Chức vụ:</span>
+          <input class="field-input" type="text" placeholder="..." data-param="bg_chuc_vu">
+        </div>
+        <div class="field-row">
+          <span class="field-label">SĐT:</span>
+          <input class="field-input" type="text" placeholder="..." data-param="bg_sdt">
+        </div>
+      </div>
+      <div class="field-row">
+        <span class="field-label">Mã số thuế:</span>
+        <input class="field-input" type="text" placeholder="..." data-param="bg_mst">
+      </div>
+    </div>
+
+    <div class="party-box">
+      <div class="party-label">Bên Gia Công (Bên Giao)</div>
+      <div class="field-row">
+        <span class="field-label">Tên đơn vị:</span>
+        <input class="field-input" type="text" placeholder="..." data-param="bn_ten">
+      </div>
+      <div class="field-row">
+        <span class="field-label">Địa chỉ:</span>
+        <input class="field-input" type="text" placeholder="..." data-param="bn_dia_chi">
+      </div>
+      <div class="field-row">
+        <span class="field-label">Đại diện:</span>
+        <input class="field-input" type="text" placeholder="..." data-param="bn_dai_dien">
+      </div>
+      <div class="field-double">
+        <div class="field-row">
+          <span class="field-label">Chức vụ:</span>
+          <input class="field-input" type="text" placeholder="..." data-param="bn_chuc_vu">
+        </div>
+        <div class="field-row">
+          <span class="field-label">SĐT:</span>
+          <input class="field-input" type="text" placeholder="..." data-param="bn_sdt">
+        </div>
+      </div>
+      <div class="field-row">
+        <span class="field-label">Mã số thuế:</span>
+        <input class="field-input" type="text" placeholder="..." data-param="bn_mst">
+      </div>
+    </div>
+  </div>
+
+  <div class="basis-section">
+    <p><strong>Căn cứ:</strong> Nhu cầu và thỏa thuận thực tế của hai bên.</p>
+  </div>
+
+  <div class="section-wrap">
+    <div class="section-title">I. Nội Dung Bàn Giao</div>
+    <table class="goods-table">
+      <thead>
+        <tr>
+          <th style="width:36px">STT</th>
+          <th>Tên Hàng Hóa</th>
+          <th style="width:80px">ĐVT</th>
+          <th style="width:72px">Số Lượng</th>
+          <th style="width:90px">Ghi Chú</th>
+        </tr>
+      </thead>
+      <tbody id="goodsBody">
+        <tr>
+          <td>1</td>
+          <td><input type="text" placeholder="Tên hàng hóa..."></td>
+          <td><input type="text" placeholder="Cái / kg..."></td>
+          <td><input type="text" placeholder="0"></td>
+          <td><input type="text" placeholder="..."></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="add-row-btn" onclick="addRow()">＋ Thêm dòng</button>
+  </div>
+
+  <div class="section-wrap">
+    <div class="section-title">II. Đánh giá chất lượng</div>
+    <p style="font-size:clamp(10px,1.5vw,12.5px);color:var(--text);line-height:1.6;">Số hàng hóa nêu trên ĐẠT YÊU CẦU</p>
+  </div>
+
+  <div class="section-wrap">
+    <div class="section-title">III. Hiệu Lực Biên Bản</div>
+    <div class="notice-bar">
+      Biên bản này được lập thành <strong>02 (hai) bản</strong>, mỗi bên giữ <strong>01 (một) bản</strong>, có giá trị pháp lý như nhau. Các bên đã đọc, hiểu và thống nhất ký tên dưới đây.
+    </div>
+  </div>
+
+  <div class="signature-grid">
+    <div class="sig-box">
+      <div class="sig-title">Đại Diện Bên Nhận</div>
+      <div class="sig-sub">(Ký, ghi rõ họ tên, đóng dấu)</div>
+    </div>
+    <div class="sig-box">
+      <div class="sig-title">Đại Diện Bên Giao</div>
+      <div class="sig-sub">(Ký, ghi rõ họ tên, đóng dấu)</div>
+    </div>
+  </div>
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨 In Biên Bản</button>
+
+<script>
+  (function fillFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    params.forEach((value, key) => {
+      const el = document.querySelector(`[data-param="${key}"]`);
+      if (el) el.value = decodeURIComponent(value);
+    });
+
+    // Generate QR if param `qr` is present
+    const qrValue = params.get('qr');
+    if (qrValue) {
+      const decoded = decodeURIComponent(qrValue);
+      const corner = document.getElementById('qrCorner');
+
+      // Remove placeholder empty box
+      const empty = document.getElementById('qrEmpty');
+      if (empty) empty.remove();
+
+      // Create wrapper div for QR image, insert before qrText
+      const qrImageDiv = document.createElement('div');
+      corner.insertBefore(qrImageDiv, document.getElementById('qrText'));
+
+      new QRCode(qrImageDiv, {
+        text: decoded,
+        width: 52,
+        height: 52,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      // Show and populate text label
+      const qrText = document.getElementById('qrText');
+      const displayText = decoded.length > 32 ? decoded.slice(0, 30) + '…' : decoded;
+      qrText.textContent = displayText;
+      qrText.style.display = 'block';
+    }
+  })();
+
+  let rowCount = 1;
+
+  function makeRow(stt, ten, dvt, sl, ghichu) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${stt}</td>
+      <td><input type="text" value="${ten||''}" placeholder="Tên hàng hóa..."></td>
+      <td><input type="text" value="${dvt||''}" placeholder="Cái / kg..."></td>
+      <td><input type="text" value="${sl||''}" placeholder="0"></td>
+      <td><input type="text" value="${ghichu||''}" placeholder="..."></td>
+    `;
+    return tr;
+  }
+
+  // Populate table from URL param `items` = "Tên|ĐVT|SL;Tên|ĐVT|SL;..."
+  const itemsParam = new URLSearchParams(window.location.search).get('items');
+  if (itemsParam) {
+    const tbody = document.getElementById('goodsBody');
+    tbody.innerHTML = '';
+    const rows = decodeURIComponent(itemsParam).split(';');
+    rows.forEach((row, i) => {
+      const [ten, dvt, sl, ghichu] = row.split('|');
+      tbody.appendChild(makeRow(i + 1, ten, dvt, sl, ghichu));
+      rowCount = i + 1;
+    });
+  }
+
+  function addRow() {
+    rowCount++;
+    document.getElementById('goodsBody').appendChild(makeRow(rowCount, '', '', '', ''));
+  }
+</script>
+
+</body>
+</html>

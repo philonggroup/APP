@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang='vi'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>IN TAG GIÁ KOHLER</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 6mm 5mm 15mm 5mm;
+        }
+        body {
+            width: 198mm;
+            margin: 0 auto;
+            padding: 0;
+            font-family: 'Times New Roman', serif;
+            font-size: 10pt;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 198mm;
+            height: 74mm;
+            margin: 0 auto 1px auto;
+            border: 2px solid #000;
+            page-break-inside: avoid;
+            position: relative;
+            overflow: hidden;
+        }
+        .container-row {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            flex: 1;
+            position: relative;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 5px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .column-1, .column-3 {
+            width: 30mm;
+            border-right: 1px solid #ccc;
+        }
+        .column-2, .column-4 {
+            width: 69mm;
+            
+        }
+        .column-2 {
+            position: relative;
+        }
+        .column-2::after {
+            content: '';
+            position: absolute;
+            top: -60mm; /* Kéo dài lên trên bằng chiều cao của logo-row */
+            right: 0;
+            width: 2px;
+            height: calc(100% + 120mm); /* Tổng chiều cao của logo-row + bottom-row + container-row */
+            background-color: #000;
+        }
+        .column-3 {
+           
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .row {
+            display: flex;
+            align-items: center;
+            height: 9mm;
+            border-bottom: 1px solid #ccc;
+            padding: 0 5px;
+            box-sizing: border-box;
+        }
+        .row:last-child {
+            border-bottom: none;
+        }
+        .qrcode-bottom {
+            position: absolute;
+            width: 8mm;
+            height: 8mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qrcode-bottom img {
+            width: 100%;
+            height: 100%;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        .qrcode-left {
+            left: 86mm;
+        }
+        .qrcode-right {
+            right: 10px;
+        }
+        #input-container {
+            margin-bottom: 10mm;
+            display: none;
+            width: 198mm;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #productCodesInput {
+            width: 100%;
+            height: 100px;
+            font-family: 'Times New Roman', serif;
+            font-size: 10pt;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        #generateButton {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-family: 'Times New Roman', serif;
+            font-size: 10pt;
+            cursor: pointer;
+        }
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            backdrop-filter: blur(2px);
+            transition: opacity 0.3s ease;
+            display: none;
+            opacity: 0;
+        }
+        .loading.show {
+            display: flex;
+            opacity: 1;
+        }
+        .loading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .strikethrough {
+            text-decoration: line-through;
+        }
+        .discounted-price {
+            font-weight: bold;
+            font-size: 12pt;
+            color: #d00;
+        }
+        #password-protection {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+            color: white;
+        }
+        #password-form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            color: black;
+            text-align: center;
+        }
+        #password-form input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 200px;
+            display: block;
+        }
+        #password-form button {
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        #password-form button:hover {
+            background: #45a049;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+        .invalid-message {
+            color: red;
+            font-size: 8pt;
+            text-align: center;
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #ffe6e6;
+            border-radius: 3px;
+        }
+        .empty-container {
+            height: 50mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+            border: 1px dashed #ccc;
+            margin-bottom: 10px;
+            width: 198mm;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .logo-row {
+            display: flex;
+            align-items: center;
+            height: 59mm;
+            padding: 0 5px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+        }
+        .logo-row img {
+            height: 7mm;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+        .logo-left {
+            position: absolute;
+            left: 15px;
+        }
+        .logo-right {
+            position: absolute;
+            left: calc(99mm + 15px);
+        }
+        .bottom-row {
+            display: flex;
+            align-items: center;
+            height: 61mm;
+            padding: 0 5px;
+            box-sizing: border-box;
+            border-top: 1px solid #ccc;
+            position: relative;
+        }
+        .bottom-row img {
+            height: 8.5mm;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+        .bottom-left {
+            position: absolute;
+            left: 10px;
+        }
+        .bottom-right {
+            position: absolute;
+            left: calc(99mm + 15px);
+        }
+        .price-code {
+            position: absolute;
+            font-size: 8pt;
+            color: #000;
+            z-index: 1;
+            bottom: 3mm;
+        }
+        .price-code-left {
+            left: 72mm;
+        }
+        .price-code-right {
+            right: 20mm;
+        }
+        .lockout-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        @media print {
+            #input-container {
+                display: none !important;
+            }
+            body {
+                margin: 0 auto;
+            }
+            .container {
+                margin-bottom: 0;
+                border-bottom: 1px solid #000 !important;
+            }
+            .column-4 {
+                
+            }
+            .logo-row {
+                
+            }
+            .bottom-row {
+                
+            }
+            .column-2::after {
+                display: block !important;
+                background-color: #000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://script.google.com">
+    <link rel="preconnect" href="https://quickchart.io">
+</head>
+<body>
+    <div id="password-protection">
+        <div id="password-form">
+            <h2>Vui lòng nhập mật khẩu</h2>
+            <input type="password" id="password-input" placeholder="Nhập mật khẩu" autocomplete="off">
+            <button id="password-submit">Xác nhận</button>
+            <div id="password-error" class="error-message">Mật khẩu không đúng. Vui lòng thử lại.</div>
+            <div id="lockout-message" class="lockout-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id='input-container'>
+        <textarea id='productCodesInput' placeholder='Nhập các MÃ SẢN PHẨM vào đây, mỗi mã một dòng... Ví dụ:
+K-1234
+K-5678
+K-9012'></textarea>
+        <button id='generateButton'>Tạo bản in tag giá</button>
+    </div>
+
+    <div id='content'></div>
+    <div id='loading' class='loading'>Đang tải dữ liệu...</div>
+
+    <script>
+        // Cấu hình bảo mật
+        const CORRECT_PASSWORD = "ritavo123";
+        const MAX_FAILED_ATTEMPTS = 5;
+        const LOCKOUT_DURATION = 30 * 60 * 1000;
+        const SESSION_DURATION = 30 * 60 * 1000;
+        
+        let failedAttempts = 0;
+        let inactivityTimer;
+
+        const passwordInput = document.getElementById('password-input');
+        const passwordSubmit = document.getElementById('password-submit');
+        const passwordError = document.getElementById('password-error');
+        const lockoutMessage = document.getElementById('lockout-message');
+        const passwordProtection = document.getElementById('password-protection');
+        const inputContainer = document.getElementById('input-container');
+
+        function checkPassword() {
+            if (isLockedOut()) {
+                showLockoutMessage();
+                return;
+            }
+
+            const enteredPassword = passwordInput.value.trim();
+            
+            if (enteredPassword === CORRECT_PASSWORD) {
+                passwordProtection.style.display = 'none';
+                inputContainer.style.display = 'block';
+                setAuthCookie();
+                resetInactivityTimer();
+                failedAttempts = 0;
+            } else {
+                failedAttempts++;
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+                
+                if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
+                    lockAccount();
+                    showLockoutMessage();
+                } else {
+                    setTimeout(() => {
+                        passwordError.style.display = 'none';
+                    }, 3000);
+                }
+            }
+        }
+
+        function isLockedOut() {
+            const lockoutUntil = localStorage.getItem('lockoutUntil');
+            return lockoutUntil && Date.now() < parseInt(lockoutUntil);
+        }
+
+        function lockAccount() {
+            const lockoutUntil = Date.now() + LOCKOUT_DURATION;
+            localStorage.setItem('lockoutUntil', lockoutUntil.toString());
+        }
+
+        function showLockoutMessage() {
+            const lockoutUntil = localStorage.getItem('lockoutUntil');
+            if (!lockoutUntil) return;
+
+            const remainingTime = Math.ceil((parseInt(lockoutUntil) - Date.now()) / (60 * 1000));
+            lockoutMessage.textContent = `Tài khoản tạm thời bị khóa. Vui lòng thử lại sau ${remainingTime} phút.`;
+            lockoutMessage.style.display = 'block';
+            passwordInput.disabled = true;
+            passwordSubmit.disabled = true;
+
+            setTimeout(() => {
+                localStorage.removeItem('lockoutUntil');
+                lockoutMessage.style.display = 'none';
+                passwordInput.disabled = false;
+                passwordSubmit.disabled = false;
+                failedAttempts = 0;
+            }, LOCKOUT_DURATION);
+        }
+
+        function setAuthCookie() {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + SESSION_DURATION);
+            document.cookie = `authenticated=true; expires=${expires.toUTCString()}; path=/; Secure; SameSite=Strict`;
+        }
+
+        function checkAuthCookie() {
+            return document.cookie.split(';').some((item) => item.trim().startsWith('authenticated='));
+        }
+
+        function clearAuthCookie() {
+            document.cookie = 'authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        }
+
+        function logout() {
+            clearAuthCookie();
+            localStorage.removeItem('lockoutUntil');
+            window.location.reload();
+        }
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(logout, SESSION_DURATION);
+        }
+
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        passwordSubmit.addEventListener('click', checkPassword);
+        
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
+            window.addEventListener(event, resetInactivityTimer);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAuthCookie()) {
+                passwordProtection.style.display = 'none';
+                inputContainer.style.display = 'block';
+                resetInactivityTimer();
+                
+                const img = new Image();
+                img.src = 'https://quickchart.io/qr?text=preload';
+            } else {
+                passwordInput.focus();
+                if (isLockedOut()) {
+                    showLockoutMessage();
+                }
+            }
+        });
+
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwgDTMSaSE7bXdJVb1iMh7UVKaUVRx0TdE9Ha45I-gydWd-IVKOMlHeX1Ocg7mSuNsu/exec';
+        const productCache = {};
+        const QR_CACHE_PREFIX = 'qr_cache_';
+        
+        async function fetchProductDataBatch(maSanPhamList) {
+            const uncachedItems = maSanPhamList.filter(maSanPham => !productCache[maSanPham]);
+            const cachedItems = maSanPhamList.filter(maSanPham => productCache[maSanPham]).map(maSanPham => productCache[maSanPham]);
+            
+            if (uncachedItems.length === 0) {
+                return cachedItems;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}?maSanPhamList=${encodeURIComponent(uncachedItems.join(','))}`);
+                
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                
+                const processedData = Array.isArray(data) ? data : [data];
+                
+                processedData.forEach(item => {
+                    const result = { ...item, isValid: true };
+                    
+                    result.displayBrand = {
+                        name: 'KOHLER',
+                        policy: ''
+                    };
+                    
+                    productCache[item.maSanPham] = result;
+                });
+                
+                uncachedItems.forEach(maSanPham => {
+                    if (!processedData.some(item => item.maSanPham === maSanPham)) {
+                        productCache[maSanPham] = { 
+                            maSanPham, 
+                            isValid: false,
+                            displayBrand: {
+                                name: 'KOHLER',
+                                policy: ''
+                            }
+                        };
+                    }
+                });
+                
+                return maSanPhamList.map(maSanPham => productCache[maSanPham]);
+                
+            } catch (error) {
+                console.error('Lỗi khi lấy dữ liệu hàng loạt:', error);
+                
+                return maSanPhamList.map(maSanPham => {
+                    return productCache[maSanPham] || { 
+                        maSanPham, 
+                        isValid: false,
+                        displayBrand: {
+                            name: 'KOHLER',
+                            policy: ''
+                        }
+                    };
+                });
+            }
+        }
+
+        function getQRCodeUrl(maSanPham) {
+            const cacheKey = QR_CACHE_PREFIX + maSanPham;
+            const cachedUrl = localStorage.getItem(cacheKey);
+            
+            if (cachedUrl) {
+                return cachedUrl;
+            }
+            
+            const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(maSanPham)}&size=100&margin=0`;
+            try {
+                localStorage.setItem(cacheKey, qrUrl);
+            } catch (e) {
+                console.warn('Không thể cache QR code do giới hạn localStorage');
+            }
+            return qrUrl;
+        }
+
+        function formatPrice(price) {
+            if (!price && price !== 0) return '';
+            const priceNumber = typeof price === 'string' ? parseFloat(price.replace(/,/g, '')) : price;
+            return isNaN(priceNumber) ? '' : new Intl.NumberFormat('vi-VN').format(priceNumber) + ' đ';
+        };
+
+        function getValue(value, defaultValue = '') {
+            return value !== undefined && value !== null ? escapeHtml(value) : escapeHtml(defaultValue);
+        };
+
+        function getPriceCode(product) {
+            if (!product || !product.isValid) return '';
+            
+            const packageChar = product.goiGia ? product.goiGia.charAt(0).toUpperCase() : 'A';
+            const discountPercent = product.phanTramGiamGia ? Math.round(product.phanTramGiamGia * 100) : 0;
+            
+            return `${packageChar}.${discountPercent}`;
+        }
+
+        function createContainer(product1, product2) {
+            let html = '';
+            
+            if (product1 && product1.isValid) {
+                const priceCode1 = getPriceCode(product1);
+                const priceCode2 = product2 && product2.isValid ? getPriceCode(product2) : '';
+                
+                html += `
+                <div class='container'>
+                    <div class='logo-row'>
+                        <img class='logo-left' src='https://img.forconstructionpros.com/files/base/acbm/fcp/image/2017/02/kohler_logo.589b284427a04.png?auto=format%2Ccompress&q=70' alt='KOHLER Logo'>
+                        ${product2 && product2.isValid ? `<img class='logo-right' src='https://img.forconstructionpros.com/files/base/acbm/fcp/image/2017/02/kohler_logo.589b284427a04.png?auto=format%2Ccompress&q=70' alt='KOHLER Logo'>` : ''}
+                    </div>
+                    <div class='container-row'>
+                        <div class='column column-1'>
+                            <div class='row'>Mã sản phẩm</div>
+                            <div class='row'>Tên sản phẩm</div>
+                            <div class='row'>Giá niêm yết (VAT)</div>
+                            <div class='row'>Giá bán (VAT)</div>
+                            <div class='row'>Xuất xứ</div>
+                            <div class='row'>Nhập khẩu & phân phối</div>
+                        </div>
+                        <div class='column column-2'>
+                            <div class='row bold'>${getValue(product1.maSanPham)}</div>
+                            <div class='row'>${getValue(product1.tenTiengViet)}</div>
+                            <div class='row'>
+                                <span class="strikethrough">${formatPrice(product1.giaNieYetCoVAT)}</span>
+                            </div>
+                            <div class='row'>
+                                <span class="discounted-price">${formatPrice(product1.giaSauGiamCoVAT)}</span>
+                            </div>
+                            <div class='row'>${getValue(product1.xuatXu)}</div>
+                            <div class='row'>Công ty TNHH Tập đoàn RiTa Võ</div>
+                        </div>`;
+                    
+                if (product2 && product2.isValid) {
+                    html += `
+                        <div class='column column-3'>
+                            <div class='row'>Mã sản phẩm</div>
+                            <div class='row'>Tên sản phẩm</div>
+                            <div class='row'>Giá niêm yết (VAT)</div>
+                            <div class='row'>Giá bán (VAT)</div>
+                            <div class='row'>Xuất xứ</div>
+                            <div class='row'>Nhập khẩu & phân phối</div>
+                        </div>
+                        <div class='column column-4'>
+                            <div class='row bold'>${getValue(product2.maSanPham)}</div>
+                            <div class='row'>${getValue(product2.tenTiengViet)}</div>
+                            <div class='row'>
+                                <span class="strikethrough">${formatPrice(product2.giaNieYetCoVAT)}</span>
+                            </div>
+                            <div class='row'>
+                                <span class="discounted-price">${formatPrice(product2.giaSauGiamCoVAT)}</span>
+                            </div>
+                            <div class='row'>${getValue(product2.xuatXu)}</div>
+                            <div class='row'>Công ty TNHH Tập đoàn RiTa Võ</div>
+                        </div>`;
+                } else if (product2) {
+                    html += `
+                        <div class='column column-3'></div>
+                        <div class='column column-4'></div>
+                        <div class='invalid-message'>Mã sản phẩm ${escapeHtml(product2.maSanPham)} không tồn tại trong hệ thống</div>`;
+                }
+                
+                html += `</div>
+                    <div class='bottom-row'>
+                        <img class='bottom-left' src='https://theme.hstatic.net/200000067582/1001251648/14/share_fb.png?v=867' alt='Rita Võ Logo'>
+                        ${product2 && product2.isValid ? `<img class='bottom-right' src='https://theme.hstatic.net/200000067582/1001251648/14/share_fb.png?v=867' alt='Rita Võ Logo'>` : ''}
+                        <div class='price-code price-code-left'>${priceCode1}</div>
+                        <div class='qrcode-bottom qrcode-left'>
+                            <img src='${getQRCodeUrl(product1.maSanPham)}' alt='QR Code' loading='lazy'>
+                        </div>
+                        ${product2 && product2.isValid ? `
+                        <div class='price-code price-code-right'>${priceCode2}</div>
+                        <div class='qrcode-bottom qrcode-right'>
+                            <img src='${getQRCodeUrl(product2.maSanPham)}' alt='QR Code' loading='lazy'>
+                        </div>` : ''}
+                    </div>
+                </div>`;
+            } else if (product1) {
+                html += `<div class='invalid-message'>Mã sản phẩm ${escapeHtml(product1.maSanPham)} không tồn tại trong hệ thống</div>`;
+            }
+            
+            return html;
+        }
+
+        async function generateContainers() {
+            const input = document.getElementById('productCodesInput').value;
+            const maSanPhamList = input.split('\n')
+                                  .filter(line => line.trim() !== '')
+                                  .map(line => line.trim());
+            
+            if (maSanPhamList.length === 0) {
+                alert('Vui lòng nhập ít nhất một mã sản phẩm!');
+                return;
+            }
+            
+            const content = document.getElementById('content');
+            const loading = document.getElementById('loading');
+            
+            content.innerHTML = '';
+            loading.classList.add('show');
+            
+            requestAnimationFrame(async () => {
+                try {
+                    const products = await fetchProductDataBatch(maSanPhamList);
+                    
+                    const validProducts = products.filter(p => p.isValid);
+                    const invalidProducts = products.filter(p => !p.isValid);
+                    
+                    if (invalidProducts.length > 0) {
+                        const invalidCodes = invalidProducts.map(p => p.maSanPham).join(', ');
+                        alert(`Các mã sản phẩm sau không tồn tại trong hệ thống:\n${invalidCodes}`);
+                    }
+                    
+                    if (validProducts.length === 0) {
+                        content.innerHTML = '<div class="empty-container">Không có mã sản phẩm hợp lệ nào để hiển thị</div>';
+                        loading.classList.remove('show');
+                        return;
+                    }
+                    
+                    let fragment = document.createDocumentFragment();
+                    const chunkSize = 10;
+                    
+                    for (let i = 0; i < validProducts.length; i += chunkSize) {
+                        const chunk = validProducts.slice(i, i + chunkSize);
+                        const chunkFragment = document.createDocumentFragment();
+                        const tempDiv = document.createElement('div');
+                        
+                        for (let j = 0; j < chunk.length; j += 2) {
+                            const product1 = chunk[j];
+                            const product2 = chunk[j + 1];
+                            tempDiv.innerHTML = createContainer(product1, product2);
+                            while (tempDiv.firstChild) {
+                                chunkFragment.appendChild(tempDiv.firstChild);
+                            }
+                        }
+                        
+                        fragment.appendChild(chunkFragment);
+                        
+                        if (i === 0) {
+                            content.appendChild(fragment);
+                            fragment = document.createDocumentFragment();
+                        }
+                        
+                        await new Promise(resolve => setTimeout(resolve, 0));
+                    }
+                    
+                    if (fragment.childNodes.length > 0) {
+                        content.appendChild(fragment);
+                    }
+                    
+                    loading.classList.remove('show');
+                    loading.classList.add('hide');
+                    
+                } catch (error) {
+                    console.error('Lỗi khi tạo tag giá:', error);
+                    loading.classList.remove('show');
+                    alert('Có lỗi xảy ra khi tạo tag giá. Vui lòng thử lại!');
+                }
+            });
+        }
+
+        document.getElementById('generateButton').addEventListener('click', generateContainers);
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

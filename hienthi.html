@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>AppSheet API - Chọn cột hiển thị</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    #loading { font-size: 18px; color: #555; margin-bottom: 10px; }
+
+    /* Container cho bảng và nút */
+    .table-container {
+      display: flex;
+      justify-content: space-between; /* nút sang phải */
+      align-items: flex-start;
+      margin-top: 20px;
+    }
+
+    #downloadBtn {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background-color: #107C41;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    #downloadBtn:hover {
+      background-color: #0E6633;
+    }
+
+    #downloadBtn img {
+      width: 18px;
+      height: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Hiển thị dữ liệu AppSheet (chọn cột)</h2>
+
+<div id="loading">Đang tải dữ liệu...</div>
+
+<div class="table-container">
+  <div style="flex:1">
+    <table id="dataTable" style="display:none;">
+      <thead id="thead"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <button id="downloadBtn" style="display:none;">
+    <img src="https://cdn-icons-png.flaticon.com/512/732/732225.png" alt="Excel icon">
+    Tải Excel
+  </button>
+</div>
+
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+
+<script>
+async function loadData() {
+  const url = "https://api.appsheet.com/api/v2/apps/09960054-a6f1-4b69-a252-b813ca3d8b3c/tables/THANH%20TOAN/find";
+  const columnsToShow = ["KY HIEU HD", "SO HOA DON", "NGAY XUAT HOA DON"];
+  const body = { "Action": "Find", "Filter": "" };
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "ApplicationAccessKey": "V2-NnuYn-V6SPQ-VURvK-8meBu-hOmsl-3Ux7X-YlOzG-iMEOr",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    const raw = await res.json();
+    const data = raw.Rows ?? raw;
+
+    document.getElementById("loading").style.display = "none";
+
+    if (!data || data.length === 0) {
+      document.getElementById("loading").innerText = "Không có dữ liệu!";
+      return;
+    }
+
+    document.getElementById("dataTable").style.display = "";
+    document.getElementById("downloadBtn").style.display = "inline-flex";
+
+    document.getElementById("thead").innerHTML =
+      "<tr>" + columnsToShow.map(c => `<th>${c}</th>`).join("") + "</tr>";
+
+    document.getElementById("tbody").innerHTML =
+      data.map(row =>
+        "<tr>" +
+          columnsToShow.map(c => `<td>${row[c] ?? ""}</td>`).join("") +
+        "</tr>"
+      ).join("");
+
+  } catch (err) {
+    console.error("Lỗi fetch:", err);
+    document.getElementById("loading").innerText = "Lỗi tải dữ liệu!";
+  }
+}
+
+// Xuất Excel với cột NGAY XUAT HOA DON giữ dd/mm/yyyy
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const table = document.getElementById("dataTable");
+  const columnsToShow = ["KY HIEU HD", "SO HOA DON", "NGAY XUAT HOA DON"];
+
+  const dataRows = Array.from(table.querySelectorAll("tbody tr")).map(tr => {
+    const tds = Array.from(tr.children);
+    return tds.map((td, i) => {
+      const colName = columnsToShow[i];
+      let value = td.innerText.trim();
+      if (colName === "NGAY XUAT HOA DON") return value; // giữ text
+      return value;
+    });
+  });
+
+  const wb = XLSX.utils.book_new();
+  const wsData = [columnsToShow, ...dataRows];
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+  const dateColIndex = columnsToShow.indexOf("NGAY XUAT HOA DON");
+  dataRows.forEach((_, rowIndex) => {
+    const cellRef = XLSX.utils.encode_cell({r: rowIndex + 1, c: dateColIndex});
+    if(ws[cellRef]) ws[cellRef].t = 's'; // ép text
+  });
+
+  XLSX.utils.book_append_sheet(wb, ws, "Dữ liệu");
+  XLSX.writeFile(wb, "AppSheet_Data.xlsx");
+});
+
+loadData();
+</script>
+
+</body>
+</html>

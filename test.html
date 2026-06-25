@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý công trình - Bộ lọc theo NVKD, Trạng thái và Tiến độ</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Bootstrap Select -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+  <!-- SheetJS -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #1a73e8;
+      --error-color: #d32f2f;
+      --success-color: #2e7d32;
+      --border-color: #ddd;
+      --table-even-bg: #f9f9f9;
+      --table-header-bg: #f2f2f2;
+    }
+    body {font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px;}
+    .container {max-width: 1200px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);}
+    h1 {color: var(--primary-color); text-align: center; font-size: 20px; margin-bottom: 20px;}
+    .filter-container {display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;}
+    .filter-group {display: flex; flex-direction: column;}
+    .filter-label {font-weight: bold; margin-bottom: 5px;}
+    .button-group {display: flex; gap: 10px; margin-top: 10px;}
+    button {padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;}
+    .refresh-btn {background: var(--primary-color); color: #fff;}
+    .reset-btn {background: var(--error-color); color: #fff;}
+    .export-btn {background: var(--success-color); color: #fff;}
+    table {width: 100%; border-collapse: collapse; font-size: 14px;}
+    th, td {border: 1px solid var(--border-color); padding: 8px; text-align: left;}
+    th {background: var(--table-header-bg); position: sticky; top: 0;}
+    tr:nth-child(even) {background: var(--table-even-bg);}
+    .loading, .error {padding: 20px; text-align: center;}
+    .loading {color: #666; font-style: italic;}
+    .error {color: var(--error-color); font-weight: bold;}
+    .data-table-container {max-height: 500px; overflow-y: auto; margin-top: 20px;}
+    .filter-row {display: flex; flex-wrap: wrap; gap: 20px;}
+    .filter-col {flex: 1; min-width: 200px;}
+    @media (max-width: 768px) {
+      .filter-row {flex-direction: column;}
+      .filter-col {min-width: 100%;}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>QUẢN LÝ CÔNG TRÌNH - BỘ LỌC THEO NHÂN VIÊN KINH DOANH, TRẠNG THÁI VÀ TIẾN ĐỘ</h1>
+
+    <div class="filter-container">
+      <div class="filter-row">
+        <div class="filter-col">
+          <div class="filter-group">
+            <label class="filter-label">Tên NVKD:</label>
+            <select id="tenNVKDFilter" class="selectpicker" multiple data-live-search="true" data-actions-box="true" title="- Chọn Tên NVKD -"></select>
+          </div>
+        </div>
+        <div class="filter-col">
+          <div class="filter-group">
+            <label class="filter-label">Trạng thái liên hệ:</label>
+            <select id="trangThaiLienHeFilter" class="selectpicker" multiple data-live-search="true" data-actions-box="true" title="- Chọn Trạng thái -"></select>
+          </div>
+        </div>
+        <div class="filter-col">
+          <div class="filter-group">
+            <label class="filter-label">Tiến độ CT:</label>
+            <select id="tienDoCTFilter" class="selectpicker" multiple data-live-search="true" data-actions-box="true" title="- Chọn Tiến độ -"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button id="refreshBtn" class="refresh-btn">Làm mới</button>
+        <button id="resetFilter" class="reset-btn">Xóa lọc</button>
+        <button id="exportExcel" class="export-btn">Xuất Excel</button>
+      </div>
+    </div>
+
+    <div id="dataContainer"><p class="loading">Đang tải dữ liệu...</p></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/i18n/defaults-vi_VN.min.js"></script>
+
+  <script>
+    const apiUrl = "https://script.google.com/macros/s/AKfycbwZMC6fH_ryn1hgrTNcYVjfP1M8yO8KSBwUI0g4z3jTq_ImPxr6rTU6MgcYEFG9lzAv/exec";
+
+    const elements = {
+      dataContainer: document.getElementById("dataContainer"),
+      filters: {
+        tenNVKD: document.getElementById("tenNVKDFilter"),
+        trangThaiLienHe: document.getElementById("trangThaiLienHeFilter"),
+        tienDoCT: document.getElementById("tienDoCTFilter")
+      },
+      buttons: {
+        refresh: document.getElementById("refreshBtn"),
+        reset: document.getElementById("resetFilter"),
+        export: document.getElementById("exportExcel"),
+      },
+    };
+
+    let allData = [];
+    let filteredData = [];
+
+    function formatDate(dateString) {
+      if (!dateString) return "";
+      const date = new Date(dateString);
+      return isNaN(date.getTime()) ? dateString :
+        `${String(date.getDate()).padStart(2,"0")}/${String(date.getMonth()+1).padStart(2,"0")}/${date.getFullYear()}`;
+    }
+
+    async function fetchData(forceRefresh = false) {
+      try {
+        elements.dataContainer.innerHTML = '<p class="loading">Đang tải dữ liệu...</p>';
+        const url = forceRefresh ? `${apiUrl}?t=${Date.now()}` : apiUrl;
+        const res = await fetch(url);
+        const data = await res.json();
+        allData = Array.isArray(data) ? data : [];
+        updateFilters();
+        filterAndRenderData();
+      } catch (err) {
+        elements.dataContainer.innerHTML = `<p class="error">Lỗi tải dữ liệu: ${err.message}</p>`;
+      }
+    }
+
+    function updateFilters() {
+      // Cập nhật bộ lọc Tên NVKD
+      const tenNVKDValues = [...new Set(allData.map(item => item.tenNVKD).filter(v => v))].sort();
+      elements.filters.tenNVKD.innerHTML = tenNVKDValues.map(v => `<option value="${v}">${v}</option>`).join("");
+      
+      // Cập nhật bộ lọc Trạng thái liên hệ
+      const trangThaiLienHeValues = [...new Set(allData.map(item => item.trangThaiLienHe).filter(v => v))].sort();
+      elements.filters.trangThaiLienHe.innerHTML = trangThaiLienHeValues.map(v => `<option value="${v}">${v}</option>`).join("");
+      
+      // Cập nhật bộ lọc Tiến độ CT
+      const tienDoCTValues = [...new Set(allData.map(item => item.tienDoCT).filter(v => v))].sort();
+      elements.filters.tienDoCT.innerHTML = tienDoCTValues.map(v => `<option value="${v}">${v}</option>`).join("");
+      
+      $(".selectpicker").selectpicker("refresh");
+    }
+
+    function filterData() {
+      const filters = {
+        tenNVKD: Array.from(elements.filters.tenNVKD.selectedOptions).map(o => o.value),
+        trangThaiLienHe: Array.from(elements.filters.trangThaiLienHe.selectedOptions).map(o => o.value),
+        tienDoCT: Array.from(elements.filters.tienDoCT.selectedOptions).map(o => o.value)
+      };
+      
+      return allData.filter(row =>
+        (!filters.tenNVKD.length || filters.tenNVKD.includes(row.tenNVKD)) &&
+        (!filters.trangThaiLienHe.length || filters.trangThaiLienHe.includes(row.trangThaiLienHe)) &&
+        (!filters.tienDoCT.length || filters.tienDoCT.includes(row.tienDoCT))
+      );
+    }
+
+    function renderTable(data) {
+      if (!data.length) {
+        elements.dataContainer.innerHTML = "<p class='error'>Không có dữ liệu phù hợp</p>";
+        return;
+      }
+      
+      // Hiển thị tất cả các cột ngoại trừ những cột không cần thiết
+      const hiddenCols = ["nvkd","chucVu","nhom","duongDanAnh","lichSuTienDoCongTrinh"];
+      const headers = Object.keys(data[0]).filter(h => !hiddenCols.includes(h));
+      
+      const headerHTML = headers.map(h => {
+        // Đặt tên cột dễ đọc hơn
+        const headerNames = {
+          "tenNVKD": "Tên NVKD",
+          "trangThaiLienHe": "Trạng thái liên hệ",
+          "tienDoCT": "Tiến độ CT",
+          "tenKDT": "Tên KĐT",
+          "ngayTiepCan": "Ngày tiếp cận",
+          "tenChuDauTu": "Tên chủ đầu tư",
+          "diaChiCongTrinh": "Địa chỉ công trình",
+          "soDienThoai": "Số điện thoại",
+          "email": "Email",
+          "zalo": "Zalo",
+          "facebook": "Facebook",
+          "nguonCongTrinh": "Nguồn công trình",
+          "tenCongTrinh": "Tên công trình",
+          "quyMoCongTrinh": "Quy mô công trình",
+          "giaTriCongTrinh": "Giá trị công trình",
+          "ngayCapNhat": "Ngày cập nhật"
+        };
+        
+        return `<th>${headerNames[h] || h}</th>`;
+      }).join("");
+      
+      const rowsHTML = data.map(row => {
+        return `<tr>${headers.map(h => {
+          let cellValue = row[h] || "";
+          // Định dạng ngày tháng
+          if (h === "ngayTiepCan" || h === "ngayCapNhat") {
+            cellValue = formatDate(cellValue);
+          }
+          // Định dạng giá trị công trình nếu có
+          if (h === "giaTriCongTrinh" && cellValue) {
+            cellValue = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(cellValue);
+          }
+          return `<td>${cellValue}</td>`;
+        }).join("")}</tr>`;
+      }).join("");
+      
+      elements.dataContainer.innerHTML = `
+        <div class="data-table-container">
+          <table class="table table-bordered table-hover">
+            <thead><tr>${headerHTML}</tr></thead>
+            <tbody>${rowsHTML}</tbody>
+          </table>
+        </div>`;
+    }
+
+    function filterAndRenderData() {
+      filteredData = filterData();
+      renderTable(filteredData);
+    }
+
+    function exportToExcel() {
+      if (!filteredData.length) {
+        alert("Không có dữ liệu để xuất");
+        return;
+      }
+      
+      const hiddenCols = ["nvkd","chucVu","nhom","duongDanAnh","lichSuTienDoCongTrinh"];
+      const headers = Object.keys(filteredData[0]).filter(h => !hiddenCols.includes(h));
+      
+      // Đặt tên cột cho file Excel
+      const headerNames = {
+        "tenNVKD": "Tên NVKD",
+        "trangThaiLienHe": "Trạng thái liên hệ",
+        "tienDoCT": "Tiến độ CT",
+        "tenKDT": "Tên KĐT",
+        "ngayTiepCan": "Ngày tiếp cận",
+        "tenChuDauTu": "Tên chủ đầu tư",
+        "diaChiCongTrinh": "Địa chỉ công trình",
+        "soDienThoai": "Số điện thoại",
+        "email": "Email",
+        "zalo": "Zalo",
+        "facebook": "Facebook",
+        "nguonCongTrinh": "Nguồn công trình",
+        "tenCongTrinh": "Tên công trình",
+        "quyMoCongTrinh": "Quy mô công trình",
+        "giaTriCongTrinh": "Giá trị công trình",
+        "ngayCapNhat": "Ngày cập nhật"
+      };
+      
+      const wsData = [
+        headers.map(h => headerNames[h] || h),
+        ...filteredData.map(row => headers.map(h => {
+          let cellValue = row[h] || "";
+          if (h === "ngayTiepCan" || h === "ngayCapNhat") {
+            cellValue = formatDate(cellValue);
+          }
+          return cellValue;
+        }))
+      ];
+      
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "DanhSachCongTrinh");
+      XLSX.writeFile(wb, `DanhSachCongTrinh_${new Date().toISOString().slice(0,10)}.xlsx`);
+    }
+
+    $(document).ready(function() {
+      $(".selectpicker").selectpicker();
+      fetchData();
+      
+      elements.buttons.refresh.addEventListener("click", () => fetchData(true));
+      elements.buttons.reset.addEventListener("click", () => {
+        $(".selectpicker").selectpicker("deselectAll");
+        filterAndRenderData();
+      });
+      elements.buttons.export.addEventListener("click", exportToExcel);
+      
+      Object.values(elements.filters).forEach(f => {
+        f.addEventListener("change", filterAndRenderData);
+      });
+    });
+  </script>
+</body>
+</html>

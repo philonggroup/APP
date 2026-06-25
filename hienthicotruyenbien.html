@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>AppSheet API - Chọn cột hiển thị</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    #loading { font-size: 18px; color: #555; margin-bottom: 10px; }
+
+    .table-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 20px;
+    }
+
+    #downloadBtn {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background-color: #107C41;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+
+    #downloadBtn:hover {
+      background-color: #0E6633;
+    }
+
+    #downloadBtn img {
+      width: 18px;
+      height: 18px;
+    }
+
+    .error {
+      color: #d32f2f;
+      background-color: #ffebee;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .info {
+      color: #1976d2;
+      background-color: #e3f2fd;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 10px;
+      display: none;
+    }
+    
+    .filter-info {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Hiển thị dữ liệu AppSheet (chọn cột)</h2>
+
+<div id="filterInfo" class="filter-info" style="display:none;"></div>
+<div id="loading">Đang tải dữ liệu...</div>
+<div id="errorMessage" class="error"></div>
+<div id="infoMessage" class="info"></div>
+
+<div class="table-container">
+  <div style="flex:1">
+    <table id="dataTable" style="display:none;">
+      <thead id="thead"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <button id="downloadBtn" style="display:none;">
+    <img src="https://cdn-icons-png.flaticon.com/512/732/732225.png" alt="Excel icon">
+    Tải Excel
+  </button>
+</div>
+
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<script>
+// Các cột cần hiển thị
+const columnsToShow = ["KY HIEU HD", "SO HOA DON", "NGAY XUAT HOA DON"];
+let allData = []; // Lưu toàn bộ dữ liệu
+let filteredData = []; // Lưu dữ liệu đã lọc
+
+// Lấy query param từ URL
+function getQueryParams() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    from: params.get("from"), // dd/mm/yyyy
+    to: params.get("to")      // dd/mm/yyyy
+  };
+}
+
+// Chuyển ngày dd/mm/yyyy thành đối tượng Date để so sánh
+function parseDateFromText(dateText) {
+  if (!dateText || typeof dateText !== 'string') return null;
+  
+  const trimmed = dateText.trim();
+  const parts = trimmed.split('/');
+  
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1; // Tháng trong JS là 0-11
+    const year = parseInt(parts[2], 10);
+    
+    // Kiểm tra tính hợp lệ
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+      return new Date(year, month, day);
+    }
+  }
+  
+  return null;
+}
+
+// Lọc dữ liệu theo ngày (phía client)
+function filterDataByDate(data, fromDate, toDate) {
+  if (!fromDate || !toDate) return data;
+  
+  const from = parseDateFromText(fromDate);
+  const to = parseDateFromText(toDate);
+  
+  if (!from || !to) return data;
+  
+  // Thêm 1 ngày vào toDate để bao gồm cả ngày cuối cùng
+  const toEndOfDay = new Date(to);
+  toEndOfDay.setHours(23, 59, 59, 999);
+  
+  return data.filter(item => {
+    const itemDateText = item["NGAY XUAT HOA DON"];
+    if (!itemDateText) return false;
+    
+    const itemDate = parseDateFromText(itemDateText);
+    if (!itemDate) return false;
+    
+    // Kiểm tra xem itemDate có nằm trong khoảng không
+    return itemDate >= from && itemDate <= toEndOfDay;
+  });
+}
+
+// Hàm xử lý và hiển thị dữ liệu
+function displayData(data) {
+  if (!data || data.length === 0) {
+    document.getElementById("infoMessage").innerText = "Không có dữ liệu!";
+    document.getElementById("infoMessage").style.display = "block";
+    document.getElementById("dataTable").style.display = "none";
+    document.getElementById("downloadBtn").style.display = "none";
+    return;
+  }
+
+  // Hiển thị số lượng bản ghi
+  const params = getQueryParams();
+  let filterText = `Tổng: ${allData.length} bản ghi`;
+  
+  if (params.from && params.to) {
+    filterText += ` | Đã lọc: ${data.length} bản ghi (${params.from} đến ${params.to})`;
+    document.getElementById("filterInfo").innerHTML = `
+      <strong>Bộ lọc:</strong> Từ ${params.from} đến ${params.to}<br>
+      <strong>Kết quả:</strong> ${data.length} bản ghi (trên tổng số ${allData.length})
+    `;
+    document.getElementById("filterInfo").style.display = "block";
+  }
+  
+  document.getElementById("infoMessage").innerText = filterText;
+  document.getElementById("infoMessage").style.display = "block";
+
+  // Hiển thị bảng
+  document.getElementById("dataTable").style.display = "";
+  document.getElementById("downloadBtn").style.display = "inline-flex";
+
+  // Tạo header
+  const headerHTML = "<tr>" + columnsToShow.map(c => `<th>${c}</th>`).join("") + "</tr>";
+  document.getElementById("thead").innerHTML = headerHTML;
+
+  // Tạo body
+  const bodyHTML = data.map(row => {
+    return "<tr>" + columnsToShow.map(col => {
+      const value = row[col] || "";
+      // Giữ nguyên định dạng ngày gốc
+      return `<td>${value}</td>`;
+    }).join("") + "</tr>";
+  }).join("");
+
+  document.getElementById("tbody").innerHTML = bodyHTML;
+}
+
+// Hàm lấy dữ liệu từ AppSheet API (lấy tất cả, không filter)
+async function loadData() {
+  const url = "https://api.appsheet.com/api/v2/apps/09960054-a6f1-4b69-a252-b813ca3d8b3c/tables/THANH%20TOAN/find";
+
+  // Lấy tham số từ URL
+  const params = getQueryParams();
+  
+  // Tạo body request - KHÔNG dùng filter, lấy tất cả
+  const body = {
+    Action: "Find",
+    Select: columnsToShow.map(col => `[${col}]`),
+    // Lấy tối đa 5000 bản ghi (có thể điều chỉnh)
+    "MaxRecords": 5000
+  };
+
+  try {
+    document.getElementById("loading").innerText = "Đang tải dữ liệu từ AppSheet...";
+    
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "ApplicationAccessKey": "V2-NnuYn-V6SPQ-VURvK-8meBu-hOmsl-3Ux7X-YlOzG-iMEOr",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    allData = result.Rows || result || [];
+    
+    document.getElementById("loading").style.display = "none";
+    
+    if (allData.length === 0) {
+      document.getElementById("infoMessage").innerText = "Không có dữ liệu trong AppSheet!";
+      document.getElementById("infoMessage").style.display = "block";
+      return;
+    }
+    
+    // Lọc dữ liệu nếu có tham số from/to
+    if (params.from && params.to) {
+      document.getElementById("loading").innerText = `Đang lọc dữ liệu (${params.from} - ${params.to})...`;
+      filteredData = filterDataByDate(allData, params.from, params.to);
+      document.getElementById("loading").style.display = "none";
+      displayData(filteredData);
+    } else {
+      // Hiển thị tất cả nếu không có filter
+      filteredData = allData;
+      displayData(allData);
+    }
+
+  } catch (error) {
+    console.error("Lỗi khi tải dữ liệu:", error);
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("errorMessage").innerText = `Lỗi tải dữ liệu: ${error.message}`;
+    document.getElementById("errorMessage").style.display = "block";
+  }
+}
+
+// Hàm xuất dữ liệu ra Excel
+function exportToExcel() {
+  const dataToExport = filteredData.length > 0 ? filteredData : allData;
+  
+  if (!dataToExport || dataToExport.length === 0) {
+    alert("Không có dữ liệu để xuất!");
+    return;
+  }
+
+  // Chuẩn bị dữ liệu cho Excel
+  const excelData = dataToExport.map(row => {
+    return columnsToShow.map(col => row[col] || "");
+  });
+
+  // Thêm header
+  excelData.unshift(columnsToShow);
+
+  // Tạo workbook
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(excelData);
+
+  // Đặt độ rộng cột
+  ws['!cols'] = columnsToShow.map(() => ({ wch: 20 }));
+
+  // Tên sheet
+  const params = getQueryParams();
+  let sheetName = "HoaDon";
+  if (params.from && params.to) {
+    sheetName = `HoaDon_${params.from.replace(/\//g, '-')}_${params.to.replace(/\//g, '-')}`;
+  }
+
+  // Thêm sheet vào workbook
+  XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+  // Tạo tên file
+  let fileName = "HoaDon.xlsx";
+  if (params.from && params.to) {
+    fileName = `HoaDon_${params.from.replace(/\//g, '-')}_den_${params.to.replace(/\//g, '-')}.xlsx`;
+  }
+
+  // Xuất file
+  XLSX.writeFile(wb, fileName);
+}
+
+// Sự kiện khi trang được tải
+document.addEventListener('DOMContentLoaded', function() {
+  // Gắn sự kiện cho nút tải Excel
+  document.getElementById("downloadBtn").addEventListener("click", exportToExcel);
+  
+  // Tải dữ liệu khi trang được tải
+  loadData();
+});
+</script>
+
+</body>
+</html>

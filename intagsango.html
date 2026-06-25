@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang='vi'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>IN TAG GIÁ SÀN GỖ</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+        body {
+            width: 210mm;
+            margin: 0;
+            padding: 10mm;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', serif;
+            font-size: 7.5pt;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 50mm;
+            border: 1px solid #ccc;
+            margin-bottom: 0;
+            page-break-inside: avoid;
+            will-change: transform;
+            contain: content;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 5px;
+            box-sizing: border-box;
+            border-right: 1px solid #ccc;
+            position: relative;
+            will-change: transform;
+            contain: content;
+        }
+        .column-1, .column-3 {
+            width: 22mm;
+        }
+        .column-2, .column-4 {
+            width: 56mm;
+        }
+        .column-2 {
+            border-right: 2px solid #000;
+        }
+        .column-4 {
+            border-right: 2px solid #000;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .row {
+            display: flex;
+            align-items: center;
+            height: 6.25mm;
+            border-bottom: 1px solid #ccc;
+            padding: 0 5px;
+            box-sizing: border-box;
+        }
+        .row:last-child {
+            border-bottom: none;
+        }
+        .qrcode {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 12mm;
+            height: 12mm;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qrcode img {
+            width: 100%;
+            height: 100%;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+        #input-container {
+            margin-bottom: 10mm;
+            display: none;
+        }
+        #productCodesInput {
+            width: 100%;
+            height: 100px;
+            font-family: 'Times New Roman', serif;
+            font-size: 10pt;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        #generateButton {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-family: 'Times New Roman', serif;
+            font-size: 10pt;
+            cursor: pointer;
+        }
+        @media print {
+            #input-container {
+                display: none !important;
+            }
+        }
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            backdrop-filter: blur(2px);
+            transition: opacity 0.3s ease;
+            display: none;
+            opacity: 0;
+        }
+        .loading.show {
+            display: flex;
+            opacity: 1;
+        }
+        .loading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .gia-niem-yet {
+            font-weight: bold;
+            font-size: 8.5pt;
+            color: #d00;
+        }
+        #password-protection {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+            color: white;
+        }
+        #password-form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            color: black;
+            text-align: center;
+        }
+        #password-form input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 200px;
+            display: block;
+        }
+        #password-form button {
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        #password-form button:hover {
+            background: #45a049;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+        .invalid-message {
+            color: red;
+            font-size: 8pt;
+            text-align: center;
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #ffe6e6;
+            border-radius: 3px;
+        }
+        .empty-container {
+            height: 50mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+            border: 1px dashed #ccc;
+            margin-bottom: 10px;
+        }
+        .brand-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .brand-name {
+            flex: 1;
+        }
+        .price-policy {
+            margin-left: 10px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .lockout-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .brand-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+    <link rel="preconnect" href="https://script.google.com">
+    <link rel="preconnect" href="https://quickchart.io">
+    <link rel="preconnect" href="https://www.dropbox.com">
+</head>
+<body>
+    <div id="password-protection">
+        <div id="password-form">
+            <h2>Vui lòng nhập mật khẩu</h2>
+            <input type="password" id="password-input" placeholder="Nhập mật khẩu" autocomplete="off">
+            <button id="password-submit">Xác nhận</button>
+            <div id="password-error" class="error-message">Mật khẩu không đúng. Vui lòng thử lại.</div>
+            <div id="lockout-message" class="lockout-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id='input-container'>
+        <textarea id='productCodesInput' placeholder='Nhập các MÃ HÀNG vào đây, mỗi mã một dòng... Ví dụ:
+150305885
+150659555
+15060-7.8.55'></textarea>
+        <button id='generateButton'>Tạo bản in tag giá</button>
+    </div>
+
+    <div id='content'></div>
+    <div id='loading' class='loading'>Đang tải dữ liệu...</div>
+
+    <script>
+        // Cấu hình bảo mật
+        const CORRECT_PASSWORD = "ritavo123";
+        const MAX_FAILED_ATTEMPTS = 5;
+        const LOCKOUT_DURATION = 30 * 60 * 1000; // 30 phút
+        const SESSION_DURATION = 30 * 60 * 1000; // 30 phút
+        const BRAND_LOGO_URL = "https://www.dropbox.com/scl/fi/vlel27luyvkuuj8gz47wq/logo-adapt-02.png?rlkey=tsiz1b8q5hgctbdbcy6pqju15&raw=1";
+        
+        // Biến toàn cục
+        let failedAttempts = 0;
+        let inactivityTimer;
+
+        // DOM elements
+        const passwordInput = document.getElementById('password-input');
+        const passwordSubmit = document.getElementById('password-submit');
+        const passwordError = document.getElementById('password-error');
+        const lockoutMessage = document.getElementById('lockout-message');
+        const passwordProtection = document.getElementById('password-protection');
+        const inputContainer = document.getElementById('input-container');
+
+        // Phần xác thực mật khẩu
+        function checkPassword() {
+            if (isLockedOut()) {
+                showLockoutMessage();
+                return;
+            }
+
+            const enteredPassword = passwordInput.value.trim();
+            
+            if (enteredPassword === CORRECT_PASSWORD) {
+                passwordProtection.style.display = 'none';
+                inputContainer.style.display = 'block';
+                setAuthCookie();
+                resetInactivityTimer();
+                failedAttempts = 0;
+            } else {
+                failedAttempts++;
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+                
+                if (failedAttempts >= MAX_FAILED_ATTEMPTS) {
+                    lockAccount();
+                    showLockoutMessage();
+                } else {
+                    setTimeout(() => {
+                        passwordError.style.display = 'none';
+                    }, 3000);
+                }
+            }
+        }
+
+        function isLockedOut() {
+            const lockoutUntil = localStorage.getItem('lockoutUntil');
+            return lockoutUntil && Date.now() < parseInt(lockoutUntil);
+        }
+
+        function lockAccount() {
+            const lockoutUntil = Date.now() + LOCKOUT_DURATION;
+            localStorage.setItem('lockoutUntil', lockoutUntil.toString());
+        }
+
+        function showLockoutMessage() {
+            const lockoutUntil = localStorage.getItem('lockoutUntil');
+            if (!lockoutUntil) return;
+
+            const remainingTime = Math.ceil((parseInt(lockoutUntil) - Date.now()) / (60 * 1000));
+            lockoutMessage.textContent = `Tài khoản tạm thời bị khóa. Vui lòng thử lại sau ${remainingTime} phút.`;
+            lockoutMessage.style.display = 'block';
+            passwordInput.disabled = true;
+            passwordSubmit.disabled = true;
+
+            setTimeout(() => {
+                localStorage.removeItem('lockoutUntil');
+                lockoutMessage.style.display = 'none';
+                passwordInput.disabled = false;
+                passwordSubmit.disabled = false;
+                failedAttempts = 0;
+            }, LOCKOUT_DURATION);
+        }
+
+        // Quản lý session
+        function setAuthCookie() {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + SESSION_DURATION);
+            document.cookie = `authenticated=true; expires=${expires.toUTCString()}; path=/; Secure; SameSite=Strict`;
+        }
+
+        function checkAuthCookie() {
+            return document.cookie.split(';').some((item) => item.trim().startsWith('authenticated='));
+        }
+
+        function clearAuthCookie() {
+            document.cookie = 'authenticated=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        }
+
+        function logout() {
+            clearAuthCookie();
+            localStorage.removeItem('lockoutUntil');
+            window.location.reload();
+        }
+
+        // Quản lý thời gian không hoạt động
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(logout, SESSION_DURATION);
+        }
+
+        // XSS Protection
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Event listeners
+        passwordSubmit.addEventListener('click', checkPassword);
+        
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Theo dõi hoạt động người dùng
+        ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
+            window.addEventListener(event, resetInactivityTimer);
+        });
+
+        // Kiểm tra khi trang tải xong
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAuthCookie()) {
+                passwordProtection.style.display = 'none';
+                inputContainer.style.display = 'block';
+                resetInactivityTimer();
+                
+                // Preload QR code generator và logo
+                const img1 = new Image();
+                img1.src = 'https://quickchart.io/qr?text=preload';
+                
+                const img2 = new Image();
+                img2.src = BRAND_LOGO_URL;
+            } else {
+                passwordInput.focus();
+                if (isLockedOut()) {
+                    showLockoutMessage();
+                }
+            }
+        });
+
+        // Phần chức năng chính
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwKhfK8giNfI2vjX2uOpjS_Zqx0zJ2eOle6R87n13v_hibKZ9dgYgzigbdfuRbFC8XE/exec';
+        const productCache = {};
+        const QR_CACHE_PREFIX = 'qr_cache_';
+        
+        // Batch request optimization
+        async function fetchProductDataBatch(maHangList) {
+            const uncachedItems = maHangList.filter(maHang => !productCache[maHang]);
+            const cachedItems = maHangList.filter(maHang => productCache[maHang]).map(maHang => productCache[maHang]);
+            
+            if (uncachedItems.length === 0) {
+                return cachedItems;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}?maHangList=${encodeURIComponent(uncachedItems.join(','))}`);
+                
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                
+                // Xử lý dữ liệu trả về và cập nhật cache
+                let processedData = [];
+                
+                // Kiểm tra nếu dữ liệu trả về là mảng
+                if (Array.isArray(data)) {
+                    processedData = data;
+                } 
+                // Hoặc nếu là object có thuộc tính data
+                else if (data.data && Array.isArray(data.data)) {
+                    processedData = data.data;
+                }
+                // Hoặc nếu là object đơn lẻ
+                else if (data.maHang) {
+                    processedData = [data];
+                }
+                
+                processedData.forEach(item => {
+                    if (!item.maHang) return;
+                    
+                    const result = { 
+                        ...item, 
+                        isValid: true,
+                        tenHangTiengViet: item.tenhangTienpyltet || item.tenHangTiengViet || '',
+                        xuatXu: item.xueKui || item.xuatXu || '',
+                        kichThuoc: item.kichThuoc || '',
+                        doDay: item.dobay || item.doDay || '',
+                        doGianNo: item.dodiamho ? `${parseFloat(item.dodiamho) * 100}%` : (item.doGianNo || ''),
+                        giaBanNieYetCoVAT: item.giaBanHicVetCvAT || item.giaBanNieYetCoVAT || 0
+                    };
+                    
+                    const phanTramGiam = Math.round((parseFloat(item.phanTramGiamGia) || 0) * 100);
+                    let kyHieuChinhSach = 'F';
+                    if (item.chinhSachGiaBan && typeof item.chinhSachGiaBan === 'string' && item.chinhSachGiaBan.trim().length > 0) {
+                        kyHieuChinhSach = item.chinhSachGiaBan.trim().charAt(0).toUpperCase();
+                    }
+                    
+                    result.displayBrand = {
+                        name: item.nhanitieu || item.nhanHieu || 'THƯƠNG HIỆU',
+                        policy: `${kyHieuChinhSach}.${phanTramGiam}`
+                    };
+                    
+                    productCache[item.maHang] = result;
+                });
+                
+                // Thêm các item không tìm thấy vào cache với isValid = false
+                uncachedItems.forEach(maHang => {
+                    if (!productCache[maHang]) {
+                        productCache[maHang] = { 
+                            maHang, 
+                            isValid: false,
+                            displayBrand: {
+                                name: 'THƯƠNG HIỆU',
+                                policy: 'F.30'
+                            }
+                        };
+                    }
+                });
+                
+                return maHangList.map(maHang => productCache[maHang]);
+                
+            } catch (error) {
+                console.error('Lỗi khi lấy dữ liệu hàng loạt:', error);
+                
+                // Trả về dữ liệu cache nếu có, hoặc dữ liệu mặc định
+                return maHangList.map(maHang => {
+                    return productCache[maHang] || { 
+                        maHang, 
+                        isValid: false,
+                        displayBrand: {
+                            name: 'THƯƠNG HIỆU',
+                            policy: 'F.30'
+                        }
+                    };
+                });
+            }
+        }
+
+        // QR Code caching
+        function getQRCodeUrl(maHang) {
+            const cacheKey = QR_CACHE_PREFIX + maHang;
+            const cachedUrl = localStorage.getItem(cacheKey);
+            
+            if (cachedUrl) {
+                return cachedUrl;
+            }
+            
+            const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(maHang)}&size=100&margin=0`;
+            try {
+                localStorage.setItem(cacheKey, qrUrl);
+            } catch (e) {
+                console.warn('Không thể cache QR code do giới hạn localStorage');
+            }
+            return qrUrl;
+        }
+
+        function formatPrice(price) {
+            if (!price && price !== 0) return '';
+            const priceNumber = typeof price === 'string' ? parseFloat(price.replace(/,/g, '')) : price;
+            return isNaN(priceNumber) ? '' : new Intl.NumberFormat('vi-VN').format(priceNumber) + ' đ';
+        };
+
+        function getValue(value, defaultValue = '') {
+            return value !== undefined && value !== null ? escapeHtml(value) : escapeHtml(defaultValue);
+        };
+
+        function renderBrandLogo() {
+            return `<img src="${BRAND_LOGO_URL}" class="brand-logo" alt="Brand Logo">`;
+        };
+
+        function createContainer(product1, product2) {
+            let html = '';
+            
+            if (product1 && product1.isValid) {
+                html += `
+                <div class='container'>
+                    <div class='column column-1'>
+                        <div class='row bold'>Thương hiệu</div>
+                        <div class='row bold'>Mã sản phẩm</div>
+                        <div class='row bold'>Tên sản phẩm</div>
+                        <div class='row bold'>Kích thước (mm)</div>
+                        <div class='row bold'>Độ giãn nở</div>
+                        <div class='row bold'>Độ dày (mm)</div>
+                        <div class='row bold'>Xuất xứ</div> 
+                        <div class='row bold'>Giá niêm yết có VAT/m2</div>
+                    </div>
+                    <div class='column column-2'>
+                        <div class='row'>${renderBrandLogo()}</div>
+                        <div class='row'>${getValue(product1.maHang)}</div>
+                        <div class='row'>${getValue(product1.tenHangTiengViet)}</div>
+                        <div class='row'>${getValue(product1.kichThuoc)}</div>
+                        <div class='row'>${getValue(product1.doGianNo)}</div>
+                        <div class='row'>${getValue(product1.doDay)}</div>
+                        <div class='row'>${getValue(product1.xuatXu)}</div>                        
+                        <div class='row'><span class="gia-niem-yet">${formatPrice(product1.giaBanNieYetCoVAT)}</span></div>
+
+                        <div class='qrcode'>
+                            <img src='${getQRCodeUrl(product1.maHang)}' alt='QR Code' loading='lazy'>
+                        </div>
+                    </div>`;
+                
+                if (product2 && product2.isValid) {
+                    html += `
+                    <div class='column column-3'>
+                        <div class='row bold'>Thương hiệu</div>
+                        <div class='row bold'>Mã sản phẩm</div>
+                        <div class='row bold'>Tên sản phẩm</div>
+                        <div class='row bold'>Kích thước (mm)</div>
+                        <div class='row bold'>Độ giãn nở</div>
+                        <div class='row bold'>Độ dày (mm)</div>
+                        <div class='row bold'>Xuất xứ</div>
+                        <div class='row bold'>Giá niêm yết có VAT/m2</div>
+                    </div>
+                    <div class='column column-4'>
+                        <div class='row'>${renderBrandLogo()}</div>
+                        <div class='row'>${getValue(product2.maHang)}</div>
+                        <div class='row'>${getValue(product2.tenHangTiengViet)}</div>
+                        <div class='row'>${getValue(product2.kichThuoc)}</div>
+                        <div class='row'>${getValue(product2.doGianNo)}</div>
+                        <div class='row'>${getValue(product2.doDay)}</div>
+                        <div class='row'>${getValue(product2.xuatXu)}</div>                        
+                        <div class='row'><span class="gia-niem-yet">${formatPrice(product2.giaBanNieYetCoVAT)}</span></div>
+                        <div class='qrcode'>
+                            <img src='${getQRCodeUrl(product2.maHang)}' alt='QR Code' loading='lazy'>
+                        </div>
+                    </div>`;
+                } else if (product2) {
+                    html += `
+                    <div class='column column-3'></div>
+                    <div class='column column-4'></div>
+                    <div class='invalid-message">Mã hàng ${escapeHtml(product2.maHang)} không tồn tại trong hệ thống</div>`;
+                }
+                
+                html += `</div>`;
+            } else if (product1) {
+                html += `<div class='invalid-message">Mã hàng ${escapeHtml(product1.maHang)} không tồn tại trong hệ thống</div>`;
+            }
+            
+            return html;
+        }
+
+        async function generateContainers() {
+            const input = document.getElementById('productCodesInput').value;
+            const maHangList = input.split('\n')
+                                  .filter(line => line.trim() !== '')
+                                  .map(line => line.trim());
+            
+            if (maHangList.length === 0) {
+                alert('Vui lòng nhập ít nhất một mã hàng!');
+                return;
+            }
+            
+            const content = document.getElementById('content');
+            const loading = document.getElementById('loading');
+            
+            content.innerHTML = '';
+            loading.classList.add('show');
+            
+            // Sử dụng requestAnimationFrame để UI không bị block
+            requestAnimationFrame(async () => {
+                try {
+                    // Sử dụng batch request thay vì từng cái một
+                    const products = await fetchProductDataBatch(maHangList);
+                    
+                    const validProducts = products.filter(p => p.isValid);
+                    const invalidProducts = products.filter(p => !p.isValid);
+                    
+                    if (invalidProducts.length > 0) {
+                        const invalidCodes = invalidProducts.map(p => p.maHang).join(', ');
+                        alert(`Các mã hàng sau không tồn tại trong hệ thống:\n${invalidCodes}`);
+                    }
+                    
+                    if (validProducts.length === 0) {
+                        content.innerHTML = '<div class="empty-container">Không có mã hàng hợp lệ nào để hiển thị</div>';
+                        loading.classList.remove('show');
+                        return;
+                    }
+                    
+                    // Tạo DOM ảo để tối ưu hiệu năng
+                    let fragment = document.createDocumentFragment();
+                    
+                    // Chia thành các chunk để render từng phần
+                    const chunkSize = 10;
+                    for (let i = 0; i < validProducts.length; i += chunkSize) {
+                        const chunk = validProducts.slice(i, i + chunkSize);
+                        
+                        // Tạo container cho từng chunk
+                        const chunkFragment = document.createDocumentFragment();
+                        const tempDiv = document.createElement('div');
+                        
+                        for (let j = 0; j < chunk.length; j += 2) {
+                            const product1 = chunk[j];
+                            const product2 = chunk[j + 1];
+                            tempDiv.innerHTML = createContainer(product1, product2);
+                            while (tempDiv.firstChild) {
+                                chunkFragment.appendChild(tempDiv.firstChild);
+                            }
+                        }
+                        
+                        fragment.appendChild(chunkFragment);
+                        
+                        // Cho phép browser render từng phần
+                        if (i === 0) {
+                            content.appendChild(fragment);
+                            fragment = document.createDocumentFragment();
+                        }
+                        
+                        // Nhường CPU cho browser
+                        await new Promise(resolve => setTimeout(resolve, 0));
+                    }
+                    
+                    if (fragment.childNodes.length > 0) {
+                        content.appendChild(fragment);
+                    }
+                    
+                    loading.classList.remove('show');
+                    loading.classList.add('hide');
+                    
+                } catch (error) {
+                    console.error('Lỗi khi tạo tag giá:', error);
+                    loading.classList.remove('show');
+                    alert('Có lỗi xảy ra khi tạo tag giá. Vui lòng thử lại!');
+                }
+            });
+        }
+
+        document.getElementById('generateButton').addEventListener('click', generateContainers);
+
+        // Register service worker if supported
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

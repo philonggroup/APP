@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Export Hóa Đơn</title>
+  <style>
+    body { 
+      font-family: Arial; 
+      padding: 50px; 
+      text-align: center; 
+      background: #f6f6f6; 
+    }
+    .message { 
+      font-size: 18px; 
+      margin: 20px 0; 
+      color: #1976d2; 
+    }
+    .error { 
+      color: #d32f2f; 
+    }
+    .link { 
+      display: inline-block; 
+      margin-top: 20px; 
+      padding: 10px 20px; 
+      background: #2e7d32; 
+      color: white; 
+      text-decoration: none; 
+      border-radius: 4px; 
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div id="message" class="message">Đang tải dữ liệu và chuẩn bị file Excel...</div>
+  <div id="error" class="message error hidden"></div>
+  <a id="downloadLink" class="link hidden" href="#" download>Download File Excel</a>
+  <div id="backLink" class="hidden">
+    <br>
+    <a href="." style="color: #1976d2;">← Quay lại trang chính</a>
+  </div>
+
+  <script>
+    const DATA_URL = "https://script.google.com/macros/s/AKfycbwnoIs3T8FKrq53SG7lCTwE1Rm0H6eWc05mD1S347XscHkgg-VxMkHO96b_8Z-O_r0j/exec";
+    
+    // Biến để kiểm tra đã download chưa
+    let hasDownloaded = false;
+    let downloadTimer = null;
+    
+    // Hàm parse date
+    function parseDateToStandard(value) {
+      if (!value && value !== 0) return null;
+      
+      if (value instanceof Date) {
+        return isNaN(value) ? null : new Date(value.getFullYear(), value.getMonth(), value.getDate());
+      }
+      
+      if (typeof value === 'number') {
+        const d = new Date(value);
+        return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      }
+      
+      const s = String(value).trim();
+      
+      // yyyy-mm-dd
+      let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (m) {
+        return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+      }
+      
+      // dd/mm/yyyy
+      m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (m) {
+        return new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]));
+      }
+      
+      const d = new Date(s);
+      return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    }
+    
+    // Format date
+    function formatDateToYYYYMMDD(raw) {
+      const d = parseDateToStandard(raw);
+      if (!d) return raw || '';
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+    
+    // Format tỷ lệ HH
+    function formatTyLeHH(value) {
+      if (value === null || value === undefined || value === '') return '';
+      const num = Number(value);
+      if (isNaN(num)) return value;
+      const percent = (num * 100).toFixed(1);
+      const formatted = percent.replace(/\.0$/, '');
+      return `${formatted}%`;
+    }
+    
+    // Lọc dữ liệu
+    function filterData(data, fromDate, toDate) {
+      return data.filter((r) => {
+        const dateValue = r.ngayXuatHoaDon || r['Ngày xuất'] || r['ngay_xuat'] || r['ngayXuatHoaDon'] || r['ngay'] || r['Ngày'];
+        const d = parseDateToStandard(dateValue);
+        
+        if (!d) return false;
+        if (fromDate && d < fromDate) return false;
+        if (toDate && d > toDate) return false;
+        return true;
+      });
+    }
+    
+    // Tạo CSV
+    function createCSV(data) {
+      if (!data || data.length === 0) return '';
+      
+      // Bỏ các cột không cần
+      const excludedCols = ['id', 'quy', 'nam', 'lichsuhoadon', 'danhdau', 'nguoithuchien'];
+      const cols = Object.keys(data[0]).filter(col => 
+        !excludedCols.some(excluded => col.toLowerCase().includes(excluded.toLowerCase()))
+      );
+      
+      let csv = '\uFEFF'; // UTF-8 BOM
+      csv += 'TT,' + cols.join(',') + '\n';
+      
+      for (let i = 0; i < data.length; i++) {
+        const row = data[i];
+        const rowData = [i + 1];
+        
+        for (const col of cols) {
+          let value = row[col] ?? '';
+          
+          if (col.toLowerCase().includes('ngay') || col.toLowerCase().includes('date')) {
+            value = formatDateToYYYYMMDD(value);
+          } else if (col.toLowerCase().includes('tylehh') || col.toLowerCase().includes('tyle_hh')) {
+            value = formatTyLeHH(value);
+          } else if (col.toLowerCase().includes('tien') || col.toLowerCase().includes('sotien') || 
+                     col.toLowerCase().includes('tong') || col.toLowerCase().includes('thanhtien')) {
+            const num = Number(value);
+            if (!isNaN(num)) value = num;
+          }
+          
+          if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
+            value = '"' + value.replace(/"/g, '""') + '"';
+          }
+          
+          rowData.push(value);
+        }
+        
+        csv += rowData.join(',') + '\n';
+      }
+      
+      return csv;
+    }
+    
+    // Hàm đóng trang
+    function closePage() {
+      // Thử đóng cửa sổ/tab
+      try {
+        if (window.opener) {
+          window.close();
+        } else {
+          // Nếu không phải cửa sổ mở ra, chuyển hướng về trang trống hoặc đóng
+          window.location.href = 'about:blank';
+          setTimeout(() => {
+            if (!window.closed) {
+              window.close();
+            }
+          }, 100);
+        }
+      } catch (e) {
+        console.log('Không thể đóng trang tự động:', e);
+        // Nếu không đóng được, chuyển về trang chính
+        window.location.href = '.';
+      }
+    }
+    
+    // Thử download tự động
+    function tryAutoDownload(link) {
+      try {
+        link.click();
+        hasDownloaded = true;
+        console.log('Đã kích hoạt download tự động');
+        
+        // Chờ 2 giây rồi đóng trang
+        downloadTimer = setTimeout(() => {
+          console.log('Tự động đóng trang sau khi download');
+          closePage();
+        }, 2000);
+        
+        return true;
+      } catch (e) {
+        console.log('Tự động download thất bại:', e);
+        return false;
+      }
+    }
+    
+    // Xử lý khi user click download thủ công
+    function setupManualDownload(link) {
+      link.addEventListener('click', function(e) {
+        hasDownloaded = true;
+        if (downloadTimer) {
+          clearTimeout(downloadTimer);
+        }
+        
+        // Đóng trang sau 1 giây khi user click
+        setTimeout(() => {
+          closePage();
+        }, 1000);
+      });
+    }
+    
+    // Chính
+    async function main() {
+      try {
+        const params = new URLSearchParams(location.search);
+        const tungay = params.get('tungay');
+        const denngay = params.get('denngay');
+        
+        const from = tungay ? parseDateToStandard(tungay) : null;
+        const to = denngay ? parseDateToStandard(denngay) : null;
+        
+        // Hiển thị thông báo
+        document.getElementById('message').textContent = 'Đang tải dữ liệu từ server...';
+        
+        // Tải dữ liệu
+        const response = await fetch(DATA_URL);
+        const allData = await response.json();
+        const rawData = Array.isArray(allData) ? allData : (allData.rows || []);
+        
+        // Lọc dữ liệu
+        const filteredData = filterData(rawData, from, to);
+        
+        if (filteredData.length === 0) {
+          document.getElementById('message').classList.add('hidden');
+          document.getElementById('error').classList.remove('hidden');
+          document.getElementById('error').textContent = 'Không có dữ liệu trong khoảng thời gian đã chọn.';
+          document.getElementById('backLink').classList.remove('hidden');
+          
+          // Đóng trang sau 3 giây nếu không có dữ liệu
+          setTimeout(() => {
+            closePage();
+          }, 3000);
+          return;
+        }
+        
+        // Tạo CSV
+        document.getElementById('message').textContent = 'Đang tạo file Excel...';
+        const csvContent = createCSV(filteredData);
+        
+        // Tạo blob và link download
+        const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        
+        // Tạo tên file
+        let fileName = 'HoaDon';
+        if (from && to) {
+          fileName = `HoaDon_${formatDateToYYYYMMDD(from)}_${formatDateToYYYYMMDD(to)}`;
+        } else if (from) {
+          fileName = `HoaDon_tu_${formatDateToYYYYMMDD(from)}`;
+        } else if (to) {
+          fileName = `HoaDon_den_${formatDateToYYYYMMDD(to)}`;
+        }
+        
+        fileName += '.csv';
+        
+        // Cập nhật link
+        const downloadLink = document.getElementById('downloadLink');
+        downloadLink.href = url;
+        downloadLink.download = fileName;
+        downloadLink.textContent = `Tải xuống ${fileName} (${filteredData.length} bản ghi)`;
+        
+        // Thiết lập xử lý click thủ công
+        setupManualDownload(downloadLink);
+        
+        // Hiển thị link
+        document.getElementById('message').classList.add('hidden');
+        downloadLink.classList.remove('hidden');
+        
+        // Thử tự động download sau 500ms
+        setTimeout(() => {
+          const autoDownloadSuccess = tryAutoDownload(downloadLink);
+          
+          if (!autoDownloadSuccess) {
+            // Nếu tự động thất bại, hiển thị thông báo cho user
+            document.getElementById('message').classList.remove('hidden');
+            document.getElementById('message').textContent = 'Vui lòng click nút bên dưới để tải file. Trang sẽ tự động đóng sau khi tải.';
+            document.getElementById('backLink').classList.remove('hidden');
+          }
+        }, 500);
+        
+        // Dọn dẹp URL khi trang đóng
+        window.addEventListener('beforeunload', () => {
+          URL.revokeObjectURL(url);
+        });
+        
+      } catch (error) {
+        console.error('Lỗi:', error);
+        document.getElementById('message').classList.add('hidden');
+        document.getElementById('error').classList.remove('hidden');
+        document.getElementById('error').textContent = `Lỗi: ${error.message}`;
+        document.getElementById('backLink').classList.remove('hidden');
+        
+        // Đóng trang sau 5 giây nếu có lỗi
+        setTimeout(() => {
+          closePage();
+        }, 5000);
+      }
+    }
+    
+    // Chạy khi trang tải xong
+    window.addEventListener('DOMContentLoaded', main);
+  </script>
+</body>
+</html>

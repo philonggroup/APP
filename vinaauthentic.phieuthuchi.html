@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Phiếu Thu / Phiếu Chi (A5 ngang)</title>
+<style>
+  @page {
+    size: A5 landscape;
+    margin: 8mm 10mm;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    margin: 0;
+    background: #e9e9e9;
+    color: #111;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .toolbar {
+    position: sticky;
+    top: 0;
+    background: #2c3e50;
+    padding: 10px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 10;
+  }
+  .toolbar button {
+    background: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  .toolbar button:hover { background: #ecf0f1; }
+  .toolbar span {
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    margin-left: auto;
+  }
+
+  .page {
+    width: 210mm;
+    height: 148mm;
+    background: #fff;
+    margin: 14px auto;
+    padding: 8mm 10mm;
+    position: relative;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  .unit-block { width: 48%; font-size: 12px; }
+  .unit-block .line {
+    border-bottom: 1px dotted #000;
+    min-height: 15px;
+    margin-bottom: 2px;
+    outline: none;
+  }
+  .form-no {
+    text-align: right;
+    font-size: 10.5px;
+    width: 48%;
+    line-height: 1.3;
+  }
+
+  .title-block { text-align: center; margin-top: 2mm; }
+  .title-block h1 {
+    font-size: 22px;
+    margin: 2px 0 0 0;
+    letter-spacing: 2px;
+  }
+  .title-block .date-line {
+    font-size: 11.5px;
+    font-style: italic;
+    margin-top: 2px;
+    outline: none;
+  }
+  .so-no {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  .so-no .editable {
+    display: inline-block;
+    min-width: 40px;
+    border-bottom: 1px dotted #000;
+    outline: none;
+    padding: 0 4px;
+  }
+
+  .no-co-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+    font-size: 11.5px;
+    margin-top: 1mm;
+  }
+  .no-co-row .editable {
+    display: inline-block;
+    min-width: 100px;
+    border-bottom: 1px dotted #000;
+    outline: none;
+  }
+
+  .field-row {
+    display: flex;
+    margin-top: 2.2mm;
+    align-items: baseline;
+  }
+  .field-label {
+    white-space: nowrap;
+    margin-right: 4px;
+  }
+  .field-value {
+    flex: 1;
+    border-bottom: 1px dotted #000;
+    outline: none;
+    min-height: 14px;
+    padding-left: 2px;
+  }
+
+  .signature-row {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 4mm;
+    font-size: 11px;
+  }
+  .signature-row .sig {
+    width: 19%;
+  }
+  .signature-row .sig b { font-size: 11.5px; }
+  .signature-row .sig .sub {
+    font-style: italic;
+    font-size: 10px;
+  }
+  .signature-row .sig .space {
+    height: 14mm;
+  }
+
+  .bottom-note {
+    font-size: 11px;
+    margin-top: 1mm;
+  }
+
+  [contenteditable]:hover {
+    background: #fff8d8;
+  }
+  [contenteditable]:focus {
+    background: #fffae0;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .page {
+      box-shadow: none;
+      margin: 0;
+    }
+    .unit-block .line,
+    .field-value,
+    .so-no .editable,
+    .no-co-row .editable {
+      border-bottom: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="window.print()">🖨️ In phiếu</button>
+</div>
+
+<div class="page" id="voucher">
+  <div class="header-row">
+    <div class="unit-block">
+      <div>Sport Clothng Original<span class="line editable" contenteditable="true"></span></div>
+      <div>VNA Sport Wear<span class="line editable" contenteditable="true"></span></div>
+    </div>
+    <div class="form-no">
+      Mẫu số <span data-thu="01-TT" data-chi="02-TT"></span><br>
+      (Ban hành theo Thông tư số 133/2016/TT-BTC<br>
+      ngày 26/8/2016 của Bộ Tài chính)
+    </div>
+  </div>
+
+  <div class="title-block">
+    <h1 id="voucher-title">PHIẾU THU</h1>
+    <div class="date-line editable" contenteditable="true" id="f-ngay">Ngày ..... tháng ..... năm 20.....</div>
+    <div class="so-no">Số: <span class="editable" contenteditable="true" id="f-so">.....................</span></div>
+  </div>
+
+  <div class="no-co-row">
+    <div>Nợ <span class="editable" contenteditable="true"></span></div>
+    <div>Có <span class="editable" contenteditable="true"></span></div>
+  </div>
+
+  <div class="field-row">
+    <div class="field-label"><span data-thu="Họ và tên người nộp tiền:" data-chi="Họ và tên người nhận tiền:"></span></div>
+    <div class="field-value editable" contenteditable="true" id="f-hoten"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-label">Địa chỉ:</div>
+    <div class="field-value editable" contenteditable="true" id="f-diachi"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-label"><span data-thu="Lý do nộp:" data-chi="Lý do chi:"></span></div>
+    <div class="field-value editable" contenteditable="true" id="f-lydo"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-label"><span data-thu="Hình thức nộp:" data-chi="Hình thức chi:"></span></div>
+    <div class="field-value editable" contenteditable="true" id="f-hinhthuc"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-label">Số tài khoản:</div>
+    <div class="field-value editable" contenteditable="true" id="f-sotk"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-label">Tên ngân hàng:</div>
+    <div class="field-value editable" contenteditable="true" id="f-nganhang"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-label">Số tiền:</div>
+    <div class="field-value editable" contenteditable="true" id="f-sotien" style="font-weight:bold; font-size:15px;"></div>
+    <div class="field-label" style="margin-left:6px;">VNĐ</div>
+  </div>
+  <div class="field-row">
+    <div class="field-label">(Viết bằng chữ):</div>
+    <div class="field-value editable" contenteditable="true" id="f-vietbangchu"></div>
+  </div>
+  <div class="field-row">
+    <div class="field-label">Kèm theo:</div>
+    <div class="field-value editable" contenteditable="true"></div>
+    <div class="field-label">chứng từ gốc</div>
+  </div>
+
+  <div class="signature-row">
+    <div class="sig"><b>Giám đốc</b><div class="sub">(Ký, họ tên, đóng dấu)</div><div class="space"></div></div>
+    <div class="sig"><b>Kế toán trưởng</b><div class="sub">(Ký, họ tên)</div><div class="space"></div></div>
+    <div class="sig"><b><span data-thu="Người nộp tiền" data-chi="Thủ quỹ"></span></b><div class="sub">(Ký, họ tên)</div><div class="space"></div></div>
+    <div class="sig"><b>Người lập phiếu</b><div class="sub">(Ký, họ tên)</div><div class="space"></div></div>
+    <div class="sig"><b><span data-thu="Thủ quỹ" data-chi="Người nhận tiền"></span></b><div class="sub">(Ký, họ tên)</div><div class="space"></div></div>
+  </div>
+
+  <div class="bottom-note editable" contenteditable="true">
+    <span data-thu="Đã nhận đủ số tiền" data-chi="Đã chi đủ số tiền"></span> (viết bằng chữ): <span id="f-vietbangchu-2"></span>
+  </div>
+</div>
+
+<script>
+function getParams() {
+  return new URLSearchParams(window.location.search);
+}
+
+function getTen(params) {
+  return params.get('ten') || params.get('name') || params.get('title') || 'Phiếu Thu';
+}
+
+function getTypeFromName(ten) {
+  return /chi/i.test(ten) && !/thu/i.test(ten) ? 'chi' : 'thu';
+}
+
+function applyType(ten) {
+  const type = getTypeFromName(ten);
+  document.title = ten;
+  document.getElementById('voucher-title').textContent = ten.toUpperCase();
+  document.querySelectorAll('[data-thu]').forEach(el => {
+    el.textContent = type === 'chi' ? el.getAttribute('data-chi') : el.getAttribute('data-thu');
+  });
+}
+
+// ===== Hàm đọc số tiền thành chữ (tiếng Việt) =====
+function docBaSo(baso, daydu) {
+  const chuSo = ["không","một","hai","ba","bốn","năm","sáu","bảy","tám","chín"];
+  const tram = Math.floor(baso / 100);
+  const chuc = Math.floor((baso % 100) / 10);
+  const donvi = baso % 10;
+  let s = "";
+  if (tram > 0 || daydu) s += chuSo[tram] + " trăm ";
+  if (chuc > 1) {
+    s += chuSo[chuc] + " mươi ";
+    if (donvi === 1) s += "mốt ";
+    else if (donvi === 5) s += "lăm ";
+    else if (donvi > 0) s += chuSo[donvi] + " ";
+  } else if (chuc === 1) {
+    s += "mười ";
+    if (donvi === 5) s += "lăm ";
+    else if (donvi > 0) s += chuSo[donvi] + " ";
+  } else if (donvi > 0) {
+    if (tram > 0 || daydu) s += "lẻ ";
+    s += chuSo[donvi] + " ";
+  }
+  return s.trim();
+}
+
+function docSoTien(number) {
+  if (number === 0) return "không đồng";
+  const dvBlock = ["", "nghìn", "triệu", "tỷ", "nghìn tỷ", "triệu tỷ"];
+  let str = Math.floor(Math.abs(number)).toString();
+  const groups = [];
+  while (str.length > 0) {
+    groups.unshift(str.slice(-3));
+    str = str.slice(0, -3);
+  }
+  const parts = [];
+  for (let i = 0; i < groups.length; i++) {
+    const g = parseInt(groups[i], 10);
+    if (g === 0) continue;
+    const part = docBaSo(g, i > 0);
+    const unit = dvBlock[groups.length - 1 - i] || "";
+    parts.push((part + " " + unit).trim());
+  }
+  let result = parts.join(" ").replace(/\s+/g, " ").trim();
+  result = result.charAt(0).toUpperCase() + result.slice(1);
+  return result + " đồng";
+}
+
+function parseAmount(str) {
+  if (!str) return null;
+  const digits = String(str).replace(/[^0-9]/g, "");
+  if (!digits) return null;
+  return parseInt(digits, 10);
+}
+
+// Ánh xạ tham số URL -> id của trường nhập liệu (vietbangchu sẽ tự tính từ sotien)
+const FIELD_MAP = {
+  ngay: 'f-ngay',
+  so: 'f-so',
+  hoten: 'f-hoten',
+  diachi: 'f-diachi',
+  lydo: 'f-lydo',
+  hinhthuc: 'f-hinhthuc',
+  sotk: 'f-sotk',
+  nganhang: 'f-nganhang',
+  sotien: 'f-sotien'
+};
+
+function applyFieldValues(params) {
+  Object.entries(FIELD_MAP).forEach(([param, id]) => {
+    const value = params.get(param);
+    if (value !== null) {
+      document.getElementById(id).textContent = value;
+    }
+  });
+}
+
+function updateVietBangChu() {
+  const sotienEl = document.getElementById('f-sotien');
+  const amount = parseAmount(sotienEl.textContent);
+  const text = amount !== null ? docSoTien(amount) : "";
+  document.getElementById('f-vietbangchu').textContent = text;
+  document.getElementById('f-vietbangchu-2').textContent = text;
+}
+
+function clearAll() {
+  document.querySelectorAll('.editable').forEach(el => {
+    if (el.closest('.bottom-note')) return;
+    el.textContent = '';
+  });
+  document.getElementById('f-ngay').textContent = 'Ngày ..... tháng ..... năm 20.....';
+  document.getElementById('f-so').textContent = '.....................';
+  document.getElementById('f-vietbangchu').textContent = '';
+}
+
+const params = getParams();
+applyType(getTen(params));
+applyFieldValues(params);
+updateVietBangChu(); // tự tính "Viết bằng chữ" từ Số tiền khi tải trang
+
+// Tự động tính lại mỗi khi người dùng sửa ô Số tiền
+document.getElementById('f-sotien').addEventListener('input', updateVietBangChu);
+</script>
+
+</body>
+</html>

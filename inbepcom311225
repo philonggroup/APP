@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHON IN BEP</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, monospace;
+            padding: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+        
+        .order-container {
+            background: white;
+            border: 1px solid #000;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .order-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #000;
+        }
+        
+        .order-number { font-weight: bold; font-size: 16px; margin-bottom: 5px; }
+        .table-info { font-weight: bold; font-size: 18px; margin-bottom: 5px; color: #d00; }
+        .service-name { margin-bottom: 15px; font-weight: bold; }
+        
+        .dish-header {
+            display: grid;
+            grid-template-columns: 50px 1fr 70px;
+            font-weight: bold;
+            padding-bottom: 3px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .dish-item {
+            display: grid;
+            grid-template-columns: 50px 1fr 70px;
+            margin: 8px 0;
+            padding: 3px 0;
+        }
+        
+        .dish-quantity { font-weight: bold; text-align: center; }
+        .dish-name { padding-left: 10px; }
+        .dish-kitchen-type { font-size: 12px; font-weight: bold; text-align: center; color: #d00; }
+        
+        .divider { border-bottom: 1px dashed #000; margin: 10px 0; }
+        
+        .print-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .print-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 140px;
+        }
+        
+        .print-btn-pho { background-color: #0066cc; }
+        .print-btn-rice { background-color: #cc6600; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 20% auto;
+            padding: 25px;
+            border-radius: 10px;
+            width: 85%;
+            max-width: 400px;
+        }
+        
+        .modal-header { font-size: 18px; font-weight: bold; margin-bottom: 15px; text-align: center; }
+        .modal-body { margin-bottom: 20px; text-align: center; line-height: 1.5; }
+        
+        .modal-buttons { display: flex; gap: 10px; justify-content: center; }
+        
+        .modal-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .modal-btn-primary { background: #4CAF50; color: white; }
+        .modal-btn-cancel { background: #999; color: white; }
+        
+        .status-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .status-message.error { background: #f44336; }
+        
+        .print-content { display: none; }
+        
+        @media print {
+            * { 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                box-sizing: border-box !important; 
+            }
+            
+            html { 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                width: 100% !important;
+                height: 100% !important;
+            }
+            
+            body { 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                background: white;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                min-height: auto !important;
+                font-size: 17px !important;
+                line-height: 1.2 !important; /* Giảm line-height */
+                font-weight: normal !important;
+            }
+            
+            .order-container, .print-buttons, .modal, .status-message { 
+                display: none !important; 
+            }
+            
+            .print-content { 
+                display: block !important;
+                width: 100% !important;
+                max-width: 80mm !important;
+                height: auto !important;
+                padding: 1mm 2mm !important; /* Giảm thêm padding */
+                box-sizing: border-box !important;
+                margin: 0 auto !important;
+            }
+            
+            .print-header {
+                text-align: center;
+                margin-bottom: 4px !important; /* Giảm margin xuống rất nhỏ */
+                padding-bottom: 2px !important; /* Giảm padding */
+                border-bottom: 0.5px solid #888 !important;
+                width: 100%;
+            }
+            
+            .print-order-num { 
+                font-weight: normal !important;
+                font-size: 16px !important;
+                margin: 1px 0 !important; /* Margin rất nhỏ */
+                line-height: 1.1 !important;
+            }
+            
+            .print-table-num { 
+                font-weight: normal !important;
+                font-size: 21px !important;
+                margin: 2px 0 !important; /* Margin rất nhỏ */
+                line-height: 1.1 !important;
+            }
+            
+            .print-kitchen-name { 
+                font-weight: normal !important;
+                font-size: 19px !important;
+                margin: 3px 0 6px 0 !important; /* Margin rất nhỏ, chỉ 3px trên 6px dưới */
+                line-height: 1.1 !important;
+            }
+            
+            .print-dish-header {
+                display: flex !important;
+                width: 100%;
+                border-bottom: 0.5px solid #888 !important;
+                padding: 2px 0 !important; /* Padding rất nhỏ */
+                margin: 5px 0 4px 0 !important; /* Margin sát nhau */
+                font-size: 16px !important;
+                font-weight: normal !important;
+            }
+            
+            .print-dish-header > div:first-child { 
+                width: 30px !important; /* Giảm thêm width */
+                text-align: center; 
+                flex-shrink: 0;
+            }
+            
+            .print-dish-header > div:last-child { 
+                flex: 1; 
+                padding-left: 6px !important; /* Giảm padding */
+                font-size: 16px !important;
+            }
+            
+            .print-dish-item {
+                display: flex;
+                width: 100%;
+                margin: 3px 0 !important; /* Margin rất nhỏ */
+                padding: 2px 0 !important; /* Padding rất nhỏ */
+                border-bottom: 0.3px dotted #aaa !important;
+                font-size: 16px !important;
+                min-height: 18px !important; /* Giảm chiều cao tối thiểu */
+            }
+            
+            .print-dish-item > div:first-child { 
+                width: 30px !important;
+                text-align: center;
+                font-size: 16px !important;
+                flex-shrink: 0;
+                font-weight: normal !important;
+            }
+            
+            .print-dish-item > div:last-child { 
+                flex: 1; 
+                padding-left: 6px !important;
+                line-height: 1.2 !important;
+                word-wrap: break-word;
+                font-weight: normal !important;
+                font-size: 16px !important;
+            }
+            
+            .print-footer {
+                text-align: center;
+                margin-top: 8px !important; /* Giảm margin top */
+                padding-top: 4px !important; /* Giảm padding top */
+                border-top: 0.5px solid #888 !important;
+                font-size: 14px !important;
+                line-height: 1.2 !important;
+                width: 100%;
+                font-weight: normal !important;
+            }
+            
+            @page { 
+                margin: 0.5mm !important; /* Giảm margin trang in xuống rất nhỏ */
+                size: auto;
+            }
+            
+            /* Tối ưu cực đại cho máy in thermal 80mm */
+            @media print and (max-width: 80mm) {
+                body {
+                    font-size: 16px !important;
+                    line-height: 1.1 !important;
+                }
+                
+                .print-content {
+                    padding: 0.5mm 1.5mm !important; /* Padding cực nhỏ */
+                }
+                
+                .print-table-num {
+                    font-size: 20px !important;
+                    margin: 1px 0 !important;
+                }
+                
+                .print-kitchen-name {
+                    font-size: 18px !important;
+                    margin: 2px 0 4px 0 !important;
+                }
+                
+                .print-dish-header {
+                    margin: 3px 0 2px 0 !important;
+                    padding: 1px 0 !important;
+                }
+                
+                .print-dish-item {
+                    margin: 2px 0 !important;
+                    padding: 1px 0 !important;
+                    min-height: 16px !important;
+                }
+                
+                .print-footer {
+                    margin-top: 6px !important;
+                    padding-top: 3px !important;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="statusMessage" class="status-message"></div>
+
+    <div id="printModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">⚠️ Không kết nối được ESC/POS</div>
+            <div class="modal-body">
+                Không thể kết nối với Open ESC/POS.<br><br>
+                Bạn muốn in bằng máy in thông thường không?
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" onclick="confirmFallback()">
+                    ✅ In máy khác
+                </button>
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal()">
+                    ❌ Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-container">
+        <div class="order-header">
+            <div class="order-number" id="orderNumber">#0902-04-02</div>
+            <div class="table-info" id="tableInfo">BÀN 1</div>
+            <div class="service-name">ORDER BẾP</div>
+        </div>
+        
+        <div class="dish-header">
+            <div>SL</div>
+            <div>TÊN MÓN</div>
+            <div>LOẠI BẾP</div>
+        </div>
+        
+        <div class="dish-list" id="dishList"></div>
+        
+        <div class="divider"></div>
+        
+        <div class="order-info" style="text-align: center; margin-top: 10px; font-size: 12px;" id="orderInfo">
+            Order Time: 14:30
+        </div>
+    </div>
+    
+    <div class="print-buttons" id="printButtons"></div>
+    <div id="printContent" class="print-content"></div>
+
+    <script>
+        // ========================================
+        // CẤU HÌNH MÁY IN - THAY ĐỔI Ở ĐÂY
+        // ========================================
+        const PRINTER_CONFIG = {
+            pho: {
+                ip: '192.168.100.234',
+                port: '9100'
+            },
+            rice: {
+                ip: '192.168.100.235',
+                port: '9100'
+            }
+        };
+        // ========================================
+        
+        let allDishes = [];
+        let hasPho = false;
+        let hasRice = false;
+        let orderNumber = '';
+        let tableInfo = '';
+        let currentKitchenType = '';
+        let intentTimeout = null;
+        
+        function showStatus(msg, type = 'success') {
+            const div = document.getElementById('statusMessage');
+            div.textContent = msg;
+            div.className = `status-message ${type}`;
+            div.style.display = 'block';
+            setTimeout(() => div.style.display = 'none', 3000);
+        }
+        
+        function showModal() {
+            document.getElementById('printModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('printModal').style.display = 'none';
+        }
+        
+        function confirmFallback() {
+            closeModal();
+            showStatus('Chuyển sang máy in thông thường...', 'success');
+            setTimeout(() => fallbackPrint(currentKitchenType), 500);
+        }
+        
+        function getUrlParameter(name) {
+            return new URLSearchParams(window.location.search).get(name);
+        }
+        
+        function decodeHtmlEntities(text) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = text;
+            return textarea.value;
+        }
+        
+        function parseDishesFromUrl() {
+            const param = getUrlParameter('data');
+            if (!param) return null;
+            
+            const decoded = decodeHtmlEntities(decodeURIComponent(param));
+            const rows = decoded.split('_b_');
+            const dishes = [];
+            
+            rows.forEach(row => {
+                if (!row.trim()) return;
+                const cols = row.split('_a_');
+                while (cols.length < 3) cols.push('');
+                
+                const kitchenType = cols[2] || 'BẾP CHÍNH';
+                let kitchenClass = 'other-item';
+                
+                if (kitchenType.toLowerCase().includes('phở') || kitchenType.toLowerCase().includes('pho')) {
+                    kitchenClass = 'pho-item';
+                } else if (kitchenType.toLowerCase().includes('cơm') || kitchenType.toLowerCase().includes('com')) {
+                    kitchenClass = 'rice-item';
+                }
+                
+                dishes.push({
+                    quantity: cols[0] || '1',
+                    name: cols[1] || '',
+                    kitchenType: kitchenType,
+                    kitchenClass: kitchenClass
+                });
+            });
+            
+            return dishes;
+        }
+        
+        function showAllDishes() {
+            const list = document.getElementById('dishList');
+            list.innerHTML = allDishes.map(d => `
+                <div class="dish-item">
+                    <div class="dish-quantity">${d.quantity}</div>
+                    <div class="dish-name">${d.name}</div>
+                    <div class="dish-kitchen-type">${d.kitchenType}</div>
+                </div>
+            `).join('');
+        }
+        
+        function createPrintButtons() {
+            let html = '';
+            if (hasPho) html += '<button class="print-btn print-btn-pho" onclick="printKitchen(\'pho\')">🖨️ IN BẾP PHỞ</button>';
+            if (hasRice) html += '<button class="print-btn print-btn-rice" onclick="printKitchen(\'rice\')">🖨️ IN BẾP CƠM</button>';
+            document.getElementById('printButtons').innerHTML = html;
+        }
+        
+        function createPrintHTML(type) {
+            const time = getCurrentTime();
+            let dishes = [];
+            let name = '';
+            
+            if (type === 'pho') {
+                dishes = allDishes.filter(d => d.kitchenClass === 'pho-item');
+                name = 'BẾP PHỞ';
+            } else if (type === 'rice') {
+                dishes = allDishes.filter(d => d.kitchenClass === 'rice-item');
+                name = 'BẾP CƠM';
+            }
+            
+            const dishesHtml = dishes.map(d => `
+                <div class="dish">
+                    <div>${d.quantity}</div>
+                    <div>${d.name}</div>
+                </div>
+            `).join('');
+            
+            return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
+*{margin:0!important;padding:0!important;box-sizing:border-box!important}
+html{margin:0!important;padding:0!important;width:100%!important;height:100%!important}
+body{padding:1mm 2mm;font-family:monospace;font-size:17px;line-height:1.2;font-weight:normal;width:100%;max-width:80mm;margin:0 auto}
+.header{text-align:center;margin-bottom:4px;padding-bottom:2px;border-bottom:0.5px solid #888;width:100%}
+.order-num{font-weight:normal;font-size:16px;margin:1px 0;line-height:1.1}
+.table-num{font-weight:normal;font-size:21px;margin:2px 0;line-height:1.1}
+.kitchen-name{font-weight:normal;font-size:19px;margin:3px 0 6px 0;line-height:1.1}
+.col-header{display:flex;width:100%;border-bottom:0.5px solid #888;padding:2px 0;margin:5px 0 4px 0;font-size:16px;font-weight:normal}
+.col-header>div:first-child{width:30px;text-align:center;flex-shrink:0}
+.col-header>div:last-child{flex:1;padding-left:6px;font-size:16px}
+.dish{display:flex;width:100%;margin:3px 0;padding:2px 0;border-bottom:0.3px dotted #aaa;font-size:16px;min-height:18px}
+.dish>div:first-child{width:30px;text-align:center;font-size:16px;flex-shrink:0;font-weight:normal}
+.dish>div:last-child{flex:1;padding-left:6px;line-height:1.2;word-wrap:break-word;font-weight:normal;font-size:16px}
+.footer{text-align:center;margin-top:8px;padding-top:4px;border-top:0.5px solid #888;font-size:14px;line-height:1.2;width:100%;font-weight:normal}
+@page{margin:0.5mm!important;size:auto}
+@media print and (max-width:80mm){body{font-size:16px!important;line-height:1.1!important}.print-content{padding:0.5mm 1.5mm!important}.table-num{font-size:20px!important;margin:1px 0!important}.kitchen-name{font-size:18px!important;margin:2px 0 4px 0!important}.col-header{margin:3px 0 2px 0!important;padding:1px 0!important}.dish{margin:2px 0!important;padding:1px 0!important;min-height:16px!important}.footer{margin-top:6px!important;padding-top:3px!important}}
+</style></head><body>
+<div class="header">
+<div class="order-num">${orderNumber}</div>
+<div class="table-num">${tableInfo}</div>
+<div class="kitchen-name">ORDER ${name}</div>
+</div>
+<div class="col-header"><div>SL</div><div>TÊN MÓN</div></div>
+<div>${dishesHtml}</div>
+<div class="footer"><div>Order Time: ${time}</div></div>
+</body></html>`;
+        }
+        
+        function fallbackPrint(type) {
+            const time = getCurrentTime();
+            let dishes = [];
+            let name = '';
+            
+            if (type === 'pho') {
+                dishes = allDishes.filter(d => d.kitchenClass === 'pho-item');
+                name = 'BẾP PHỞ';
+            } else {
+                dishes = allDishes.filter(d => d.kitchenClass === 'rice-item');
+                name = 'BẾP CƠM';
+            }
+            
+            const dishesHtml = dishes.map(d => `
+                <div class="print-dish-item">
+                    <div>${d.quantity}</div>
+                    <div>${d.name}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('printContent').innerHTML = `
+                <div class="print-header">
+                    <div class="print-order-num">${orderNumber}</div>
+                    <div class="print-table-num">${tableInfo}</div>
+                    <div class="print-kitchen-name">ORDER ${name}</div>
+                </div>
+                <div class="print-dish-header"><div>SL</div><div>TÊN MÓN</div></div>
+                <div>${dishesHtml}</div>
+                <div class="print-footer"><div>Order Time: ${time}</div></div>
+            `;
+            
+            window.print();
+            showStatus('✅ Đã gửi đến máy in thông thường');
+        }
+        
+        function printKitchen(type) {
+            currentKitchenType = type;
+            const printerInfo = PRINTER_CONFIG[type];
+            
+            if (!printerInfo) {
+                showStatus('❌ Không tìm thấy cấu hình máy in', 'error');
+                return;
+            }
+            
+            showStatus(`Đang in ${type === 'pho' ? 'PHỞ' : 'CƠM'} → ${printerInfo.ip}:${printerInfo.port}`, 'success');
+            
+            try {
+                const html = createPrintHTML(type);
+                const json = JSON.stringify([html]);
+                const compressed = pako.gzip(json);
+                const base64 = btoa(String.fromCharCode.apply(null, compressed));
+                
+                const intentUrl = `intent://#Intent;scheme=print-intent;S.content=${base64};S.printer_ip=${printerInfo.ip};S.printer_port=${printerInfo.port};S.kitchen_type=${type};end`;
+                
+                showStatus(`✅ Gửi đến máy in ${type === 'pho' ? 'PHỞ' : 'CƠM'} (${printerInfo.ip})`, 'success');
+                
+                intentTimeout = setTimeout(() => showModal(), 3000);
+                window.addEventListener('blur', () => {
+                    if (intentTimeout) clearTimeout(intentTimeout);
+                }, { once: true });
+                
+                setTimeout(() => {
+                    window.location.href = intentUrl;
+                }, 500);
+                
+            } catch (e) {
+                console.error('❌ Lỗi khi in:', e);
+                showStatus('❌ Lỗi: ' + e.message, 'error');
+                setTimeout(() => showModal(), 1000);
+            }
+        }
+        
+        function getCurrentTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+        
+        function init() {
+            const table = getUrlParameter('table');
+            if (table) {
+                tableInfo = `BÀN ${table}`;
+                document.getElementById('tableInfo').textContent = tableInfo;
+            }
+            
+            const order = getUrlParameter('order');
+            if (order) {
+                orderNumber = `#${order}`;
+                document.getElementById('orderNumber').textContent = orderNumber;
+            }
+            
+            document.getElementById('orderInfo').textContent = `Order Time: ${getCurrentTime()}`;
+            
+            const dishes = parseDishesFromUrl();
+            if (dishes && dishes.length > 0) {
+                allDishes = dishes;
+                hasPho = dishes.some(d => d.kitchenClass === 'pho-item');
+                hasRice = dishes.some(d => d.kitchenClass === 'rice-item');
+            } else {
+                allDishes = [
+                    { quantity: '2', name: 'Phở bò tái chín', kitchenType: 'BẾP PHỞ', kitchenClass: 'pho-item' },
+                    { quantity: '1', name: 'Phở gà', kitchenType: 'BẾP PHỞ', kitchenClass: 'pho-item' },
+                    { quantity: '1', name: 'Cơm rang bò', kitchenType: 'BẾP CƠM', kitchenClass: 'rice-item' },
+                    { quantity: '2', name: 'Cơm rang thập cẩm', kitchenType: 'BẾP CƠM', kitchenClass: 'rice-item' }
+                ];
+                hasPho = true;
+                hasRice = true;
+                orderNumber = '#0902-04-02';
+                tableInfo = 'BÀN 1';
+            }
+            
+            showAllDishes();
+            createPrintButtons();
+        }
+        
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

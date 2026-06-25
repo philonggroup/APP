@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phiếu Xuất Kho Bán Hàng</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Be Vietnam Pro', Arial, sans-serif;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 8px 4px;
+      min-height: 100vh;
+    }
+
+    .invoice-wrapper {
+      background: #ffffff;
+      width: 100%;
+      max-width: 1060px;
+      border-radius: 4px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    .header {
+      background: #ffffff;
+      color: #000;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .logo-box { display: flex; align-items: center; flex-shrink: 0; }
+
+    .company-info h1 {
+      font-size: 15px; font-weight: 700; color: #000;
+      text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.4;
+    }
+    .company-info p { font-size: 13px; color: #000; line-height: 1.7; margin-top: 4px; }
+
+    .title-band {
+      background: #ffffff; padding: 10px 16px;
+      text-align: center; border-bottom: 1px solid #ccc;
+    }
+    .title-band h2 { font-size: 22px; font-weight: 700; color: #000; text-transform: uppercase; letter-spacing: 1px; }
+    .title-band .invoice-meta { font-size: 14px; color: #000; margin-top: 4px; }
+    .title-band .invoice-meta span { margin: 0 10px; }
+
+    .body { padding: 12px 16px; }
+
+    .customer-section {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 16px; margin-bottom: 14px;
+      padding-bottom: 12px; border-bottom: 1px solid #ccc;
+    }
+    .customer-left .row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 9px; }
+    .customer-left .label { font-size: 13.5px; color: #000; white-space: nowrap; font-weight: 600; }
+    .customer-left .value { font-size: 14px; font-weight: 700; color: #000; }
+    .customer-right { font-size: 13.5px; color: #000; }
+    .customer-right .cr-row { display: grid; grid-template-columns: auto 1fr; gap: 6px; margin-bottom: 9px; align-items: baseline; }
+    .customer-right .cr-label { font-weight: 600; white-space: nowrap; text-align: right; }
+    .customer-right .cr-value { font-weight: 700; text-align: left; }
+
+    .table-wrap { border-radius: 4px; overflow: hidden; border: 1px solid #ccc; margin-bottom: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    thead tr { background: #ffffff; color: #000; border-bottom: 2px solid #000; }
+    thead th { padding: 12px 10px; text-align: center; font-weight: 700; font-size: 13px; color: #000; }
+    thead th:nth-child(3) { text-align: left; }
+    tbody tr { border-bottom: 1px solid #ccc; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td { padding: 11px 10px; color: #000; vertical-align: middle; }
+    tbody td.center { text-align: center; }
+    tbody td.right { text-align: right; }
+    .product-name { font-weight: 600; color: #000; }
+
+    .totals-section { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+    .totals-box { width: 340px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; font-size: 13.5px; }
+    .totals-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 14px; border-bottom: 1px solid #ccc; }
+    .totals-row:last-child { border-bottom: none; }
+    .totals-row .t-label { color: #000; }
+    .totals-row .t-value { font-weight: 600; color: #000; }
+    .totals-row.grand-total { background: #ffffff; border-top: 2px solid #000; }
+    .totals-row.grand-total .t-label,
+    .totals-row.grand-total .t-value { color: #000; font-size: 15px; font-weight: 700; }
+
+    .amount-words {
+      font-size: 13px; color: #000; font-style: italic;
+      text-align: center; margin-bottom: 20px; padding: 9px 14px;
+      background: #ffffff; border-radius: 4px; border-left: 3px solid #000;
+    }
+    .amount-words strong { color: #000; font-style: normal; }
+
+    .signature-section { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 8px; }
+    .sig-box { text-align: center; }
+    .sig-box .sig-title { font-size: 14px; font-weight: 700; color: #000; margin-bottom: 2px; }
+    .sig-box .sig-note { font-size: 12px; color: #000; font-style: italic; }
+    .sig-box .sig-line { height: 56px; margin: 8px 16px 0; }
+
+    .footer-date { text-align: right; font-size: 13px; color: #000; font-style: italic; margin-bottom: 14px; }
+
+    @media print { body { background: #fff; padding: 0; } .invoice-wrapper { box-shadow: none; } }
+    @media (max-width: 600px) {
+      .header { flex-direction: column; text-align: center; }
+      .customer-section { grid-template-columns: 1fr; }
+      .signature-section { grid-template-columns: repeat(2, 1fr); }
+      .totals-section { justify-content: stretch; }
+      .totals-box { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="invoice-wrapper">
+
+  <div class="header">
+    <div class="logo-box">
+      <img src="https://i.ibb.co/NgrC76kz/eurokar.jpg" alt="Euro Kar Logo" style="width:210px;height:auto;display:block;" />
+    </div>
+    <div class="company-info">
+      <h1>Công ty TNHH Thương Mại DV &amp; Xuất Nhập Khẩu Euro Kar</h1>
+      <p>
+        Mã số thuế: 0110236590<br>
+        Địa chỉ: Số 10, ngõ 987/84 phố Ngô Gia Tự, phường Việt Hưng, TP. Hà Nội<br>
+        Điện thoại: 0902.683.222 &nbsp;|&nbsp; Email: eurokarvietnam@gmail.com
+      </p>
+    </div>
+  </div>
+
+  <div class="title-band">
+    <h2>Phiếu Xuất Kho Bán Hàng</h2>
+    <div class="invoice-meta">
+      <span>Số hóa đơn: <strong id="el-so-hd"></strong></span>
+      <span id="el-ngay-title"></span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="customer-section">
+      <div class="customer-left">
+        <div class="row">
+          <span class="label">Khách hàng:</span>
+          <span class="value" id="el-khach-hang"></span>
+        </div>
+        <div class="row">
+          <span class="label">Địa chỉ:</span>
+          <span class="value" style="font-weight:500;" id="el-dia-chi"></span>
+        </div>
+      </div>
+      <div class="customer-right">
+        <div class="cr-row">
+          <span class="cr-label">SĐT:</span>
+          <span class="cr-value" id="el-sdt"></span>
+        </div>
+        <div class="cr-row">
+          <span class="cr-label">NVBH:</span>
+          <span class="cr-value" id="el-nvbh"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px;">STT</th>
+            <th style="width:80px;">Mã hàng</th>
+            <th>Tên hàng hoá</th>
+            <th style="width:55px;">ĐVT</th>
+            <th style="width:60px;">Số lượng</th>
+            <th style="width:80px;">Đơn giá</th>
+            <th style="width:85px;">Thành tiền</th>
+            <th style="width:55px;">% VAT</th>
+            <th style="width:85px;">Tiền thuế GTGT</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+
+    <div class="totals-section">
+      <div class="totals-box">
+        <div class="totals-row">
+          <span class="t-label" id="el-tong-label">Tổng cộng:</span>
+          <span class="t-value" id="el-tong-value"></span>
+        </div>
+        <div class="totals-row">
+          <span class="t-label">Chiết khấu hóa đơn:</span>
+          <span class="t-value" id="el-chiet-khau">0</span>
+        </div>
+        <div class="totals-row">
+          <span class="t-label" id="el-vat-label">VAT:</span>
+          <span class="t-value" id="el-vat-value"></span>
+        </div>
+        <div class="totals-row grand-total">
+          <span class="t-label">Tổng thanh toán:</span>
+          <span class="t-value" id="el-tong-tt"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="amount-words">
+      <strong>Số tiền bằng chữ:</strong> <span id="el-so-chu"></span>
+    </div>
+
+    <div class="footer-date" id="el-ngay-footer"></div>
+
+    <div class="signature-section">
+      <div class="sig-box"><div class="sig-title">Người mua hàng</div><div class="sig-note">(Ký, họ tên)</div><div class="sig-line"></div></div>
+      <div class="sig-box"><div class="sig-title">Người giao</div><div class="sig-note">(Ký, họ tên)</div><div class="sig-line"></div></div>
+      <div class="sig-box"><div class="sig-title">Thủ kho</div><div class="sig-note">(Ký, họ tên)</div><div class="sig-line"></div></div>
+      <div class="sig-box"><div class="sig-title">Người bán hàng</div><div class="sig-note">(Ký, họ tên)</div><div class="sig-line"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function getParams() {
+  return new URLSearchParams(window.location.search);
+}
+
+function fmt(n) {
+  return n.toLocaleString('vi-VN');
+}
+
+// ── Số tiền bằng chữ ─────────────────────────────────────────────────────────
+const CH_0_9  = ['không','một','hai','ba','bốn','năm','sáu','bảy','tám','chín'];
+const CH_UNIT = ['','nghìn','triệu','tỷ'];
+
+function docNhom(n, hasTram) {
+  // hasTram: nhóm này có hàng trăm (dùng để quyết định có thêm "linh" không)
+  let tram = Math.floor(n / 100);
+  let chuc = Math.floor((n % 100) / 10);
+  let dv   = n % 10;
+  let s = '';
+  if (tram > 0 || hasTram) s += CH_0_9[tram] + ' trăm ';
+  if (chuc === 0 && dv === 0) return s.trim();
+  if (chuc === 0) {
+    // chỉ thêm "linh" nếu nhóm này có phần trăm
+    if (tram > 0 || hasTram) s += 'linh ';
+    s += CH_0_9[dv];
+  } else if (chuc === 1) {
+    s += 'mười ';
+    if (dv === 5) s += 'lăm';
+    else if (dv > 0) s += CH_0_9[dv];
+  } else {
+    s += CH_0_9[chuc] + ' mươi ';
+    if (dv === 1) s += 'mốt';
+    else if (dv === 5) s += 'lăm';
+    else if (dv === 4) s += 'tư';
+    else if (dv > 0) s += CH_0_9[dv];
+  }
+  return s.trim();
+}
+
+function soThanhChu(n) {
+  if (n === 0) return 'Không đồng chẵn';
+  let groups = [];
+  let tmp = n;
+  while (tmp > 0) { groups.push(tmp % 1000); tmp = Math.floor(tmp / 1000); }
+  let parts = [];
+  for (let i = groups.length - 1; i >= 0; i--) {
+    if (groups[i] === 0) continue;
+    // hasTram: true nếu nhóm này >= 100, hoặc nếu không phải nhóm cao nhất
+    const hasTram = groups[i] >= 100 || i < groups.length - 1;
+    let chunk = docNhom(groups[i], hasTram);
+    if (CH_UNIT[i]) chunk += ' ' + CH_UNIT[i];
+    parts.push(chunk);
+  }
+  let result = parts.join(' ').trim();
+  result = result.charAt(0).toUpperCase() + result.slice(1);
+  return result + ' đồng chẵn';
+}
+
+// ── Render bảng ──────────────────────────────────────────────────────────────
+function renderTable(dataStr) {
+  // Cột: MaHang | TenHang | DVT | SoLuong | DonGia | ThanhTien | %VAT | TienThueGTGT
+  const rows = dataStr ? dataStr.split('_b_') : [];
+  const tbody = document.getElementById('table-body');
+  let totalQty = 0, totalAmt = 0;
+
+  // Gộp các dòng trùng mã hàng
+  const mergedMap = new Map(); // key: maHang, value: object
+  const mergedOrder = []; // giữ thứ tự xuất hiện
+
+  rows.forEach(row => {
+    const cols = row.split('_a_');
+    const maHang    = (cols[0] || '').trim();
+    const tenHang   = (cols[1] || '').trim();
+    const dvt       = (cols[2] || '').trim();
+    const soLuong   = parseInt((cols[3] || '0').replace(/[^0-9]/g,'')) || 0;
+    const donGia    = parseInt((cols[4] || '0').replace(/[^0-9]/g,'')) || 0;
+    const thanhTien = parseInt((cols[5] || '0').replace(/[^0-9]/g,'')) || 0;
+    const pctVat    = (cols[6] || '').trim();
+    const tienThue  = parseInt((cols[7] || '0').replace(/[^0-9]/g,'')) || 0;
+
+    if (mergedMap.has(maHang)) {
+      const existing = mergedMap.get(maHang);
+      existing.soLuong   += soLuong;
+      existing.thanhTien += thanhTien;
+      existing.tienThue  += tienThue;
+    } else {
+      const item = { maHang, tenHang, dvt, soLuong, donGia, thanhTien, pctVat, tienThue };
+      mergedMap.set(maHang, item);
+      mergedOrder.push(maHang);
+    }
+  });
+
+  mergedOrder.forEach((maHang, idx) => {
+    const d = mergedMap.get(maHang);
+    totalQty += d.soLuong;
+    totalAmt += d.thanhTien;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="center">${idx + 1}</td>
+      <td class="center">${d.maHang}</td>
+      <td><div class="product-name">${d.tenHang}</div></td>
+      <td class="center">${d.dvt}</td>
+      <td class="center">${d.soLuong}</td>
+      <td class="right">${fmt(d.donGia)}</td>
+      <td class="right">${fmt(d.thanhTien)}</td>
+      <td class="center">${d.pctVat}</td>
+      <td class="right">${d.tienThue > 0 ? fmt(d.tienThue) : ''}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  return { totalQty, totalAmt };
+}
+
+// ── Main ─────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function () {
+  const p = getParams();
+
+  // 1. Số hóa đơn
+  document.getElementById('el-so-hd').textContent = p.get('so_hd') || 'HD000000';
+
+  // 2. Khách hàng
+  document.getElementById('el-khach-hang').textContent = p.get('khach_hang') || '';
+
+  // 3. Địa chỉ
+  document.getElementById('el-dia-chi').textContent = p.get('dia_chi') || '';
+
+  // 4. SĐT
+  document.getElementById('el-sdt').textContent = p.get('sdt') || '';
+
+  // 5. NVBH
+  document.getElementById('el-nvbh').textContent = p.get('nvbh') || '';
+
+  // 7. Ngày
+  const ngay = p.get('ngay') || '';
+  document.getElementById('el-ngay-title').textContent = ngay;
+  document.getElementById('el-ngay-footer').textContent = ngay;
+
+  // 6. Bảng dữ liệu
+  const dataStr = p.get('data') || '';
+  const { totalQty, totalAmt } = renderTable(dataStr);
+
+  // Tổng cộng (tự tính)
+  document.getElementById('el-tong-label').textContent = `Tổng cộng (${totalQty} sp):`;
+  document.getElementById('el-tong-value').textContent = fmt(totalAmt) + ' ₫';
+
+  // Chiết khấu
+  const chietKhau = parseInt((p.get('chiet_khau') || '0').replace(/[^0-9]/g,'')) || 0;
+  document.getElementById('el-chiet-khau').textContent = chietKhau > 0 ? fmt(chietKhau) + ' ₫' : '0';
+
+  // VAT (tên dòng + thành tiền)
+  const vatLabel = p.get('vat_label') || 'VAT:';
+  const vatValue = parseInt((p.get('vat_value') || '0').replace(/[^0-9]/g,'')) || 0;
+  document.getElementById('el-vat-label').textContent = vatLabel;
+  document.getElementById('el-vat-value').textContent = vatValue > 0 ? fmt(vatValue) + ' ₫' : '0';
+
+  // Tổng thanh toán = tổng cộng - chiết khấu + VAT
+  const tongTT = totalAmt - chietKhau + vatValue;
+  document.getElementById('el-tong-tt').textContent = fmt(tongTT) + ' ₫';
+
+  // Số tiền bằng chữ
+  document.getElementById('el-so-chu').textContent = soThanhChu(tongTT);
+});
+</script>
+</body>
+</html>

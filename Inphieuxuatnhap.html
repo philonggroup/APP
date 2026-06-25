@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Phiếu Nhập Kho</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    background: #fff;
+    color: #000;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 10mm 15mm;
+    background: #fff;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .title {
+    font-size: 22pt;
+    font-weight: bold;
+    color: #000;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .subtitle {
+    font-size: 10pt;
+    margin-top: 4px;
+    color: #333;
+  }
+
+  .so-phieu {
+    text-align: right;
+    font-size: 10pt;
+    margin-top: 2px;
+    color: #333;
+  }
+
+  .so-phieu span {
+    font-weight: bold;
+    font-size: 13pt;
+    color: #000;
+  }
+
+  /* Info lines */
+  .info-line {
+    margin: 6px 0;
+    font-size: 10.5pt;
+    color: #000;
+    font-weight: bold;
+  }
+
+  .info-line .dotted {
+    display: inline-block;
+    width: 75%;
+    border-bottom: 1px dotted #666;
+    vertical-align: bottom;
+    margin-left: 4px;
+    min-height: 14px;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 9.5pt;
+  }
+
+  thead tr th {
+    border: 1px solid #000;
+    padding: 5px 4px;
+    text-align: center;
+    font-weight: bold;
+    background: #fff;
+    color: #000;
+  }
+
+  tbody tr td {
+    border: 1px solid #000;
+    padding: 0 4px;
+    height: 22px;
+    vertical-align: middle;
+  }
+
+  .col-stt   { width: 6%; text-align: center; }
+  .col-ten   { width: 36%; }
+  .col-dvt   { width: 9%; text-align: center; }
+  .col-sl    { width: 9%; text-align: center; }
+  .col-dg    { width: 15%; text-align: right; }
+  .col-tt    { width: 15%; text-align: right; padding-right: 5px; }
+
+  .tong-row td {
+    font-weight: bold;
+    background: #fff;
+  }
+
+  /* Summary block */
+  .summary {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    font-size: 9.5pt;
+  }
+
+  .summary td {
+    border: 1px solid #000;
+    border-top: none;
+    padding: 4px 8px;
+    height: 22px;
+  }
+
+  .summary .label {
+    width: 35%;
+    font-weight: bold;
+    color: #000;
+  }
+
+  .summary .value {
+    width: 65%;
+    text-align: right;
+    padding-right: 8px;
+  }
+
+  /* Signatures */
+  .signatures {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+    text-align: center;
+    font-size: 9pt;
+    font-weight: bold;
+    color: #000;
+  }
+
+  .sig-col {
+    flex: 1;
+  }
+
+  .sig-col .sub {
+    font-weight: normal;
+    font-style: italic;
+    color: #333;
+    font-size: 8.5pt;
+  }
+
+  .print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: green;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 11pt;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 999;
+  }
+
+  .print-btn:hover { background: #005500; }
+
+  @media print {
+    body { background: #fff; }
+    .page { margin: 0; padding: 10mm 15mm; width: 210mm; }
+    .print-btn { display: none; }
+  }
+</style>
+<script>
+  function getParams() {
+    const p = new URLSearchParams(window.location.search);
+    return {
+      tieude:  p.get('tieude') || 'Phiếu Nhập Kho',
+      ngay:    p.get('ngay')   || '',
+      donvi:   p.get('donvi')  || '',
+      data:    p.get('data')   || '',    // "TenHang_a_DVT_a_SoLuong_a_DonGia_b_..."
+      ckhaU:   p.get('ck')     || '',
+      datraU:  p.get('datra')  || '',
+    };
+  }
+
+  function parseDate(str) {
+    // Nhận vào dd/mm/yyyy hoặc dd-mm-yyyy hoặc để nguyên
+    if (!str) return { ngay: '…………', thang: '…………', nam: '………' };
+    const parts = str.split(/[\/\-]/);
+    if (parts.length === 3) return { ngay: parts[0], thang: parts[1], nam: parts[2] };
+    return { ngay: str, thang: '…………', nam: '………' };
+  }
+
+  function parseNumber(str) {
+    if (!str) return 0;
+    // Bỏ dấu chấm/phẩy ngăn cách hàng nghìn, chuyển dấu phẩy thập phân thành chấm
+    return parseFloat(str.replace(/\./g, '').replace(',', '.')) || 0;
+  }
+
+  function formatNum(n) {
+    if (!n && n !== 0) return '';
+    return n.toLocaleString('vi-VN');
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    const { tieude, ngay, donvi, data, ckhaU, datraU } = getParams();
+
+    // --- Tiêu đề ---
+    document.getElementById('txt-tieude').textContent = tieude;
+    document.title = tieude;
+
+    // --- Ngày --- tự đổi mm/dd/yyyy sang dd/mm/yyyy nếu cần
+    let ngayHienThi = ngay;
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(ngay)) {
+      const parts = ngay.split('/');
+      // Nếu phần đầu > 12 thì đã là dd/mm, giữ nguyên; ngược lại đổi
+      if (parseInt(parts[0]) <= 12 && parseInt(parts[1]) > 12) {
+        ngayHienThi = parts[1] + '/' + parts[0] + '/' + parts[2];
+      }
+    }
+    document.getElementById('txt-ngay').textContent = ngayHienThi;
+
+    // --- Đơn vị ---
+    document.getElementById('txt-donvi').textContent = donvi;
+
+    // --- Bảng dữ liệu ---
+    // Thứ tự cột: Tên hàng | ĐV Tính | Số lượng | Đơn giá
+    // Thành tiền tự tính = Số lượng × Đơn giá
+    const tbody = document.getElementById('main-tbody');
+    tbody.innerHTML = '';
+
+    let tongTien = 0;
+
+    if (data) {
+      const rows = data.split('_b_');
+      rows.forEach(function (row, idx) {
+        if (!row.trim()) return;
+        const cols = row.split('_a_');
+        const tenHang = cols[0] || '';
+        const dvt     = cols[1] || '';
+        const soLuong = cols[2] || '';
+        const donGia  = cols[3] || '';
+
+        const sl = parseNumber(soLuong);
+        const dg = parseNumber(donGia);
+        const tt = sl * dg;
+        tongTien += tt;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td class="col-stt">' + (idx + 1) + '</td>' +
+          '<td class="col-ten">' + tenHang + '</td>' +
+          '<td class="col-dvt">' + dvt + '</td>' +
+          '<td class="col-sl">'  + soLuong + '</td>' +
+          '<td class="col-dg">'  + formatNum(dg) + '</td>' +
+          '<td class="col-tt">'  + formatNum(tt) + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+
+
+    // --- Summary ---
+    const ck     = parseNumber(ckhaU);
+    const datra  = parseNumber(datraU);
+    const tongSauCK = tongTien - ck;
+    const conNo  = tongSauCK - datra;
+
+    document.getElementById('val-tongtien').textContent      = formatNum(tongTien);
+    document.getElementById('val-ck').textContent            = ckhaU ? formatNum(ck) : '';
+    document.getElementById('val-tongsauck').textContent     = formatNum(tongSauCK);
+    document.getElementById('val-datra').textContent         = datraU ? formatNum(datra) : '';
+    document.getElementById('val-conno').textContent         = formatNum(conNo);
+  });
+</script>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="title" id="txt-tieude">Phiếu Nhập Kho</div>
+    <div class="subtitle">Ngày: <span id="txt-ngay"></span></div>
+  </div>
+
+  <!-- Info -->
+  <div class="info-line">Đơn vị giao/nhận: <span class="dotted" id="txt-donvi"></span></div>
+
+  <!-- Main table -->
+  <table>
+    <thead>
+      <tr>
+        <th class="col-stt">TT</th>
+        <th class="col-ten">Tên hàng</th>
+        <th class="col-dvt">ĐVT</th>
+        <th class="col-sl">Số lượng</th>
+        <th class="col-dg">Đơn giá</th>
+        <th class="col-tt">Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody id="main-tbody">
+      <!-- Filled by JS -->
+    </tbody>
+  </table>
+
+  <!-- Summary rows -->
+  <table class="summary">
+    <tr>
+      <td class="label">Tổng tiền:</td>
+      <td class="value" id="val-tongtien"></td>
+    </tr>
+    <tr>
+      <td class="label">Chiết khấu:</td>
+      <td class="value" id="val-ck"></td>
+    </tr>
+    <tr>
+      <td class="label">Tổng tiền sau chiết khấu:</td>
+      <td class="value" id="val-tongsauck"></td>
+    </tr>
+    <tr>
+      <td class="label">Đã trả:</td>
+      <td class="value" id="val-datra"></td>
+    </tr>
+    <tr>
+      <td class="label">Còn nợ:</td>
+      <td class="value" id="val-conno"></td>
+    </tr>
+  </table>
+
+  <!-- Signatures -->
+  <div class="signatures">
+    <div class="sig-col">
+      Người giao hàng<br>
+      <span class="sub">(Ký, ghi rõ họ tên)</span>
+    </div>
+    <div class="sig-col">
+      Thủ kho<br>
+      <span class="sub">(Ký, ghi rõ họ tên)</span>
+    </div>
+    <div class="sig-col">
+      Kế toán<br>
+      <span class="sub">(Ký, ghi rõ họ tên)</span>
+    </div>
+    <div class="sig-col">
+      Giám đốc<br>
+      <span class="sub">(Ký, ghi rõ họ tên)</span>
+    </div>
+  </div>
+
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨 In phiếu</button>
+
+</body>
+</html>
